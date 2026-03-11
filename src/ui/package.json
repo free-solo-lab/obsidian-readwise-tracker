@@ -1,0 +1,37 @@
+{
+	"name": "obsidian-readwise-tracker",
+	"version": "1.0.0",
+	"description": "Track reading progress from Readwise.",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"release": "node scripts/release.mjs",
+		"version": "node version-bump.mjs && git add manifest.json versions.json"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/chart.js": "^2.9.41",
+		"@types/node": "^16.11.6",
+		"@types/react": "^18.3.27",
+		"@types/react-dom": "^18.3.7",
+		"@typescript-eslint/eslint-plugin": "5.29.0",
+		"@typescript-eslint/parser": "5.29.0",
+		"builtin-modules": "3.3.0",
+		"esbuild": "0.17.3",
+		"obsidian": "^1.7.2",
+		"tslib": "2.4.0",
+		"typescript": "4.7.4"
+	},
+	"dependencies": {
+		"@types/uuid": "^10.0.0",
+		"axios": "^1.6.0",
+		"chart.js": "^4.4.0",
+		"react": "^18.2.0",
+		"react-chartjs-2": "^5.2.0",
+		"react-dom": "^18.2.0",
+		"uuid": "^13.0.0"
+	}
+}
