@@ -6,3 +6,7 @@ pnpm-debug.log*
 .npm/
 .pnpm-store/
 .idea/
+.vscode/
+.DS_Store
+coverage/
+*.tsbuildinfo
