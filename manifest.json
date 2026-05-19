@@ -1,0 +1,10 @@
+{
+	"id": "readwise-reading-tracker",
+	"name": "Readwise Reading Tracker",
+	"version": "1.0.0",
+	"minAppVersion": "1.7.2",
+	"description": "Track Readwise reading progress, highlights, heatmaps, and reading inbox notes.",
+	"author": "Kostya Struga",
+	"authorUrl": "https://freesolo.tech",
+	"isDesktopOnly": false
+}
