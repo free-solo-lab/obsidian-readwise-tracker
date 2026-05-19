@@ -243,7 +243,16 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     [activitySource, fallbackUpdatesByDate, heatmapMode, selectedBook],
   );
 
-  const heatmapColors = React.useMemo(() => ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"], []);
+  const heatmapColors = React.useMemo(
+    () => [
+      "var(--rwt-heatmap-0)",
+      "var(--rwt-heatmap-1)",
+      "var(--rwt-heatmap-2)",
+      "var(--rwt-heatmap-3)",
+      "var(--rwt-heatmap-4)",
+    ],
+    [],
+  );
 
   const heatmapData = React.useMemo(() => {
     const today = new Date();
@@ -450,18 +459,17 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
 
   return (
     <div className="readwise-dashboard-root">
-      <ReadwiseTagFilterBar
-        allTags={allTags}
-        selectedTags={selectedTags}
-        onToggleTag={(tag) =>
-          setSelectedTags((previous) =>
-            previous.includes(tag) ? previous.filter((value) => value !== tag) : [...previous, tag],
-          )
-        }
-        onReset={() => setSelectedTags([])}
-      />
-
       <div className="readwise-dashboard-top">
+        <ReadwiseTagFilterBar
+          allTags={allTags}
+          selectedTags={selectedTags}
+          onToggleTag={(tag) =>
+            setSelectedTags((previous) =>
+              previous.includes(tag) ? previous.filter((value) => value !== tag) : [...previous, tag],
+            )
+          }
+        />
+
         <ReadwiseHeatmapPanel
           displayedWeeks={displayedWeeks}
           monthLabelByWeekIndex={monthLabelByWeekIndex}
@@ -489,7 +497,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
         selectedBookId={selectedBookId}
         rightLabelByBookId={readingRightLabelByBookId}
         rightDateByBookId={rightDateByBookId}
-        accentColor="#3b82f6"
+        accentColor="#2a9a96"
         emptyText={t("dashboard.noActiveBooks")}
         showReset={!!selectedBookId}
         onReset={() => setSelectedBookId(null)}
@@ -502,7 +510,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
         selectedBookId={selectedBookId}
         rightLabelByBookId={completedRightLabelByBookId}
         rightDateByBookId={rightDateByBookId}
-        accentColor="#22c55e"
+        accentColor="#2a9a96"
         emptyText={t("dashboard.noCompletedBooks")}
         showReset={!!(selectedBookId && selectedBook && isCompletedBook(selectedBook))}
         onReset={() => setSelectedBookId(null)}

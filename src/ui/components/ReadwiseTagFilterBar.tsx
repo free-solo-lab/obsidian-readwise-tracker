@@ -1,18 +1,15 @@
 import * as React from "react";
-import { t } from "../../i18n";
 
 interface ReadwiseTagFilterBarProps {
   allTags: string[];
   selectedTags: string[];
   onToggleTag(tag: string): void;
-  onReset(): void;
 }
 
 export const ReadwiseTagFilterBar: React.FC<ReadwiseTagFilterBarProps> = ({
   allTags,
   selectedTags,
   onToggleTag,
-  onReset,
 }) => {
   if (allTags.length === 0) {
     return null;
@@ -35,11 +32,6 @@ export const ReadwiseTagFilterBar: React.FC<ReadwiseTagFilterBarProps> = ({
           );
         })}
       </div>
-      {selectedTags.length > 0 ? (
-        <button className="readwise-reset-button" onClick={onReset}>
-          {t("tagFilter.reset")}
-        </button>
-      ) : null}
     </div>
   );
 };

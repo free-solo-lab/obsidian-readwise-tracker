@@ -56,11 +56,16 @@ export const ReadwiseBookSection: React.FC<ReadwiseBookSectionProps> = ({
         <h2 className="readwise-book-section-title">{title}</h2>
       )}
 
-      {showReset ? (
-        <button className="readwise-reset-button" onClick={onReset}>
-          {t("bookSection.showAll")}
-        </button>
-      ) : null}
+      <button
+        className={`readwise-reset-button${showReset ? "" : " is-hidden"}`}
+        type="button"
+        onClick={showReset ? onReset : undefined}
+        disabled={!showReset}
+        aria-hidden={!showReset}
+        tabIndex={showReset ? 0 : -1}
+      >
+        {t("bookSection.showAll")}
+      </button>
     </div>
 
     {collapsed ? null : books.length === 0 ? (

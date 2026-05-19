@@ -1,10 +1,64 @@
+:root,
+.readwise-dashboard-root,
+.readwise-book-search,
+.readwise-selected-book-card,
+.readwise-book-card,
+.readwise-highlight-card {
+  --rwt-ink: #031326;
+  --rwt-midnight: #071b2f;
+  --rwt-pine: #1f4351;
+  --rwt-teal: #2a9a96;
+  --rwt-teal-strong: #21817e;
+  --rwt-glacial: #7db1b1;
+  --rwt-mist: #ddeaea;
+  --rwt-snow: #f7fafa;
+  --rwt-panel: var(--background-secondary);
+  --rwt-panel-soft: var(--background-primary-alt);
+  --rwt-border: var(--background-modifier-border);
+  --rwt-border-strong: rgba(42, 154, 150, 0.32);
+  --rwt-muted: var(--text-muted);
+  --rwt-focus: rgba(42, 154, 150, 0.32);
+  --rwt-heatmap-0: #edf5f5;
+  --rwt-heatmap-1: #c8dddd;
+  --rwt-heatmap-2: #7db1b1;
+  --rwt-heatmap-3: #2a9a96;
+  --rwt-heatmap-4: #1f4351;
+  --rwt-heatmap-border: rgba(31, 67, 81, 0.12);
+  --rwt-radius-card: 8px;
+  --rwt-radius-control: 10px;
+}
+
+body.theme-dark .readwise-dashboard-root,
+body.theme-dark .readwise-book-search,
+body.theme-dark .readwise-selected-book-card,
+body.theme-dark .readwise-book-card,
+body.theme-dark .readwise-highlight-card {
+  --rwt-heatmap-0: #34383b;
+  --rwt-heatmap-1: #3d5755;
+  --rwt-heatmap-2: #456f6d;
+  --rwt-heatmap-3: #348d89;
+  --rwt-heatmap-4: #1f4351;
+  --rwt-heatmap-border: rgba(221, 234, 235, 0.12);
+}
+
 .readwise-dashboard-root {
   padding: 18px;
   color: var(--text-normal);
 }
 
+.readwise-dashboard-root button:not(.clickable-icon),
+.readwise-book-section button:not(.clickable-icon),
+.readwise-highlights-toolbar button:not(.clickable-icon),
+.readwise-highlight-card button:not(.clickable-icon) {
+  box-shadow: none !important;
+}
+
 .readwise-tag-filter-bar {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,30 +73,49 @@
 }
 
 .readwise-dashboard-top {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
-  gap: 24px;
-  align-items: start;
+  display: block;
+  padding: 14px;
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-card);
+  background: var(--rwt-panel);
 }
 
 .readwise-tag-pill,
 .readwise-reset-button {
   font-size: 12px;
-  padding: 6px 10px;
+  min-height: 28px;
+  padding: 4px 12px;
   border-radius: 999px;
-  border: none;
+  border: 1px solid var(--rwt-border);
   background: transparent;
+  color: var(--text-muted);
   cursor: pointer;
-  box-shadow: none;
+  box-shadow: none !important;
+}
+
+.readwise-reset-button.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .readwise-tag-pill.is-selected {
-  border: 1px solid var(--interactive-accent);
+  border-color: var(--rwt-teal);
+  background: transparent;
+  color: var(--text-normal);
+}
+
+.readwise-tag-pill:hover,
+.readwise-reset-button:hover {
+  border-color: var(--rwt-border-strong);
   background: var(--background-modifier-hover);
+  color: var(--text-normal);
 }
 
 .readwise-heatmap-layout {
-  display: contents;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
+  gap: 18px;
+  align-items: start;
 }
 
 .readwise-heatmap-shell {
@@ -110,8 +183,8 @@
 .readwise-heatmap-cell {
   width: 13px;
   height: 13px;
-  border-radius: 2px;
-  border: 1px solid var(--background-modifier-border);
+  border-radius: 3px;
+  border: 1px solid var(--rwt-heatmap-border);
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -122,7 +195,7 @@
 }
 
 .readwise-heatmap-cell.is-selected {
-  outline: 2px solid var(--interactive-accent);
+  outline: 2px solid var(--rwt-teal);
   outline-offset: 1px;
 }
 
@@ -130,19 +203,25 @@
   width: min(100%, 260px);
   min-width: 220px;
   justify-self: end;
+  padding: 14px 16px;
+  border: 1px solid rgba(42, 154, 150, 0.18);
+  border-radius: var(--rwt-radius-card);
+  background: rgba(42, 154, 150, 0.08);
 }
 
 .readwise-summary-title {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-normal);
+  margin-bottom: 10px;
+  opacity: 1;
 }
 
 .readwise-summary-legend {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 12px;
   opacity: 0.8;
 }
@@ -153,10 +232,10 @@
 }
 
 .readwise-summary-legend-swatch {
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   border-radius: 2px;
-  border: 1px solid var(--background-modifier-border);
+  border: 1px solid var(--rwt-heatmap-border);
   box-sizing: border-box;
 }
 
@@ -169,11 +248,16 @@
 .readwise-book-search-input {
   width: 100%;
   font-size: 13px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--background-modifier-border);
+  padding: 8px 11px;
+  border-radius: var(--rwt-radius-control);
+  border: 1px solid var(--rwt-border);
   background: var(--background-primary);
   color: var(--text-normal);
+}
+
+.readwise-book-search-input:focus {
+  border-color: var(--rwt-teal);
+  box-shadow: 0 0 0 3px var(--rwt-focus);
 }
 
 .readwise-book-picker {
@@ -184,8 +268,8 @@
   right: 0;
   max-height: 280px;
   overflow: auto;
-  border-radius: 8px;
-  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--rwt-radius-control);
+  border: 1px solid var(--rwt-border);
   background: var(--background-primary);
   box-shadow: var(--shadow-l);
 }
@@ -203,13 +287,13 @@
 .readwise-current-book-button {
   font-size: 12px;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: var(--rwt-radius-control);
   border: none;
   background: transparent;
   color: var(--text-normal);
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .readwise-current-book-button:hover:not(:disabled) {
@@ -223,11 +307,17 @@
 
 .readwise-summary-metrics {
   font-size: 12px;
-  opacity: 0.85;
+  line-height: 1.45;
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 .readwise-book-section {
   margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-card);
+  background: var(--rwt-panel);
 }
 
 .readwise-book-section-header {
@@ -240,8 +330,8 @@
 
 .readwise-book-section-title,
 .readwise-section-toggle {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 650;
   margin: 0 0 10px;
 }
 
@@ -262,7 +352,8 @@
 
 .readwise-empty-state {
   font-size: 13px;
-  opacity: 0.75;
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 .readwise-book-list {
@@ -276,14 +367,15 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
-  background: var(--background-secondary);
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-card);
+  background: var(--background-primary);
   cursor: pointer;
 }
 
 .readwise-book-card.is-selected {
-  border-color: var(--interactive-accent);
+  border-color: var(--rwt-border-strong);
+  box-shadow: inset 3px 0 0 var(--rwt-teal);
 }
 
 .readwise-book-cover {
@@ -373,9 +465,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
-  background: var(--background-secondary);
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-card);
+  background: var(--rwt-panel);
 }
 
 .readwise-selected-book-cover {
@@ -424,8 +516,9 @@
   font-size: 12px;
   padding: 3px 8px;
   border-radius: 999px;
-  border: 1px solid var(--background-modifier-border);
+  border: 1px solid var(--rwt-border);
   color: var(--text-muted);
+  background: var(--background-primary);
 }
 
 .readwise-selected-book-progress {
@@ -454,7 +547,7 @@
 
 .readwise-selected-book-progress-fill {
   height: 100%;
-  background: var(--interactive-accent);
+  background: var(--rwt-teal);
 }
 
 .readwise-highlights-toolbar {
@@ -466,30 +559,14 @@
   margin-bottom: 10px;
 }
 
-.readwise-graph-button {
-  font-size: 12px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 0 !important;
-  background: var(--background-secondary);
-  color: var(--text-normal);
-  cursor: pointer;
-  box-shadow: none !important;
-  min-height: 28px;
-}
-
-.readwise-graph-button:hover {
-  background: var(--background-modifier-hover);
-}
-
 .readwise-sort-control {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: var(--background-secondary);
+  padding: 3px;
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-control);
+  background: var(--background-primary);
 }
 
 .readwise-sort-option,
@@ -506,8 +583,8 @@
 }
 
 .readwise-sort-option.is-active {
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
+  background: var(--rwt-teal);
+  color: #ffffff;
 }
 
 .readwise-sort-direction {
@@ -524,15 +601,21 @@
 .readwise-highlight-card {
   position: relative;
   padding: 11px 12px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
-  background: var(--background-secondary);
+  border: 1px solid var(--rwt-border);
+  border-radius: var(--rwt-radius-card);
+  background: var(--rwt-panel);
+  cursor: pointer;
   transition: background-color 120ms ease, border-color 120ms ease;
 }
 
 .readwise-highlight-card:hover,
 .readwise-highlight-card.is-expanded {
-  border-color: var(--background-modifier-border-hover);
+  border-color: var(--rwt-border-strong);
+}
+
+.readwise-highlight-card:focus-visible {
+  outline: 2px solid var(--rwt-teal);
+  outline-offset: 2px;
 }
 
 .readwise-highlight-card-header {
@@ -552,24 +635,24 @@
 
 .readwise-highlight-toggle {
   width: 16px;
-  height: 20px;
+  height: 18px;
   min-width: 16px;
-  min-height: 20px;
-  margin: 0;
+  min-height: 18px;
+  margin: 2px 0 0;
   border-radius: 0;
   border: none;
   background: transparent !important;
   color: var(--text-muted);
-  cursor: pointer;
+  cursor: inherit;
   flex: 0 0 auto;
-  line-height: 20px;
+  line-height: 18px;
   text-align: center;
   padding: 0;
   box-shadow: none !important;
   font-size: 13px;
 }
 
-.readwise-highlight-toggle:hover {
+.readwise-highlight-card:hover .readwise-highlight-toggle {
   color: var(--text-normal);
 }
 
@@ -602,7 +685,7 @@
 
 .readwise-highlight-title:hover,
 .readwise-highlight-title:focus-visible {
-  color: var(--interactive-accent);
+  color: var(--rwt-teal);
   background: transparent !important;
   box-shadow: none !important;
   outline: none;
@@ -622,17 +705,17 @@
 }
 
 .readwise-highlight-create {
-  width: 30px;
-  height: 26px;
-  border-radius: 8px;
-  border: 0 !important;
-  background: var(--background-modifier-hover);
-  color: var(--text-muted);
+  min-width: 92px;
+  height: 28px;
+  border-radius: var(--rwt-radius-control);
+  border: 1px solid var(--rwt-border-strong) !important;
+  background: rgba(42, 154, 150, 0.1);
+  color: var(--text-normal);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 650;
   line-height: 1;
-  padding: 0 8px;
-  opacity: 0;
+  padding: 0 10px;
   box-shadow: none !important;
   display: inline-flex;
   align-items: center;
@@ -640,19 +723,13 @@
   gap: 5px;
   overflow: hidden;
   white-space: nowrap;
-  transition: opacity 120ms ease, width 140ms ease, background-color 120ms ease, color 120ms ease;
-}
-
-.readwise-highlight-card:hover .readwise-highlight-create,
-.readwise-highlight-create:focus-visible,
-.readwise-highlight-create:disabled {
-  opacity: 1;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 .readwise-highlight-create:hover:not(:disabled) {
-  width: 74px;
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
+  border-color: var(--rwt-teal) !important;
+  background: var(--rwt-teal);
+  color: #ffffff;
 }
 
 .readwise-highlight-create:disabled {
@@ -666,16 +743,9 @@
 }
 
 .readwise-highlight-create-label {
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-width 140ms ease, opacity 120ms ease;
-}
-
-.readwise-highlight-create:hover .readwise-highlight-create-label,
-.readwise-highlight-create:focus-visible .readwise-highlight-create-label {
-  max-width: 52px;
+  max-width: none;
   opacity: 1;
+  overflow: hidden;
 }
 
 .readwise-highlight-content {
@@ -687,8 +757,17 @@
 }
 
 .readwise-highlight-content blockquote {
-  margin-top: 0;
-  margin-bottom: 10px;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--rwt-border-strong);
+  border-left: 4px solid var(--rwt-teal);
+  border-radius: var(--rwt-radius-card);
+  background: rgba(42, 154, 150, 0.08);
+  color: var(--text-normal);
+}
+
+.readwise-highlight-content blockquote p {
+  margin: 0;
 }
 
 .readwise-highlight-muted {
@@ -696,6 +775,16 @@
 }
 
 @media (max-width: 640px) {
+  .readwise-heatmap-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .readwise-summary-panel {
+    width: 100%;
+    min-width: 0;
+    justify-self: stretch;
+  }
+
   .readwise-selected-book-card,
   .readwise-book-card {
     align-items: flex-start;

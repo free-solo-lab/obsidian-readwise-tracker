@@ -366,15 +366,6 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                         ) : (
                             <div>
                                 <div className="readwise-highlights-toolbar">
-                                    <button
-                                        onClick={() => {
-                                            void plugin.openBookGraph(activeBook.id);
-                                        }}
-                                        className="readwise-graph-button"
-                                    >
-                                        {t('stats.openGraph')}
-                                    </button>
-
                                     <div className="readwise-sort-control" aria-label={t('stats.sortHighlights')}>
                                         <button
                                             onClick={() => setHighlightsSort('date')}
@@ -402,52 +393,65 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                                     {highlightItems.slice(0, 300).map((h) => {
                                         const isExpanded = !!expandedHighlightPaths[h.file.path];
                                         const cached = highlightContentByPath[h.file.path];
+                                        const toggleHighlight = async () => {
+                                            const nextExpanded = !isExpanded;
+                                            setExpandedHighlightPaths((prev) => ({ ...prev, [h.file.path]: nextExpanded }));
+
+                                            if (nextExpanded && !highlightContentByPath[h.file.path]) {
+                                                try {
+                                                    const text = await plugin.app.vault.cachedRead(h.file);
+                                                    const parsed = parseHighlightNote(text);
+                                                    setHighlightContentByPath((prev) => ({ ...prev, [h.file.path]: parsed }));
+                                                } catch (e) {
+                                                    setHighlightContentByPath((prev) => ({
+                                                        ...prev,
+                                                        [h.file.path]: {
+                                                            quote: '',
+                                                            description: t('stats.readNoteError', {
+                                                                message: e instanceof Error ? e.message : String(e),
+                                                            }),
+                                                        },
+                                                    }));
+                                                }
+                                            }
+                                        };
                                         return (
                                         <div
                                             key={h.file.path}
                                             className={`readwise-highlight-card${isExpanded ? ' is-expanded' : ''}`}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={(event) => {
+                                                const target = event.target as HTMLElement;
+                                                if (target.closest('button, a, input, textarea, select')) {
+                                                    return;
+                                                }
+                                                void toggleHighlight();
+                                            }}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter' || event.key === ' ') {
+                                                    event.preventDefault();
+                                                    void toggleHighlight();
+                                                }
+                                            }}
                                         >
                                             <div className="readwise-highlight-card-header">
                                                 <div className="readwise-highlight-title-row">
-                                                    <button
-                                                        onClick={async () => {
-                                                            const nextExpanded = !isExpanded;
-                                                            setExpandedHighlightPaths((prev) => ({ ...prev, [h.file.path]: nextExpanded }));
-
-                                                            if (nextExpanded && !highlightContentByPath[h.file.path]) {
-                                                                try {
-                                                                    const text = await plugin.app.vault.cachedRead(h.file);
-                                                                    const parsed = parseHighlightNote(text);
-                                                                    setHighlightContentByPath((prev) => ({ ...prev, [h.file.path]: parsed }));
-                                                                } catch (e) {
-                                                                    setHighlightContentByPath((prev) => ({
-                                                                        ...prev,
-                                                                        [h.file.path]: {
-                                                                            quote: '',
-                                                                            description: t('stats.readNoteError', {
-                                                                                message: e instanceof Error ? e.message : String(e),
-                                                                            }),
-                                                                        },
-                                                                    }));
-                                                                }
-                                                            }
-                                                        }}
-                                                        className="readwise-highlight-toggle"
-                                                        title={isExpanded ? t('stats.collapse') : t('stats.expand')}
-                                                    >
+                                                    <span className="readwise-highlight-toggle" aria-hidden="true">
                                                         {isExpanded ? '▾' : '▸'}
-                                                    </button>
+                                                    </span>
 
                                                     <div className="readwise-highlight-title-stack">
                                                         <button
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            plugin.app.workspace.getLeaf(false).openFile(h.file);
-                                                        }}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                event.preventDefault();
+                                                                plugin.app.workspace.getLeaf(false).openFile(h.file);
+                                                            }}
                                                             className="readwise-highlight-title"
-                                                        title={h.title}
-                                                    >
-                                                        {typeof h.index === 'number' ? `${String(h.index).padStart(3, '0')} · ${h.title}` : h.title}
+                                                            title={h.title}
+                                                        >
+                                                            {typeof h.index === 'number' ? `${String(h.index).padStart(3, '0')} · ${h.title}` : h.title}
                                                         </button>
                                                         {h.date ? (
                                                             <div className="readwise-highlight-date">
@@ -459,7 +463,8 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
 
                                                 <div className="readwise-highlight-actions">
                                                     <button
-                                                        onClick={async () => {
+                                                        onClick={async (event) => {
+                                                            event.stopPropagation();
                                                             try {
                                                                 setCreatingInboxPath(h.file.path);
                                                                 await plugin.createInboxNoteFromHighlight({ highlightFile: h.file, book: activeBook, bookFile: bookNoteFile });

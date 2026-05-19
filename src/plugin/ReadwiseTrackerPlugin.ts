@@ -8,12 +8,11 @@ import { ReadwiseSyncService } from "../services/ReadwiseSyncService";
 import { ReadwiseTrackerSettingTab } from "../settings/ReadwiseTrackerSettingTab";
 import { loadPluginSettings, savePluginSettings } from "../settings/persistence";
 import type { ReadwiseTrackerSettings } from "../settings/types";
-import { BookGraphView } from "../ui/BookGraphView";
 import { DashboardView } from "../ui/DashboardView";
 import { StatsView } from "../ui/StatsView";
 import { t } from "../i18n";
 import { AUTO_SYNC_CHECK_INTERVAL_MS, isAutoSyncDue } from "./autoSync";
-import { BOOK_GRAPH_VIEW_TYPE, DASHBOARD_VIEW_TYPE, STATS_VIEW_TYPE, activateReadwiseView, openReadwiseBookGraph } from "./workspace";
+import { DASHBOARD_VIEW_TYPE, STATS_VIEW_TYPE, activateReadwiseView } from "./workspace";
 import type { CreateInboxNoteArgs } from "./contracts";
 
 export class ReadwiseTrackerPlugin extends Plugin {
@@ -40,7 +39,6 @@ export class ReadwiseTrackerPlugin extends Plugin {
 
     this.registerView(STATS_VIEW_TYPE, (leaf) => new StatsView(leaf, this));
     this.registerView(DASHBOARD_VIEW_TYPE, (leaf) => new DashboardView(leaf, this));
-    this.registerView(BOOK_GRAPH_VIEW_TYPE, (leaf) => new BookGraphView(leaf, this));
 
     this.addSettingTab(new ReadwiseTrackerSettingTab(this.app, this));
     registerCommands(this);
@@ -49,10 +47,6 @@ export class ReadwiseTrackerPlugin extends Plugin {
 
   async activateView(viewType: string): Promise<void> {
     await activateReadwiseView(this.app.workspace, viewType);
-  }
-
-  async openBookGraph(bookId?: string): Promise<void> {
-    await openReadwiseBookGraph(this.app.workspace, bookId);
   }
 
   async createInboxNoteFromHighlight(args: CreateInboxNoteArgs): Promise<TFile> {

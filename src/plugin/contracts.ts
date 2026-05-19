@@ -14,5 +14,4 @@ export interface ReadwiseTrackerViewHost {
   settings: ReadwiseTrackerSettings;
   dataManager: DataManager;
   createInboxNoteFromHighlight(args: CreateInboxNoteArgs): Promise<TFile>;
-  openBookGraph(bookId?: string): Promise<void>;
 }

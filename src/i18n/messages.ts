@@ -48,7 +48,6 @@ const messages = {
 
     "view.highlights": "Readwise Book Highlights",
     "view.dashboard": "Reading Heatmap",
-    "view.bookGraph": "Book Graph",
 
     "stats.searchPlaceholder": "Search books...",
     "stats.currentlyReading": "Currently reading",
@@ -58,7 +57,6 @@ const messages = {
     "stats.remainingUnknown": "remaining: -",
     "stats.highlights": "Highlights",
     "stats.noHighlights": "No linked highlight notes found.",
-    "stats.openGraph": "Open graph",
     "stats.sortHighlights": "Highlight sorting",
     "stats.sortByDate": "By date",
     "stats.sortByIndex": "By index",
@@ -96,13 +94,7 @@ const messages = {
     "heatmap.booksUnit": "books",
 
     "bookSection.showAll": "Show all",
-    "tagFilter.reset": "Reset tags",
 
-    "graph.noSelectedBook": "No selected book",
-    "graph.reset": "Reset",
-    "graph.noCurrentBook": "No current book (status=reading) and no bookId was provided.",
-    "graph.book": "Book",
-    "graph.highlight": "Highlight",
     "note.links": "Links",
   },
   ru: {
@@ -148,7 +140,6 @@ const messages = {
 
     "view.highlights": "Readwise Book Highlights",
     "view.dashboard": "Reading Heatmap",
-    "view.bookGraph": "Граф книги",
 
     "stats.searchPlaceholder": "Поиск книги...",
     "stats.currentlyReading": "Читаю сейчас",
@@ -158,7 +149,6 @@ const messages = {
     "stats.remainingUnknown": "осталось: -",
     "stats.highlights": "Highlights",
     "stats.noHighlights": "Нет созданных хайлайтов в папке связок.",
-    "stats.openGraph": "Открыть граф",
     "stats.sortHighlights": "Сортировка хайлайтов",
     "stats.sortByDate": "По дате",
     "stats.sortByIndex": "По индексу",
@@ -196,13 +186,7 @@ const messages = {
     "heatmap.booksUnit": "книг",
 
     "bookSection.showAll": "Показать все",
-    "tagFilter.reset": "Сбросить теги",
 
-    "graph.noSelectedBook": "Нет выбранной книги",
-    "graph.reset": "Сброс",
-    "graph.noCurrentBook": "Нет текущей книги (status=reading) и не передан bookId.",
-    "graph.book": "Книга",
-    "graph.highlight": "Хайлайт",
     "note.links": "Связи",
   },
 } as const;
