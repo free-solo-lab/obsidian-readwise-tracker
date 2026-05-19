@@ -9,4 +9,5 @@ pnpm-debug.log*
 .vscode/
 .DS_Store
 coverage/
+release/
 *.tsbuildinfo
