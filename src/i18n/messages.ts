@@ -31,6 +31,9 @@ const messages = {
     "notice.migrationComplete": "Migration complete. Created {created}, skipped {skipped}, errors {errors}.",
 
     "settings.title": "Readwise Reading Tracker Settings",
+    "settings.setupGuideName": "Setup guide",
+    "settings.setupGuideDesc": "Read how to configure this plugin with the official Readwise Obsidian export.",
+    "settings.setupGuideButton": "Open README",
     "settings.tokenName": "Readwise Access Token",
     "settings.tokenDesc": "Your API token from https://readwise.io/access_token",
     "settings.tokenPlaceholder": "Enter your token",
@@ -123,6 +126,9 @@ const messages = {
     "notice.migrationComplete": "Миграция завершена. Создано: {created}, пропущено: {skipped}, ошибок: {errors}.",
 
     "settings.title": "Настройки Readwise Reading Tracker",
+    "settings.setupGuideName": "Setup guide",
+    "settings.setupGuideDesc": "Read how to configure this plugin with the official Readwise Obsidian export.",
+    "settings.setupGuideButton": "Open README",
     "settings.tokenName": "Readwise Access Token",
     "settings.tokenDesc": "API token из https://readwise.io/access_token",
     "settings.tokenPlaceholder": "Введите token",

@@ -11,3 +11,4 @@ pnpm-debug.log*
 coverage/
 release/
 *.tsbuildinfo
+*.mhtml

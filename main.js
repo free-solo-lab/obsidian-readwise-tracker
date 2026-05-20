@@ -7867,6 +7867,9 @@ var messages = {
     "notice.migratingNotes": "Migrating Readwise notes: {count} files...",
     "notice.migrationComplete": "Migration complete. Created {created}, skipped {skipped}, errors {errors}.",
     "settings.title": "Readwise Reading Tracker Settings",
+    "settings.setupGuideName": "Setup guide",
+    "settings.setupGuideDesc": "Read how to configure this plugin with the official Readwise Obsidian export.",
+    "settings.setupGuideButton": "Open README",
     "settings.tokenName": "Readwise Access Token",
     "settings.tokenDesc": "Your API token from https://readwise.io/access_token",
     "settings.tokenPlaceholder": "Enter your token",
@@ -7951,6 +7954,9 @@ var messages = {
     "notice.migratingNotes": "\u041C\u0438\u0433\u0440\u0430\u0446\u0438\u044F \u0437\u0430\u043C\u0435\u0442\u043E\u043A Readwise: {count} \u0444\u0430\u0439\u043B\u043E\u0432...",
     "notice.migrationComplete": "\u041C\u0438\u0433\u0440\u0430\u0446\u0438\u044F \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430. \u0421\u043E\u0437\u0434\u0430\u043D\u043E: {created}, \u043F\u0440\u043E\u043F\u0443\u0449\u0435\u043D\u043E: {skipped}, \u043E\u0448\u0438\u0431\u043E\u043A: {errors}.",
     "settings.title": "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 Readwise Reading Tracker",
+    "settings.setupGuideName": "Setup guide",
+    "settings.setupGuideDesc": "Read how to configure this plugin with the official Readwise Obsidian export.",
+    "settings.setupGuideButton": "Open README",
     "settings.tokenName": "Readwise Access Token",
     "settings.tokenDesc": "API token \u0438\u0437 https://readwise.io/access_token",
     "settings.tokenPlaceholder": "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 token",
@@ -10069,6 +10075,14 @@ var ReadwiseTrackerSettingTab = class extends import_obsidian9.PluginSettingTab 
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: t("settings.title") });
+    new import_obsidian9.Setting(containerEl).setName(t("settings.setupGuideName")).setDesc(t("settings.setupGuideDesc")).addButton(
+      (button) => button.setButtonText(t("settings.setupGuideButton")).onClick(() => {
+        window.open(
+          "https://github.com/free-solo-lab/obsidian-readwise-tracker#setup-with-the-official-readwise-plugin",
+          "_blank"
+        );
+      })
+    );
     new import_obsidian9.Setting(containerEl).setName(t("settings.tokenName")).setDesc(t("settings.tokenDesc")).addText(
       (text) => text.setPlaceholder(t("settings.tokenPlaceholder")).setValue(this.plugin.settings.readwiseToken).onChange(async (value) => {
         this.plugin.settings.readwiseToken = value;

@@ -13,6 +13,20 @@ export class ReadwiseTrackerSettingTab extends PluginSettingTab {
     containerEl.createEl("h2", { text: t("settings.title") });
 
     new Setting(containerEl)
+      .setName(t("settings.setupGuideName"))
+      .setDesc(t("settings.setupGuideDesc"))
+      .addButton((button) =>
+        button
+          .setButtonText(t("settings.setupGuideButton"))
+          .onClick(() => {
+            window.open(
+              "https://github.com/free-solo-lab/obsidian-readwise-tracker#setup-with-the-official-readwise-plugin",
+              "_blank",
+            );
+          }),
+      );
+
+    new Setting(containerEl)
       .setName(t("settings.tokenName"))
       .setDesc(t("settings.tokenDesc"))
       .addText((text) =>

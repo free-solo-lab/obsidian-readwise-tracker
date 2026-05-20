@@ -49,17 +49,80 @@ versions.json
 4. Restart Obsidian.
 5. Enable `Readwise Reading Tracker`.
 
-## Setup
+## Setup With The Official Readwise Plugin
 
-1. Get your Readwise API token from:
+Readwise Reading Tracker is designed to work together with the official Readwise Obsidian plugin.
 
-```text
-https://readwise.io/access_token
+The official plugin exports the source book notes from Readwise/Reader into your vault. This plugin then reads those files, extracts highlight timelines, builds linked highlight notes, shows the reading heatmap, and lets you create inbox notes from individual highlights.
+
+### 1. Install both plugins
+
+Install and enable:
+
+- `Readwise Official`
+- `Readwise Reading Tracker`
+
+### 2. Configure the official Readwise export
+
+Open the official Readwise plugin settings or the Readwise Obsidian export page.
+
+Use these export settings:
+
+- Enable `Export All Reader Documents`.
+- Enable `Group Files in Category Folders`.
+- Map categories you want to track into the same books folder:
+  - `books -> Books`
+  - `articles -> Books`
+  - optional: keep `tweets -> Tweets`, `podcasts -> Podcasts`
+- Enable `Use Custom Formatting`.
+
+Use this `Page metadata` template:
+
+```django
+---
+type: book
+source: readwise
+title: "{{full_title}}"
+{% if author %}author: "{{author}}"{% endif %}
+{% if category %}category: "{{category}}"{% endif %}
+created: {{date}}
+{% if url %}url: "{{url}}"{% endif %}
+{% if document_tags %}tags:{% for tag in document_tags %}  - {{tag}}{% endfor %}{% endif %}
+---
+{% if image_url %}![rw-book-cover]({{image_url}}){% endif %}
 ```
 
-2. In Obsidian, open `Settings -> Readwise Reading Tracker`.
-3. Paste the token and run `Test Readwise token`.
-4. Configure folders if needed:
+Use this `Highlights header` template:
+
+```django
+{% if is_new_page %}
+## Highlights
+
+{% elif has_new_highlights -%}## New highlights added {{date|date('F j, Y')}} at {{time}}{% endif -%}
+---
+```
+
+Use this `Highlight` template:
+
+```django
+> {{ highlight_text }}
+{% if highlight_note %}
+>> {{ highlight_note }}{% endif %}
+
+📅 *{{ highlight_date | date('Y-m-d, H:i') }}*
+{% if highlight_tags %}🏷 {% for tag in highlight_tags %}[[{{tag}}]] {% endfor %}{% endif %}
+{% if highlight_location and highlight_location_url %}🔗 [{{highlight_location}}]({{highlight_location_url}})
+{% elif highlight_location %}📍 {{highlight_location}}{% endif %}
+---
+```
+
+Optional: keep `Full Document Text Link` enabled if you want links to full Reader content. It is not required for the tracker.
+
+### 3. Configure Readwise Reading Tracker folders
+
+In Obsidian, open `Settings -> Readwise Reading Tracker`.
+
+Use the same folders as your official Readwise export:
 
 ```text
 Readwise books folder: Readwise/Books
@@ -67,9 +130,40 @@ Linked highlights folder: Readwise/Highlights
 Inbox folder: Inbox/Readwise
 ```
 
-5. Run `Sync Readwise data`.
+The tracker reads official book notes from `Readwise/Books`. It writes linked per-highlight notes into `Readwise/Highlights` when you run the migration command.
 
-If you also use the Readwise Official plugin, keep its export folders aligned with the folders above so linked highlights and book notes can be discovered.
+### 4. Add the Readwise API token
+
+Get your Readwise API token from:
+
+```text
+https://readwise.io/access_token
+```
+
+Paste the token into `Settings -> Readwise Reading Tracker`, then run `Test Readwise Token`.
+
+### 5. First sync
+
+Run the command:
+
+```text
+Readwise Reading Tracker: Sync All (Official + Tracker)
+```
+
+This command:
+
+1. Runs the official Readwise sync if the official plugin is installed.
+2. Syncs document metadata and reading progress from the Readwise API.
+3. Migrates official book-note highlights into linked highlight notes.
+
+After sync, open:
+
+```text
+Readwise Reading Tracker: Open Progress Dashboard
+Readwise Reading Tracker: Open Readwise Book Highlights
+```
+
+If the official Readwise plugin is not installed, you can still run `Sync Readwise Data`, but linked highlight notes require official exported markdown files or a compatible Readwise export.
 
 ## Privacy
 
