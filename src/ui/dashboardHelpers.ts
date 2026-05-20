@@ -44,6 +44,41 @@ export function getMinutesForDay(day: ReadingActivityDay | undefined, selectedBo
   return 0;
 }
 
+export function getBookLastActivityTime(
+  book: LocalBook,
+  readingActivityByBook: Record<string, Record<string, ReadingActivityDay>>,
+): number {
+  const activity = readingActivityByBook[book.id] || {};
+  let latest = 0;
+
+  for (const [dateKey, day] of Object.entries(activity)) {
+    if (!hasReadingActivity(day)) {
+      continue;
+    }
+
+    const time = new Date(dateKey).getTime();
+    if (Number.isFinite(time) && time > latest) {
+      latest = time;
+    }
+  }
+
+  const fallback = new Date(book.updated_at || book.created_at).getTime();
+  return latest || (Number.isFinite(fallback) ? fallback : 0);
+}
+
+export function compareBooksByRecentActivity(
+  a: LocalBook,
+  b: LocalBook,
+  readingActivityByBook: Record<string, Record<string, ReadingActivityDay>>,
+  sortLocale: string,
+): number {
+  return (
+    getBookLastActivityTime(b, readingActivityByBook) -
+      getBookLastActivityTime(a, readingActivityByBook) ||
+    a.title.localeCompare(b.title, sortLocale)
+  );
+}
+
 export function formatHeatmapValue(
   value: number,
   mode: "minutes" | "progressPoints" | "updates",

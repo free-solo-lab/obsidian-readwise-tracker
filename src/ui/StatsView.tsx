@@ -6,6 +6,7 @@ import { LocalBook, ReadingActivityDay } from '../models/store';
 import { findBookNoteFile, findHighlightFilesForBook, normalizeSearchName } from '../services/readwiseFiles';
 import { parseHighlightNote } from '../services/readwiseHighlightParsing';
 import { formatDurationCompact, getCurrentLocale, getDateLocale, getSortLocale, t } from '../i18n';
+import { compareBooksByRecentActivity, getMinutesForDay, getRemainingMinutes } from './dashboardHelpers';
 
 export const STATS_VIEW_TYPE = 'readwise-stats-view';
 
@@ -136,34 +137,13 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         return formatDurationCompact(minutesRaw, locale);
     }, [locale]);
 
-    const getRemainingMinutes = React.useCallback((book: LocalBook) => {
-        const wpm = 200;
-        const totalWords = book.words_count || 0;
-        if (totalWords <= 0) return null;
-        const progressRatio = Math.min(100, Math.max(0, book.reading_progress || 0)) / 100;
-        const remainingWords = totalWords * (1 - progressRatio);
-        return remainingWords / wpm;
-    }, []);
-
-    const minutesFromDay = React.useCallback((day: ReadingActivityDay | undefined, totalWords: number) => {
-        if (!day) return 0;
-        if ((day.minutes || 0) > 0) return day.minutes || 0;
-        if ((day.words || 0) > 0) return (day.words || 0) / 200;
-        if ((day.progressPoints || 0) > 0 && totalWords > 0) {
-            const deltaWords = (totalWords * (day.progressPoints || 0)) / 100;
-            return deltaWords / 200;
-        }
-        return 0;
-    }, []);
-
     const spentMinutes = React.useMemo(() => {
         if (!activeBook) return 0;
         const byDay = readingActivityByBook[activeBook.id] || {};
-        const totalWords = activeBook.words_count || 0;
         let sum = 0;
-        for (const day of Object.values(byDay)) sum += minutesFromDay(day, totalWords);
+        for (const day of Object.values(byDay)) sum += getMinutesForDay(day, activeBook);
         return sum;
-    }, [activeBook, minutesFromDay, readingActivityByBook]);
+    }, [activeBook, readingActivityByBook]);
 
     const formatDate = React.useCallback((iso: string | undefined) => {
         if (!iso) return '';
@@ -185,7 +165,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
     const highlightItems = React.useMemo(() => {
         const items = highlightsFiles.map((f) => {
             const cache = plugin.app.metadataCache.getFileCache(f);
-            const fm = cache?.frontmatter as any;
+            const fm = cache?.frontmatter as Record<string, unknown> | undefined;
             const title = (fm?.title as string | undefined) || f.basename;
             const index = typeof fm?.index === 'number' ? fm.index : undefined;
             const date = typeof fm?.date === 'string' ? fm.date : '';
@@ -215,9 +195,11 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
 
     const bookMatches: LocalBook[] = React.useMemo(() => {
         const q = normalizeSearchName(bookQuery);
+        const byRecentActivity = (a: LocalBook, b: LocalBook) =>
+            compareBooksByRecentActivity(a, b, readingActivityByBook, sortLocale);
         const list = books
             .slice()
-            .sort((a, b) => a.title.localeCompare(b.title, sortLocale));
+            .sort(byRecentActivity);
 
         if (!q) return list.slice(0, 20);
 
@@ -229,15 +211,15 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                 return { b, score };
             })
             .filter((x) => Number.isFinite(x.score))
-            .sort((a, b) => a.score - b.score || a.b.title.localeCompare(b.b.title, sortLocale));
+            .sort((a, b) => a.score - b.score || byRecentActivity(a.b, b.b));
 
         return scored.slice(0, 20).map((x) => x.b);
-    }, [bookQuery, books, sortLocale]);
+    }, [bookQuery, books, readingActivityByBook, sortLocale]);
 
     return (
-        <div className="p-4">
-            <div style={{ marginBottom: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <div className="readwise-stats-root p-4">
+            <div className="readwise-book-picker-shell">
+                <div className="readwise-book-picker-row">
                     <div className="readwise-book-search">
                         <input
                             value={bookQuery}
@@ -268,8 +250,8 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                                         }}
                                         className="readwise-book-picker-item"
                                     >
-                                        <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.25 }}>{b.title}</div>
-                                        {b.author ? <div style={{ fontSize: 12, opacity: 0.75, marginTop: 2 }}>{b.author}</div> : null}
+                                        <div className="readwise-book-picker-title">{b.title}</div>
+                                        {b.author ? <div className="readwise-book-picker-author">{b.author}</div> : null}
                                     </div>
                                 ))}
                             </div>
@@ -294,7 +276,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                 </div>
 
                 {!activeBook ? (
-                    <div style={{ marginTop: 8, fontSize: 12, opacity: 0.75 }}>
+                    <div className="readwise-book-picker-helper">
                         {t('stats.selectBook')}
                     </div>
                 ) : null}
@@ -357,10 +339,10 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                         </div>
                     </div>
 
-                    <div style={{ marginTop: 18 }}>
-                        <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, marginBottom: 10 }}>{t('stats.highlights')}</h2>
+                    <div className="readwise-highlights-section">
+                        <h2 className="readwise-highlights-title">{t('stats.highlights')}</h2>
                         {highlightItems.length === 0 ? (
-                            <div style={{ fontSize: 13, opacity: 0.75 }}>
+                            <div className="readwise-highlights-empty">
                                 {t('stats.noHighlights')}
                             </div>
                         ) : (
@@ -389,7 +371,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                <div className="readwise-highlight-list">
                                     {highlightItems.slice(0, 300).map((h) => {
                                         const isExpanded = !!expandedHighlightPaths[h.file.path];
                                         const cached = highlightContentByPath[h.file.path];

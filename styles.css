@@ -74,7 +74,7 @@ body.theme-dark .readwise-highlight-card {
 
 .readwise-dashboard-top {
   display: block;
-  padding: 14px;
+  padding: 10px 14px 14px;
   border: 1px solid var(--rwt-border);
   border-radius: var(--rwt-radius-card);
   background: var(--rwt-panel);
@@ -245,6 +245,17 @@ body.theme-dark .readwise-highlight-card {
   min-width: 240px;
 }
 
+.readwise-book-picker-shell {
+  margin-bottom: 12px;
+}
+
+.readwise-book-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .readwise-book-search-input {
   width: 100%;
   font-size: 13px;
@@ -284,25 +295,50 @@ body.theme-dark .readwise-highlight-card {
   background: var(--background-modifier-hover);
 }
 
+.readwise-book-picker-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.readwise-book-picker-author {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.readwise-book-picker-helper {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
 .readwise-current-book-button {
   font-size: 12px;
-  padding: 8px 10px;
+  font-weight: 600;
+  min-height: 34px;
+  padding: 7px 12px;
   border-radius: var(--rwt-radius-control);
-  border: none;
-  background: transparent;
-  color: var(--text-normal);
+  border: 1px solid var(--rwt-border) !important;
+  background: var(--background-primary);
+  color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
   box-shadow: none !important;
 }
 
 .readwise-current-book-button:hover:not(:disabled) {
-  background: var(--background-modifier-hover);
+  border-color: var(--rwt-border-strong) !important;
+  background: rgba(42, 154, 150, 0.08);
+  color: var(--text-normal);
 }
 
 .readwise-current-book-button:disabled {
   cursor: default;
-  opacity: 0.6;
+  border-color: transparent !important;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 .readwise-summary-metrics {
@@ -557,6 +593,27 @@ body.theme-dark .readwise-highlight-card {
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 10px;
+}
+
+.readwise-highlights-section {
+  margin-top: 18px;
+}
+
+.readwise-highlights-title {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.readwise-highlights-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.readwise-highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .readwise-sort-control {

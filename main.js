@@ -8078,6 +8078,24 @@ function getMinutesForDay(day, selectedBook) {
   }
   return 0;
 }
+function getBookLastActivityTime(book, readingActivityByBook) {
+  const activity = readingActivityByBook[book.id] || {};
+  let latest = 0;
+  for (const [dateKey, day] of Object.entries(activity)) {
+    if (!hasReadingActivity(day)) {
+      continue;
+    }
+    const time = new Date(dateKey).getTime();
+    if (Number.isFinite(time) && time > latest) {
+      latest = time;
+    }
+  }
+  const fallback = new Date(book.updated_at || book.created_at).getTime();
+  return latest || (Number.isFinite(fallback) ? fallback : 0);
+}
+function compareBooksByRecentActivity(a, b, readingActivityByBook, sortLocale) {
+  return getBookLastActivityTime(b, readingActivityByBook) - getBookLastActivityTime(a, readingActivityByBook) || a.title.localeCompare(b.title, sortLocale);
+}
 function formatHeatmapValue(value, mode, locale = "ru") {
   if (mode === "minutes") {
     return `${value.toFixed(1)} ${translate(locale, "heatmap.minutesUnit")}`;
@@ -9016,38 +9034,15 @@ var StatsComponent = ({ plugin }) => {
   const formatRemaining2 = React6.useCallback((minutesRaw) => {
     return formatDurationCompact(minutesRaw, locale);
   }, [locale]);
-  const getRemainingMinutes2 = React6.useCallback((book) => {
-    const wpm = 200;
-    const totalWords = book.words_count || 0;
-    if (totalWords <= 0)
-      return null;
-    const progressRatio = Math.min(100, Math.max(0, book.reading_progress || 0)) / 100;
-    const remainingWords = totalWords * (1 - progressRatio);
-    return remainingWords / wpm;
-  }, []);
-  const minutesFromDay = React6.useCallback((day, totalWords) => {
-    if (!day)
-      return 0;
-    if ((day.minutes || 0) > 0)
-      return day.minutes || 0;
-    if ((day.words || 0) > 0)
-      return (day.words || 0) / 200;
-    if ((day.progressPoints || 0) > 0 && totalWords > 0) {
-      const deltaWords = totalWords * (day.progressPoints || 0) / 100;
-      return deltaWords / 200;
-    }
-    return 0;
-  }, []);
   const spentMinutes = React6.useMemo(() => {
     if (!activeBook)
       return 0;
     const byDay = readingActivityByBook[activeBook.id] || {};
-    const totalWords = activeBook.words_count || 0;
     let sum = 0;
     for (const day of Object.values(byDay))
-      sum += minutesFromDay(day, totalWords);
+      sum += getMinutesForDay(day, activeBook);
     return sum;
-  }, [activeBook, minutesFromDay, readingActivityByBook]);
+  }, [activeBook, readingActivityByBook]);
   const formatDate = React6.useCallback((iso) => {
     if (!iso)
       return "";
@@ -9099,7 +9094,8 @@ var StatsComponent = ({ plugin }) => {
   }, [highlightsFiles, highlightsSort, highlightsSortDir, plugin.app.metadataCache, sortLocale]);
   const bookMatches = React6.useMemo(() => {
     const q = normalizeSearchName(bookQuery);
-    const list = books.slice().sort((a, b) => a.title.localeCompare(b.title, sortLocale));
+    const byRecentActivity = (a, b) => compareBooksByRecentActivity(a, b, readingActivityByBook, sortLocale);
+    const list = books.slice().sort(byRecentActivity);
     if (!q)
       return list.slice(0, 20);
     const scored = list.map((b) => {
@@ -9107,10 +9103,10 @@ var StatsComponent = ({ plugin }) => {
       const idx = hay.indexOf(q);
       const score = idx === -1 ? Number.POSITIVE_INFINITY : idx;
       return { b, score };
-    }).filter((x) => Number.isFinite(x.score)).sort((a, b) => a.score - b.score || a.b.title.localeCompare(b.b.title, sortLocale));
+    }).filter((x) => Number.isFinite(x.score)).sort((a, b) => a.score - b.score || byRecentActivity(a.b, b.b));
     return scored.slice(0, 20).map((x) => x.b);
-  }, [bookQuery, books, sortLocale]);
-  return /* @__PURE__ */ React6.createElement("div", { className: "p-4" }, /* @__PURE__ */ React6.createElement("div", { style: { marginBottom: 12 } }, /* @__PURE__ */ React6.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" } }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-search" }, /* @__PURE__ */ React6.createElement(
+  }, [bookQuery, books, readingActivityByBook, sortLocale]);
+  return /* @__PURE__ */ React6.createElement("div", { className: "readwise-stats-root p-4" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-shell" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-row" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-search" }, /* @__PURE__ */ React6.createElement(
     "input",
     {
       value: bookQuery,
@@ -9139,8 +9135,8 @@ var StatsComponent = ({ plugin }) => {
       },
       className: "readwise-book-picker-item"
     },
-    /* @__PURE__ */ React6.createElement("div", { style: { fontSize: 13, fontWeight: 600, lineHeight: 1.25 } }, b.title),
-    b.author ? /* @__PURE__ */ React6.createElement("div", { style: { fontSize: 12, opacity: 0.75, marginTop: 2 } }, b.author) : null
+    /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-title" }, b.title),
+    b.author ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-author" }, b.author) : null
   ))) : null), /* @__PURE__ */ React6.createElement(
     "button",
     {
@@ -9157,7 +9153,7 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-current-book-button"
     },
     t("stats.currentlyReading")
-  )), !activeBook ? /* @__PURE__ */ React6.createElement("div", { style: { marginTop: 8, fontSize: 12, opacity: 0.75 } }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React6.createElement(
+  )), !activeBook ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-helper" }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React6.createElement(
     "img",
     {
       src: activeBook.cover_url,
@@ -9165,7 +9161,7 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-selected-book-cover-image"
     }
   ) : /* @__PURE__ */ React6.createElement("span", { className: "readwise-selected-book-cover-placeholder" }, getBookPlaceholderLabel2(activeBook))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-body" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-title" }, activeBook.title), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-author" }, activeBook.author || ""), activeBook.tags && activeBook.tags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-tags" }, activeBook.tags.slice(0, 20).map((t2) => /* @__PURE__ */ React6.createElement("span", { key: t2, className: "readwise-selected-book-tag" }, t2))) : null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-labels" }, /* @__PURE__ */ React6.createElement("div", null, Math.min(100, Math.max(0, activeBook.reading_progress || 0)).toFixed(1), "%"), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-time" }, t("stats.spent"), ": ", formatRemaining2(spentMinutes), " \xB7 ", t("stats.remaining"), ": ", (() => {
-    const remaining = getRemainingMinutes2(activeBook);
+    const remaining = getRemainingMinutes(activeBook);
     return remaining === null ? "-" : formatRemaining2(remaining);
   })())), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-bar" }, /* @__PURE__ */ React6.createElement(
     "div",
@@ -9173,7 +9169,7 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-selected-book-progress-fill",
       style: { width: `${Math.min(100, Math.max(0, activeBook.reading_progress || 0))}%` }
     }
-  ))))), /* @__PURE__ */ React6.createElement("div", { style: { marginTop: 18 } }, /* @__PURE__ */ React6.createElement("h2", { style: { fontSize: 18, fontWeight: 700, margin: 0, marginBottom: 10 } }, t("stats.highlights")), highlightItems.length === 0 ? /* @__PURE__ */ React6.createElement("div", { style: { fontSize: 13, opacity: 0.75 } }, t("stats.noHighlights")) : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-toolbar" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-sort-control", "aria-label": t("stats.sortHighlights") }, /* @__PURE__ */ React6.createElement(
+  ))))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-section" }, /* @__PURE__ */ React6.createElement("h2", { className: "readwise-highlights-title" }, t("stats.highlights")), highlightItems.length === 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-empty" }, t("stats.noHighlights")) : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-toolbar" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-sort-control", "aria-label": t("stats.sortHighlights") }, /* @__PURE__ */ React6.createElement(
     "button",
     {
       onClick: () => setHighlightsSort("date"),
@@ -9195,7 +9191,7 @@ var StatsComponent = ({ plugin }) => {
       title: t("stats.toggleSortDirection")
     },
     highlightsSortDir === "asc" ? "\u2191" : "\u2193"
-  ))), /* @__PURE__ */ React6.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, highlightItems.slice(0, 300).map((h) => {
+  ))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-list" }, highlightItems.slice(0, 300).map((h) => {
     const isExpanded = !!expandedHighlightPaths[h.file.path];
     const cached = highlightContentByPath[h.file.path];
     const toggleHighlight = async () => {
