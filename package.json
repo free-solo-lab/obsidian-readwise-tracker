@@ -1,7 +1,7 @@
 {
 	"name": "readwise-reading-tracker",
-	"version": "1.0.0",
-	"description": "Track Readwise reading progress, highlights, heatmaps, and reading inbox notes.",
+	"version": "1.0.1",
+	"description": "Track Readwise reading progress and use highlights in a Zettelkasten workflow with quick note review, inbox capture, and source links.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
@@ -11,7 +11,13 @@
 		"release": "node scripts/release.mjs",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
-	"keywords": ["obsidian", "readwise", "reading", "highlights", "analytics"],
+	"keywords": [
+		"obsidian",
+		"readwise",
+		"reading",
+		"highlights",
+		"analytics"
+	],
 	"author": "Kostya Struga",
 	"license": "MIT",
 	"devDependencies": {
