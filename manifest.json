@@ -1,7 +1,7 @@
 {
 	"id": "readwise-reading-tracker",
 	"name": "Readwise Reading Tracker",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "1.7.2",
 	"description": "Track Readwise reading progress and use highlights in a Zettelkasten workflow with quick note review, inbox capture, and source links.",
 	"author": "Kostya Struga",
