@@ -7884,6 +7884,13 @@ var messages = {
     "settings.testTokenName": "Test Readwise Token",
     "settings.testTokenDesc": "Performs GET https://readwise.io/api/v2/auth/ (expects 204)",
     "settings.testButton": "Test",
+    "settings.syncScopeTitle": "Sync scope",
+    "settings.syncLocationsName": "Reader locations to sync",
+    "settings.syncLocationsDesc": "Which Readwise Reader locations to pull. Large libraries (lots of RSS feed / archive) can exceed the API rate limit if everything is fetched every time. Turning a location off skips it. With none selected, all locations are fetched (legacy behaviour).",
+    "settings.requestDelayName": "Delay between requests (ms)",
+    "settings.requestDelayDesc": "Pause between paginated list requests to stay under the Readwise rate limit (~20 req/min). Increase this if you still hit HTTP 429; set 0 to disable.",
+    "settings.maxRetriesName": "Max rate-limit retries",
+    "settings.maxRetriesDesc": "How many times to wait out an HTTP 429 (honouring Retry-After) before a request fails.",
     "view.highlights": "Readwise Book Highlights",
     "view.dashboard": "Reading Heatmap",
     "stats.searchPlaceholder": "Search books...",
@@ -7971,6 +7978,13 @@ var messages = {
     "settings.testTokenName": "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C Readwise Token",
     "settings.testTokenDesc": "\u0412\u044B\u043F\u043E\u043B\u043D\u044F\u0435\u0442 GET https://readwise.io/api/v2/auth/ (\u043E\u0436\u0438\u0434\u0430\u0435\u0442 204)",
     "settings.testButton": "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C",
+    "settings.syncScopeTitle": "\u0427\u0442\u043E \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C",
+    "settings.syncLocationsName": "\u041B\u043E\u043A\u0430\u0446\u0438\u0438 Reader \u0434\u043B\u044F \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u0438",
+    "settings.syncLocationsDesc": "\u041A\u0430\u043A\u0438\u0435 \u043B\u043E\u043A\u0430\u0446\u0438\u0438 Readwise Reader \u043F\u043E\u0434\u0442\u044F\u0433\u0438\u0432\u0430\u0442\u044C. \u041D\u0430 \u0431\u043E\u043B\u044C\u0448\u0438\u0445 \u0431\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0430\u0445 (\u043C\u043D\u043E\u0433\u043E RSS feed / archive) \u0432\u044B\u0431\u043E\u0440\u043A\u0430 \u0432\u0441\u0435\u0433\u043E \u043F\u043E\u0434\u0440\u044F\u0434 \u043A\u0430\u0436\u0434\u044B\u0439 \u0440\u0430\u0437 \u0443\u043F\u0438\u0440\u0430\u0435\u0442\u0441\u044F \u0432 \u043B\u0438\u043C\u0438\u0442 API. \u0412\u044B\u043A\u043B\u044E\u0447\u0435\u043D\u043D\u0430\u044F \u043B\u043E\u043A\u0430\u0446\u0438\u044F \u043F\u0440\u043E\u043F\u0443\u0441\u043A\u0430\u0435\u0442\u0441\u044F. \u0415\u0441\u043B\u0438 \u043D\u0435 \u0432\u044B\u0431\u0440\u0430\u043D\u043E \u043D\u0438\u0447\u0435\u0433\u043E \u2014 \u0442\u044F\u043D\u0443\u0442\u0441\u044F \u0432\u0441\u0435 \u043B\u043E\u043A\u0430\u0446\u0438\u0438 (\u0441\u0442\u0430\u0440\u043E\u0435 \u043F\u043E\u0432\u0435\u0434\u0435\u043D\u0438\u0435).",
+    "settings.requestDelayName": "\u041F\u0430\u0443\u0437\u0430 \u043C\u0435\u0436\u0434\u0443 \u0437\u0430\u043F\u0440\u043E\u0441\u0430\u043C\u0438 (\u043C\u0441)",
+    "settings.requestDelayDesc": "\u0417\u0430\u0434\u0435\u0440\u0436\u043A\u0430 \u043C\u0435\u0436\u0434\u0443 \u043F\u043E\u0441\u0442\u0440\u0430\u043D\u0438\u0447\u043D\u044B\u043C\u0438 \u0437\u0430\u043F\u0440\u043E\u0441\u0430\u043C\u0438, \u0447\u0442\u043E\u0431\u044B \u043D\u0435 \u043F\u0440\u0435\u0432\u044B\u0441\u0438\u0442\u044C \u043B\u0438\u043C\u0438\u0442 Readwise (~20 \u0437\u0430\u043F\u0440/\u043C\u0438\u043D). \u0423\u0432\u0435\u043B\u0438\u0447\u044C\u0442\u0435, \u0435\u0441\u043B\u0438 \u0432\u0441\u0451 \u0435\u0449\u0451 \u043B\u043E\u0432\u0438\u0442\u0435 HTTP 429; 0 \u2014 \u043E\u0442\u043A\u043B\u044E\u0447\u0438\u0442\u044C.",
+    "settings.maxRetriesName": "\u041C\u0430\u043A\u0441. \u043F\u043E\u0432\u0442\u043E\u0440\u043E\u0432 \u043F\u0440\u0438 \u043B\u0438\u043C\u0438\u0442\u0435",
+    "settings.maxRetriesDesc": "\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0440\u0430\u0437 \u043F\u0435\u0440\u0435\u0436\u0438\u0434\u0430\u0442\u044C HTTP 429 (\u0441 \u0443\u0447\u0451\u0442\u043E\u043C Retry-After), \u043F\u0440\u0435\u0436\u0434\u0435 \u0447\u0435\u043C \u0437\u0430\u043F\u0440\u043E\u0441 \u0443\u043F\u0430\u0434\u0451\u0442.",
     "view.highlights": "Readwise Book Highlights",
     "view.dashboard": "Reading Heatmap",
     "stats.searchPlaceholder": "\u041F\u043E\u0438\u0441\u043A \u043A\u043D\u0438\u0433\u0438...",
@@ -9623,6 +9637,8 @@ var ReadwiseService = class {
   constructor(token) {
     this.baseUrl = "https://readwise.io/api/v3";
     this.debug = false;
+    this.requestDelayMs = 0;
+    this.maxRetries = 5;
     this.token = token;
   }
   updateToken(token) {
@@ -9630,6 +9646,12 @@ var ReadwiseService = class {
   }
   setDebug(debug) {
     this.debug = debug;
+  }
+  setRequestDelayMs(ms) {
+    this.requestDelayMs = Number.isFinite(ms) ? Math.max(0, ms) : 0;
+  }
+  setMaxRetries(retries) {
+    this.maxRetries = Number.isFinite(retries) ? Math.max(1, Math.floor(retries)) : 5;
   }
   async validateToken() {
     if (!this.token) {
@@ -9669,7 +9691,7 @@ var ReadwiseService = class {
         "Content-Type": "application/json"
       }
     };
-    for (let attempt = 0; attempt < 5; attempt++) {
+    for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       const response = await (0, import_obsidian6.requestUrl)(requestParams);
       if (this.debug) {
         console.log("[Readwise] GET", requestParams.url, "status", response.status);
@@ -9715,6 +9737,9 @@ var ReadwiseService = class {
       const response = await this.getDocuments(location, category, updatedAfter, nextPageCursor || void 0);
       allDocuments = allDocuments.concat(response.results);
       nextPageCursor = response.nextPageCursor;
+      if (nextPageCursor && this.requestDelayMs > 0) {
+        await this.sleep(this.requestDelayMs);
+      }
     } while (nextPageCursor);
     return allDocuments;
   }
@@ -9957,7 +9982,19 @@ var ReadwiseSyncService = class {
   }
   async sync(debugLogging, options) {
     await this.readwiseService.validateToken();
-    const documents = await this.readwiseService.getAllDocuments();
+    const configuredLocations = this.getSettings().syncLocations;
+    const locations = configuredLocations && configuredLocations.length > 0 ? configuredLocations : [void 0];
+    const documents = [];
+    const seenIds = /* @__PURE__ */ new Set();
+    for (const location of locations) {
+      const part = await this.readwiseService.getAllDocuments(location);
+      for (const doc of part) {
+        if (!seenIds.has(doc.id)) {
+          seenIds.add(doc.id);
+          documents.push(doc);
+        }
+      }
+    }
     const filteredDocuments = documents.filter(isTopLevelReadingDocument);
     const filteredIdSet = new Set(filteredDocuments.map((document2) => document2.id));
     const staleBookIds = Object.values(this.dataManager.getData().books).filter((book) => book.source === "readwise" && !filteredIdSet.has(book.id)).map((book) => book.id);
@@ -10066,6 +10103,21 @@ function clampProgress(value) {
 
 // src/settings/ReadwiseTrackerSettingTab.ts
 var import_obsidian9 = require("obsidian");
+
+// src/settings/types.ts
+var ALL_SYNC_LOCATIONS = ["new", "later", "shortlist", "feed", "archive"];
+var DEFAULT_SETTINGS = {
+  readwiseToken: "",
+  debugLogging: false,
+  readwiseBooksFolder: "Readwise/Books",
+  readwiseLinkedHighlightsFolder: "Readwise/Highlights",
+  readwiseInboxFolder: "Inbox/Readwise",
+  syncLocations: ["new", "later", "shortlist"],
+  requestDelayMs: 1500,
+  maxRetries: 8
+};
+
+// src/settings/ReadwiseTrackerSettingTab.ts
 var ReadwiseTrackerSettingTab = class extends import_obsidian9.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
@@ -10113,21 +10165,44 @@ var ReadwiseTrackerSettingTab = class extends import_obsidian9.PluginSettingTab 
         await this.plugin.saveSettings();
       })
     );
+    containerEl.createEl("h3", { text: t("settings.syncScopeTitle") });
+    new import_obsidian9.Setting(containerEl).setName(t("settings.syncLocationsName")).setDesc(t("settings.syncLocationsDesc"));
+    for (const location of ALL_SYNC_LOCATIONS) {
+      new import_obsidian9.Setting(containerEl).setName(location.charAt(0).toUpperCase() + location.slice(1)).addToggle(
+        (toggle) => toggle.setValue(this.plugin.settings.syncLocations.includes(location)).onChange(async (value) => {
+          const selected = new Set(this.plugin.settings.syncLocations);
+          if (value) {
+            selected.add(location);
+          } else {
+            selected.delete(location);
+          }
+          this.plugin.settings.syncLocations = ALL_SYNC_LOCATIONS.filter(
+            (item) => selected.has(item)
+          );
+          await this.plugin.saveSettings();
+        })
+      );
+    }
+    new import_obsidian9.Setting(containerEl).setName(t("settings.requestDelayName")).setDesc(t("settings.requestDelayDesc")).addText(
+      (text) => text.setValue(String(this.plugin.settings.requestDelayMs)).onChange(async (value) => {
+        const parsed = Number.parseInt(value, 10);
+        this.plugin.settings.requestDelayMs = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+        await this.plugin.saveSettings();
+      })
+    );
+    new import_obsidian9.Setting(containerEl).setName(t("settings.maxRetriesName")).setDesc(t("settings.maxRetriesDesc")).addText(
+      (text) => text.setValue(String(this.plugin.settings.maxRetries)).onChange(async (value) => {
+        const parsed = Number.parseInt(value, 10);
+        this.plugin.settings.maxRetries = Number.isFinite(parsed) ? Math.max(1, parsed) : 8;
+        await this.plugin.saveSettings();
+      })
+    );
     new import_obsidian9.Setting(containerEl).setName(t("settings.testTokenName")).setDesc(t("settings.testTokenDesc")).addButton(
       (button) => button.setButtonText(t("settings.testButton")).onClick(async () => {
         await this.plugin.testReadwiseToken();
       })
     );
   }
-};
-
-// src/settings/types.ts
-var DEFAULT_SETTINGS = {
-  readwiseToken: "",
-  debugLogging: false,
-  readwiseBooksFolder: "Readwise/Books",
-  readwiseLinkedHighlightsFolder: "Readwise/Highlights",
-  readwiseInboxFolder: "Inbox/Readwise"
 };
 
 // src/settings/persistence.ts
@@ -10167,6 +10242,8 @@ var ReadwiseTrackerPlugin = class extends import_obsidian10.Plugin {
     await this.dataManager.loadData();
     this.readwiseService = new ReadwiseService(this.settings.readwiseToken);
     this.readwiseService.setDebug(this.settings.debugLogging);
+    this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+    this.readwiseService.setMaxRetries(this.settings.maxRetries);
     this.officialSyncService = new ReadwiseOfficialSyncService(this.app);
     this.syncService = new ReadwiseSyncService(this.readwiseService, this.dataManager, this.app, () => this.settings);
     this.noteService = new ReadwiseNoteService(this.app);
@@ -10196,6 +10273,8 @@ var ReadwiseTrackerPlugin = class extends import_obsidian10.Plugin {
     if (this.readwiseService) {
       this.readwiseService.updateToken(this.settings.readwiseToken);
       this.readwiseService.setDebug(this.settings.debugLogging);
+      this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+      this.readwiseService.setMaxRetries(this.settings.maxRetries);
     }
   }
   async testReadwiseToken() {

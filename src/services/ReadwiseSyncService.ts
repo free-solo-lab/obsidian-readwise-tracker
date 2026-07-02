@@ -6,7 +6,7 @@ import type { ReadwiseTrackerSettings } from "../settings/types";
 import { toDateKey } from "../utils/date";
 import { DataManager } from "./dataManager";
 import { isPdfDocument, isTopLevelReadingDocument, getDocumentTitle } from "./readwiseDocuments";
-import { ReadwiseService } from "./readwise";
+import { ReadwiseService, type ReaderLocation } from "./readwise";
 import { inferPdfReadingActivity } from "./readwisePdfActivity";
 import { t } from "../i18n";
 
@@ -20,7 +20,26 @@ export class ReadwiseSyncService {
 
   async sync(debugLogging: boolean, options?: { silent?: boolean }): Promise<void> {
     await this.readwiseService.validateToken();
-    const documents = await this.readwiseService.getAllDocuments();
+
+    // Pull only the configured Reader locations instead of the whole library. Large libraries
+    // (tens of thousands of RSS `feed` / `archive` documents) otherwise exceed the API rate limit
+    // before the sync can finish. An empty list falls back to "all locations" (legacy behaviour).
+    const configuredLocations = this.getSettings().syncLocations;
+    const locations: (ReaderLocation | undefined)[] =
+      configuredLocations && configuredLocations.length > 0 ? configuredLocations : [undefined];
+
+    const documents: ReadwiseDocument[] = [];
+    const seenIds = new Set<string>();
+    for (const location of locations) {
+      const part = await this.readwiseService.getAllDocuments(location);
+      for (const doc of part) {
+        if (!seenIds.has(doc.id)) {
+          seenIds.add(doc.id);
+          documents.push(doc);
+        }
+      }
+    }
+
     const filteredDocuments = documents.filter(isTopLevelReadingDocument);
     const filteredIdSet = new Set(filteredDocuments.map((document) => document.id));
     const staleBookIds = Object.values(this.dataManager.getData().books)

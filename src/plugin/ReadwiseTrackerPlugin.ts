@@ -33,6 +33,8 @@ export class ReadwiseTrackerPlugin extends Plugin {
 
     this.readwiseService = new ReadwiseService(this.settings.readwiseToken);
     this.readwiseService.setDebug(this.settings.debugLogging);
+    this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+    this.readwiseService.setMaxRetries(this.settings.maxRetries);
     this.officialSyncService = new ReadwiseOfficialSyncService(this.app);
     this.syncService = new ReadwiseSyncService(this.readwiseService, this.dataManager, this.app, () => this.settings);
     this.noteService = new ReadwiseNoteService(this.app);
@@ -69,6 +71,8 @@ export class ReadwiseTrackerPlugin extends Plugin {
     if (this.readwiseService) {
       this.readwiseService.updateToken(this.settings.readwiseToken);
       this.readwiseService.setDebug(this.settings.debugLogging);
+      this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+      this.readwiseService.setMaxRetries(this.settings.maxRetries);
     }
   }
 
