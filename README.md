@@ -141,6 +141,10 @@ Run the command:
 Readwise Reading Tracker: Sync All (Official + Tracker)
 ```
 
+For large Reader libraries, regular sync uses an incremental update after the initial import.
+Run `Readwise Reading Tracker: Sync Full Readwise History` when you want to import the complete
+library. Full-history sync is rate-limited and preserves existing reading activity.
+
 This command:
 
 1. Runs the official Readwise sync if the official plugin is installed.

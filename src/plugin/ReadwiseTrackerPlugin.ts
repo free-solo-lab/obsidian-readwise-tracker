@@ -33,6 +33,8 @@ export class ReadwiseTrackerPlugin extends Plugin {
 
     this.readwiseService = new ReadwiseService(this.settings.readwiseToken);
     this.readwiseService.setDebug(this.settings.debugLogging);
+    this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+    this.readwiseService.setMaxRetries(this.settings.maxRetries);
     this.officialSyncService = new ReadwiseOfficialSyncService(this.app);
     this.syncService = new ReadwiseSyncService(this.readwiseService, this.dataManager, this.app, () => this.settings);
     this.noteService = new ReadwiseNoteService(this.app);
@@ -69,6 +71,8 @@ export class ReadwiseTrackerPlugin extends Plugin {
     if (this.readwiseService) {
       this.readwiseService.updateToken(this.settings.readwiseToken);
       this.readwiseService.setDebug(this.settings.debugLogging);
+      this.readwiseService.setRequestDelayMs(this.settings.requestDelayMs);
+      this.readwiseService.setMaxRetries(this.settings.maxRetries);
     }
   }
 
@@ -90,7 +94,7 @@ export class ReadwiseTrackerPlugin extends Plugin {
     }
   }
 
-  async syncReadwiseData(options?: { silent?: boolean }): Promise<void> {
+  async syncReadwiseData(options?: { silent?: boolean; fullHistory?: boolean }): Promise<void> {
     if (!this.settings.readwiseToken) {
       if (!options?.silent) {
         this.notice(t("notice.setToken"));
@@ -104,12 +108,16 @@ export class ReadwiseTrackerPlugin extends Plugin {
     }
 
     if (!options?.silent) {
-      this.notice(t("notice.syncing"));
+      this.notice(t(options?.fullHistory ? "notice.syncingFullHistory" : "notice.syncing"));
     }
 
     this.syncInFlight = (async () => {
       try {
-        await this.syncService.sync(this.settings.debugLogging, options);
+        if (options?.fullHistory) {
+          await this.syncService.syncFullHistory(this.settings.debugLogging, options);
+        } else {
+          await this.syncService.sync(this.settings.debugLogging, options);
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         if (this.settings.debugLogging) {
