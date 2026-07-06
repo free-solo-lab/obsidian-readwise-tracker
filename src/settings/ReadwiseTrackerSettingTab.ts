@@ -1,6 +1,7 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type { ReadwiseTrackerPlugin } from "../plugin/ReadwiseTrackerPlugin";
 import { t } from "../i18n";
+import { ALL_SYNC_LOCATIONS } from "./types";
 
 export class ReadwiseTrackerSettingTab extends PluginSettingTab {
   constructor(app: App, private readonly plugin: ReadwiseTrackerPlugin) {
@@ -85,6 +86,74 @@ export class ReadwiseTrackerSettingTab extends PluginSettingTab {
           .onChange(async (value) => {
             this.plugin.settings.readwiseInboxFolder = value;
             await this.plugin.saveSettings();
+          }),
+      );
+
+    containerEl.createEl("h3", { text: t("settings.syncScopeTitle") });
+
+    new Setting(containerEl)
+      .setName(t("settings.syncLocationsName"))
+      .setDesc(t("settings.syncLocationsDesc"));
+
+    for (const location of ALL_SYNC_LOCATIONS) {
+      new Setting(containerEl)
+        .setName(location.charAt(0).toUpperCase() + location.slice(1))
+        .addToggle((toggle) =>
+          toggle
+            .setValue(this.plugin.settings.syncLocations.includes(location))
+            .onChange(async (value) => {
+              const selected = new Set(this.plugin.settings.syncLocations);
+              if (value) {
+                selected.add(location);
+              } else {
+                selected.delete(location);
+              }
+              this.plugin.settings.syncLocations = ALL_SYNC_LOCATIONS.filter((item) =>
+                selected.has(item),
+              );
+              await this.plugin.saveSettings();
+            }),
+        );
+    }
+
+    new Setting(containerEl)
+      .setName(t("settings.requestDelayName"))
+      .setDesc(t("settings.requestDelayDesc"))
+      .addText((text) =>
+        text
+          .setValue(String(this.plugin.settings.requestDelayMs))
+          .onChange(async (value) => {
+            const parsed = Number.parseInt(value, 10);
+            this.plugin.settings.requestDelayMs = Number.isFinite(parsed)
+              ? Math.min(60_000, Math.max(0, parsed))
+              : 0;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName(t("settings.maxRetriesName"))
+      .setDesc(t("settings.maxRetriesDesc"))
+      .addText((text) =>
+        text
+          .setValue(String(this.plugin.settings.maxRetries))
+          .onChange(async (value) => {
+            const parsed = Number.parseInt(value, 10);
+            this.plugin.settings.maxRetries = Number.isFinite(parsed)
+              ? Math.min(20, Math.max(0, parsed))
+              : 8;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName(t("settings.fullHistoryName"))
+      .setDesc(t("settings.fullHistoryDesc"))
+      .addButton((button) =>
+        button
+          .setButtonText(t("settings.fullHistoryButton"))
+          .onClick(async () => {
+            await this.plugin.syncReadwiseData({ fullHistory: true });
           }),
       );
 

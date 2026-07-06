@@ -1,10 +1,15 @@
 import { requestUrl, RequestUrlParam } from 'obsidian';
 import { ReadwiseDocument, ReadwiseListResponse } from '../models/readwise';
+import { getHttpErrorStatus, getRateLimitWaitMs } from './readwiseRateLimit';
+
+export type ReaderLocation = 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
 
 export class ReadwiseService {
     private token: string;
     private baseUrl = 'https://readwise.io/api/v3';
     private debug = false;
+    private requestDelayMs = 0;
+    private maxRetries = 5;
 
     constructor(token: string) {
         this.token = token;
@@ -16,6 +21,16 @@ export class ReadwiseService {
 
     public setDebug(debug: boolean) {
         this.debug = debug;
+    }
+
+    public setRequestDelayMs(ms: number) {
+        this.requestDelayMs = Number.isFinite(ms) ? Math.min(60_000, Math.max(0, ms)) : 0;
+    }
+
+    public setMaxRetries(retries: number) {
+        this.maxRetries = Number.isFinite(retries)
+            ? Math.min(20, Math.max(0, Math.floor(retries)))
+            : 5;
     }
 
     public async validateToken(): Promise<void> {
@@ -62,8 +77,22 @@ export class ReadwiseService {
             },
         };
 
-        for (let attempt = 0; attempt < 5; attempt++) {
-            const response = await requestUrl(requestParams);
+        for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+            let response;
+            try {
+                response = await requestUrl(requestParams);
+            } catch (error) {
+                if (getHttpErrorStatus(error) !== 429 || attempt === this.maxRetries) {
+                    throw error;
+                }
+
+                const waitMs = getRateLimitWaitMs(error);
+                if (this.debug) {
+                    console.warn('[Readwise] rate limited, retry in', waitMs, 'ms');
+                }
+                await this.sleep(waitMs);
+                continue;
+            }
 
             if (this.debug) {
                 console.log('[Readwise] GET', requestParams.url, 'status', response.status);
@@ -71,9 +100,10 @@ export class ReadwiseService {
             }
 
             if (response.status === 429) {
-                const retryAfterRaw = (response.headers?.['Retry-After'] ?? response.headers?.['retry-after']) as string | undefined;
-                const retryAfterSeconds = retryAfterRaw ? Number.parseInt(retryAfterRaw, 10) : 5;
-                const waitMs = Number.isFinite(retryAfterSeconds) ? Math.max(1, retryAfterSeconds) * 1000 : 5000;
+                if (attempt === this.maxRetries) {
+                    break;
+                }
+                const waitMs = getRateLimitWaitMs(response);
                 if (this.debug) {
                     console.warn('[Readwise] rate limited, retry in', waitMs, 'ms');
                 }
@@ -99,7 +129,7 @@ export class ReadwiseService {
     }
 
     public async getDocuments(
-        location?: 'new' | 'later' | 'archive' | 'feed',
+        location?: ReaderLocation,
         category?: string,
         updatedAfter?: string,
         pageCursor?: string
@@ -115,7 +145,7 @@ export class ReadwiseService {
     }
 
     public async getAllDocuments(
-        location?: 'new' | 'later' | 'archive' | 'feed',
+        location?: ReaderLocation,
         category?: string,
         updatedAfter?: string
     ): Promise<ReadwiseDocument[]> {
@@ -126,6 +156,9 @@ export class ReadwiseService {
             const response: ReadwiseListResponse = await this.getDocuments(location, category, updatedAfter, nextPageCursor || undefined);
             allDocuments = allDocuments.concat(response.results);
             nextPageCursor = response.nextPageCursor;
+            if (nextPageCursor && this.requestDelayMs > 0) {
+                await this.sleep(this.requestDelayMs);
+            }
         } while (nextPageCursor);
 
         return allDocuments;

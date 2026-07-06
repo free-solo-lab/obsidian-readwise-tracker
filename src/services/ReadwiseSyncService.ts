@@ -8,6 +8,7 @@ import { DataManager } from "./dataManager";
 import { isPdfDocument, isTopLevelReadingDocument, getDocumentTitle } from "./readwiseDocuments";
 import { ReadwiseService } from "./readwise";
 import { inferPdfReadingActivity } from "./readwisePdfActivity";
+import { createRegularSyncPlan, type ReadwiseSyncRequest } from "./readwiseSyncPlan";
 import { t } from "../i18n";
 
 export class ReadwiseSyncService {
@@ -20,20 +21,52 @@ export class ReadwiseSyncService {
 
   async sync(debugLogging: boolean, options?: { silent?: boolean }): Promise<void> {
     await this.readwiseService.validateToken();
-    const documents = await this.readwiseService.getAllDocuments();
-    const filteredDocuments = documents.filter(isTopLevelReadingDocument);
-    const filteredIdSet = new Set(filteredDocuments.map((document) => document.id));
-    const staleBookIds = Object.values(this.dataManager.getData().books)
-      .filter((book) => book.source === "readwise" && !filteredIdSet.has(book.id))
-      .map((book) => book.id);
 
-    if (staleBookIds.length > 0) {
-      await this.dataManager.removeBooks(staleBookIds);
-      if (debugLogging) {
-        console.log("[Readwise] removed stale books", staleBookIds.length);
+    const plan = createRegularSyncPlan(
+      this.dataManager.getData().lastSync,
+      this.getSettings().syncLocations,
+    );
+    const documents = await this.fetchDocuments(plan.requests);
+
+    if (debugLogging) {
+      console.log("[Readwise] sync mode", plan.mode);
+    }
+    await this.applyDocuments(documents, debugLogging, options);
+  }
+
+  async syncFullHistory(debugLogging: boolean, options?: { silent?: boolean }): Promise<void> {
+    await this.readwiseService.validateToken();
+    const documents = await this.readwiseService.getAllDocuments();
+    await this.applyDocuments(documents, debugLogging, options);
+  }
+
+  private async fetchDocuments(requests: ReadwiseSyncRequest[]): Promise<ReadwiseDocument[]> {
+    const documents: ReadwiseDocument[] = [];
+    const seenIds = new Set<string>();
+
+    for (const request of requests) {
+      const part = await this.readwiseService.getAllDocuments(
+        request.location,
+        undefined,
+        request.updatedAfter,
+      );
+      for (const document of part) {
+        if (!seenIds.has(document.id)) {
+          seenIds.add(document.id);
+          documents.push(document);
+        }
       }
     }
 
+    return documents;
+  }
+
+  private async applyDocuments(
+    documents: ReadwiseDocument[],
+    debugLogging: boolean,
+    options?: { silent?: boolean },
+  ): Promise<void> {
+    const filteredDocuments = documents.filter(isTopLevelReadingDocument);
     if (debugLogging) {
       console.log("[Readwise] fetched documents", documents.length);
       console.log("[Readwise] filtered documents", filteredDocuments.length);

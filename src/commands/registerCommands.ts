@@ -28,6 +28,14 @@ export function registerCommands(plugin: ReadwiseTrackerPlugin): void {
   });
 
   plugin.addCommand({
+    id: "readwise-sync-full-history",
+    name: t("command.syncFullHistory"),
+    callback: async () => {
+      await plugin.syncReadwiseData({ fullHistory: true });
+    },
+  });
+
+  plugin.addCommand({
     id: "readwise-sync-all",
     name: t("command.syncAll"),
     callback: async () => {
