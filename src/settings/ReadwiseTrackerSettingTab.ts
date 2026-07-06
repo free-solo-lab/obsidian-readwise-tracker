@@ -11,7 +11,7 @@ export class ReadwiseTrackerSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: t("settings.title") });
+    new Setting(containerEl).setName(t("settings.title")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.setupGuideName"))
@@ -89,7 +89,7 @@ export class ReadwiseTrackerSettingTab extends PluginSettingTab {
           }),
       );
 
-    containerEl.createEl("h3", { text: t("settings.syncScopeTitle") });
+    new Setting(containerEl).setName(t("settings.syncScopeTitle")).setHeading();
 
     new Setting(containerEl)
       .setName(t("settings.syncLocationsName"))
