@@ -10230,7 +10230,7 @@ var ReadwiseTrackerSettingTab = class extends import_obsidian9.PluginSettingTab 
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: t("settings.title") });
+    new import_obsidian9.Setting(containerEl).setName(t("settings.title")).setHeading();
     new import_obsidian9.Setting(containerEl).setName(t("settings.setupGuideName")).setDesc(t("settings.setupGuideDesc")).addButton(
       (button) => button.setButtonText(t("settings.setupGuideButton")).onClick(() => {
         window.open(
@@ -10269,7 +10269,7 @@ var ReadwiseTrackerSettingTab = class extends import_obsidian9.PluginSettingTab 
         await this.plugin.saveSettings();
       })
     );
-    containerEl.createEl("h3", { text: t("settings.syncScopeTitle") });
+    new import_obsidian9.Setting(containerEl).setName(t("settings.syncScopeTitle")).setHeading();
     new import_obsidian9.Setting(containerEl).setName(t("settings.syncLocationsName")).setDesc(t("settings.syncLocationsDesc"));
     for (const location of ALL_SYNC_LOCATIONS) {
       new import_obsidian9.Setting(containerEl).setName(location.charAt(0).toUpperCase() + location.slice(1)).addToggle(
