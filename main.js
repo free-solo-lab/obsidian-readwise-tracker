@@ -7913,10 +7913,52 @@ var messages = {
     "stats.collapse": "Collapse",
     "stats.expand": "Expand",
     "stats.createInboxNote": "Create inbox note",
+    "stats.deleteBook": "Remove book from tracker",
+    "stats.deleteBookFailed": "Could not remove book: {message}",
+    "stats.deleteBookConfirmTitle": "Delete this book?",
+    "stats.deleteBookConfirmText": "\u201C{title}\u201D will be permanently deleted from Readwise and removed from the local tracker. This action cannot be undone.",
+    "stats.deleteBookCancel": "Cancel",
+    "stats.deleteBookConfirm": "Delete permanently",
+    "stats.deleteBookDeleting": "Deleting...",
     "stats.inInbox": "To inbox",
     "stats.loading": "Loading...",
     "stats.emptyNote": "Empty note.",
     "stats.readNoteError": "Error reading note: {message}",
+    "stats.importOpen": "Add to Reader",
+    "stats.importUrl": "URL",
+    "stats.importUpload": "Upload",
+    "stats.importClose": "Close",
+    "stats.importTitleLabel": "Title",
+    "stats.importTitlePlaceholder": "Optional title",
+    "stats.importTagsLabel": "Tags",
+    "stats.importTagsPlaceholder": "Choose a tag or type a new one",
+    "stats.importTagRemove": "Remove tag",
+    "stats.importDropTitle": "Drop a book here or choose a file",
+    "stats.importDropHint": "EPUB, PDF, HTML, TXT or MD",
+    "stats.importDropReplace": "Drop another file or click to replace",
+    "stats.importSave": "Save to Reader",
+    "stats.importSaving": "Saving...",
+    "stats.importSaved": "Saved. Syncing tracker...",
+    "stats.importFailed": "Could not save: {message}",
+    "stats.importUrlRequired": "Enter a URL first.",
+    "stats.importUrlInvalid": "This does not look like a valid URL.",
+    "stats.importFileRequired": "Choose a file first.",
+    "stats.importFileUnsupported": "This file type is not supported yet.",
+    "stats.importLoginRequired": "Sign in to Reader to continue this upload.",
+    "stats.importLoginTitle": "Sign in to Reader",
+    "stats.importLoginHelp": "Your password is used only for this sign-in and is not saved.",
+    "stats.importLoginEmail": "Email",
+    "stats.importLoginPassword": "Password",
+    "stats.importLoginFieldsRequired": "Enter email and password.",
+    "stats.importLoginInProgress": "Signing in...",
+    "stats.importRetryingUpload": "Signed in. Continuing upload...",
+    "stats.importLoginSubmit": "Sign in and continue",
+    "stats.importLoginFailed": "Could not sign in or continue upload: {message}",
+    "stats.bookTagAdd": "Add tag",
+    "stats.bookTagTitle": "Add a tag",
+    "stats.bookTagPlaceholder": "Choose or type a new tag",
+    "stats.bookTagSubmit": "Add",
+    "stats.bookTagFailed": "Could not add tag: {message}",
     "dashboard.minutesLegend": "Reading minutes",
     "dashboard.progressLegend": "Progress (p.p.)",
     "dashboard.updatesLegend": "Books (updates)",
@@ -8012,10 +8054,52 @@ var messages = {
     "stats.collapse": "\u0421\u0445\u043B\u043E\u043F\u043D\u0443\u0442\u044C",
     "stats.expand": "\u0420\u0430\u0441\u043A\u0440\u044B\u0442\u044C",
     "stats.createInboxNote": "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u0437\u0430\u043C\u0435\u0442\u043A\u0443 \u0432 inbox",
+    "stats.deleteBook": "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u043D\u0438\u0433\u0443 \u0438\u0437 \u0442\u0440\u0435\u043A\u0435\u0440\u0430",
+    "stats.deleteBookFailed": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043A\u043D\u0438\u0433\u0443: {message}",
+    "stats.deleteBookConfirmTitle": "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u0442\u0443 \u043A\u043D\u0438\u0433\u0443?",
+    "stats.deleteBookConfirmText": "\xAB{title}\xBB \u0431\u0443\u0434\u0435\u0442 \u043F\u043E\u043B\u043D\u043E\u0441\u0442\u044C\u044E \u0443\u0434\u0430\u043B\u0435\u043D\u0430 \u0438\u0437 Readwise \u0438 \u043B\u043E\u043A\u0430\u043B\u044C\u043D\u043E\u0433\u043E \u0442\u0440\u0435\u043A\u0435\u0440\u0430. \u042D\u0442\u043E \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043D\u0435\u043B\u044C\u0437\u044F \u043E\u0442\u043C\u0435\u043D\u0438\u0442\u044C.",
+    "stats.deleteBookCancel": "\u041E\u0442\u043C\u0435\u043D\u0430",
+    "stats.deleteBookConfirm": "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043E\u043B\u043D\u043E\u0441\u0442\u044C\u044E",
+    "stats.deleteBookDeleting": "\u0423\u0434\u0430\u043B\u0435\u043D\u0438\u0435...",
     "stats.inInbox": "\u0412 inbox",
     "stats.loading": "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...",
     "stats.emptyNote": "\u041F\u0443\u0441\u0442\u0430\u044F \u0437\u0430\u043C\u0435\u0442\u043A\u0430.",
     "stats.readNoteError": "\u041E\u0448\u0438\u0431\u043A\u0430 \u0447\u0442\u0435\u043D\u0438\u044F \u0437\u0430\u043C\u0435\u0442\u043A\u0438: {message}",
+    "stats.importOpen": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 Reader",
+    "stats.importUrl": "URL",
+    "stats.importUpload": "Upload",
+    "stats.importClose": "\u0417\u0430\u043A\u0440\u044B\u0442\u044C",
+    "stats.importTitleLabel": "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
+    "stats.importTitlePlaceholder": "\u041D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",
+    "stats.importTagsLabel": "\u0422\u0435\u0433\u0438",
+    "stats.importTagsPlaceholder": "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0442\u0435\u0433 \u0438\u043B\u0438 \u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439",
+    "stats.importTagRemove": "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0442\u0435\u0433",
+    "stats.importDropTitle": "\u041F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u043A\u043D\u0438\u0433\u0443 \u0441\u044E\u0434\u0430 \u0438\u043B\u0438 \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u0430\u0439\u043B",
+    "stats.importDropHint": "EPUB, PDF, HTML, TXT \u0438\u043B\u0438 MD",
+    "stats.importDropReplace": "\u041F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0434\u0440\u0443\u0433\u043E\u0439 \u0444\u0430\u0439\u043B \u0438\u043B\u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435, \u0447\u0442\u043E\u0431\u044B \u0437\u0430\u043C\u0435\u043D\u0438\u0442\u044C",
+    "stats.importSave": "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432 Reader",
+    "stats.importSaving": "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u044E...",
+    "stats.importSaved": "\u0421\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u043E. \u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0438\u0440\u0443\u044E \u0442\u0440\u0435\u043A\u0435\u0440...",
+    "stats.importFailed": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C: {message}",
+    "stats.importUrlRequired": "\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0432\u0441\u0442\u0430\u0432\u044C\u0442\u0435 URL.",
+    "stats.importUrlInvalid": "\u042D\u0442\u043E \u043D\u0435 \u043F\u043E\u0445\u043E\u0436\u0435 \u043D\u0430 \u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u044B\u0439 URL.",
+    "stats.importFileRequired": "\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u0430\u0439\u043B.",
+    "stats.importFileUnsupported": "\u0422\u0430\u043A\u043E\u0439 \u0442\u0438\u043F \u0444\u0430\u0439\u043B\u0430 \u043F\u043E\u043A\u0430 \u043D\u0435 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0430\u043D.",
+    "stats.importLoginRequired": "\u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0432 Reader, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u044D\u0442\u0443 \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0443.",
+    "stats.importLoginTitle": "\u0412\u043E\u0439\u0442\u0438 \u0432 Reader",
+    "stats.importLoginHelp": "\u041F\u0430\u0440\u043E\u043B\u044C \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0442\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F \u044D\u0442\u043E\u0433\u043E \u0432\u0445\u043E\u0434\u0430 \u0438 \u043D\u0435 \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442\u0441\u044F.",
+    "stats.importLoginEmail": "Email",
+    "stats.importLoginPassword": "\u041F\u0430\u0440\u043E\u043B\u044C",
+    "stats.importLoginFieldsRequired": "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 email \u0438 \u043F\u0430\u0440\u043E\u043B\u044C.",
+    "stats.importLoginInProgress": "\u0412\u0445\u043E\u0436\u0443...",
+    "stats.importRetryingUpload": "\u0412\u0445\u043E\u0434 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D. \u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0430\u044E \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0443...",
+    "stats.importLoginSubmit": "\u0412\u043E\u0439\u0442\u0438 \u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C",
+    "stats.importLoginFailed": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0432\u043E\u0439\u0442\u0438 \u0438\u043B\u0438 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0443: {message}",
+    "stats.bookTagAdd": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0442\u0435\u0433",
+    "stats.bookTagTitle": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0442\u0435\u0433",
+    "stats.bookTagPlaceholder": "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0438\u043B\u0438 \u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u044B\u0439 \u0442\u0435\u0433",
+    "stats.bookTagSubmit": "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C",
+    "stats.bookTagFailed": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0442\u0435\u0433: {message}",
     "dashboard.minutesLegend": "\u041C\u0438\u043D\u0443\u0442\u044B \u0447\u0442\u0435\u043D\u0438\u044F",
     "dashboard.progressLegend": "\u041F\u0440\u043E\u0433\u0440\u0435\u0441\u0441 (\u043F.\u043F.)",
     "dashboard.updatesLegend": "\u041A\u043D\u0438\u0433\u0438 (\u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F)",
@@ -8713,6 +8797,10 @@ var DashboardComponent = ({ plugin }) => {
     }
     return dates;
   }, [completedBooks, locale, readingBooks]);
+  const selectBook = React5.useCallback((bookId) => {
+    setSelectedBookId(bookId);
+    void plugin.openBookHighlights(bookId);
+  }, [plugin]);
   return /* @__PURE__ */ React5.createElement("div", { className: "readwise-dashboard-root" }, /* @__PURE__ */ React5.createElement("div", { className: "readwise-dashboard-top" }, /* @__PURE__ */ React5.createElement(
     ReadwiseTagFilterBar,
     {
@@ -8755,7 +8843,7 @@ var DashboardComponent = ({ plugin }) => {
       emptyText: t("dashboard.noActiveBooks"),
       showReset: !!selectedBookId,
       onReset: () => setSelectedBookId(null),
-      onToggleBook: (bookId) => setSelectedBookId((previous) => previous === bookId ? null : bookId)
+      onToggleBook: selectBook
     }
   ), /* @__PURE__ */ React5.createElement(
     ReadwiseBookSection,
@@ -8769,7 +8857,7 @@ var DashboardComponent = ({ plugin }) => {
       emptyText: t("dashboard.noCompletedBooks"),
       showReset: !!(selectedBookId && selectedBook && isCompletedBook(selectedBook)),
       onReset: () => setSelectedBookId(null),
-      onToggleBook: (bookId) => setSelectedBookId((previous) => previous === bookId ? null : bookId),
+      onToggleBook: selectBook,
       collapsed: completedCollapsed,
       countLabel: `(${completedBooks.length})`,
       onToggleCollapsed: () => setCompletedCollapsed((value) => !value)
@@ -9020,6 +9108,41 @@ function getBookPlaceholderLabel2(book) {
   const letters = source.split(/\s+/).map((part) => part[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
   return letters || "B";
 }
+function getImportFileTitle(file) {
+  return file.name.replace(/\.[^.]+$/, "").trim() || file.name;
+}
+function escapeHtml(value) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+function getReaderFileContentType(file) {
+  var _a;
+  const extension = ((_a = file.name.split(".").pop()) == null ? void 0 : _a.toLowerCase()) || "";
+  if (extension === "epub")
+    return "application/epub+zip";
+  if (extension === "pdf")
+    return "application/pdf";
+  if (extension === "html" || extension === "htm")
+    return "text/html";
+  if (extension === "txt")
+    return "text/plain";
+  if (extension === "md")
+    return "text/markdown";
+  if (file.type)
+    return file.type;
+  return null;
+}
+function isReaderAuthenticationError(error) {
+  return error instanceof Error && error.name === "ReaderAuthenticationError";
+}
+function mergeImportTags(tags, pending = "") {
+  const unique = /* @__PURE__ */ new Map();
+  for (const raw of [...tags, ...pending.split(",")]) {
+    const tag = raw.trim().replace(/^#+/, "");
+    if (tag)
+      unique.set(tag.toLocaleLowerCase(), tag);
+  }
+  return Array.from(unique.values());
+}
 var StatsComponent = ({ plugin }) => {
   const [books, setBooks] = React6.useState([]);
   const [readingActivityByBook, setReadingActivityByBook] = React6.useState({});
@@ -9028,12 +9151,43 @@ var StatsComponent = ({ plugin }) => {
   const [expandedHighlightPaths, setExpandedHighlightPaths] = React6.useState({});
   const [highlightContentByPath, setHighlightContentByPath] = React6.useState({});
   const [creatingInboxPath, setCreatingInboxPath] = React6.useState(null);
-  const [selectedBookId, setSelectedBookId] = React6.useState(null);
+  const [deletingBookId, setDeletingBookId] = React6.useState(null);
+  const [bookDeleteConfirmationOpen, setBookDeleteConfirmationOpen] = React6.useState(false);
+  const [selectedBookId, setSelectedBookId] = React6.useState(
+    () => plugin.getSelectedHighlightsBookId()
+  );
   const [bookQuery, setBookQuery] = React6.useState("");
   const [bookPickerOpen, setBookPickerOpen] = React6.useState(false);
+  const [importMenuOpen, setImportMenuOpen] = React6.useState(false);
+  const [importDialog, setImportDialog] = React6.useState(null);
+  const [importUrl, setImportUrl] = React6.useState("");
+  const [importTitle, setImportTitle] = React6.useState("");
+  const [selectedImportFile, setSelectedImportFile] = React6.useState(null);
+  const [importStatus, setImportStatus] = React6.useState(null);
+  const [importBusy, setImportBusy] = React6.useState(false);
+  const [readerLoginRequired, setReaderLoginRequired] = React6.useState(false);
+  const [readerEmail, setReaderEmail] = React6.useState("");
+  const [readerPassword, setReaderPassword] = React6.useState("");
+  const [importTags, setImportTags] = React6.useState([]);
+  const [importTagInput, setImportTagInput] = React6.useState("");
+  const [importDragActive, setImportDragActive] = React6.useState(false);
+  const [bookTagEditorOpen, setBookTagEditorOpen] = React6.useState(false);
+  const [bookTagInput, setBookTagInput] = React6.useState("");
+  const [bookTagBusy, setBookTagBusy] = React6.useState(false);
+  const [bookTagStatus, setBookTagStatus] = React6.useState(null);
+  const fileInputRef = React6.useRef(null);
+  const importControlRef = React6.useRef(null);
   const locale = getCurrentLocale();
   const dateLocale = getDateLocale(locale);
   const sortLocale = getSortLocale(locale);
+  const availableTags = React6.useMemo(() => Array.from(new Set(
+    books.flatMap((book) => book.tags || []).map((tag) => tag.trim()).filter(Boolean)
+  )).sort((a, b) => a.localeCompare(b, sortLocale)), [books, sortLocale]);
+  const suggestedImportTags = React6.useMemo(() => {
+    const query = importTagInput.trim().toLocaleLowerCase();
+    const selected = new Set(importTags.map((tag) => tag.toLocaleLowerCase()));
+    return availableTags.filter((tag) => !selected.has(tag.toLocaleLowerCase())).filter((tag) => !query || tag.toLocaleLowerCase().includes(query)).slice(0, 12);
+  }, [availableTags, importTagInput, importTags]);
   const loadData = () => {
     const data = plugin.dataManager.getData();
     setBooks(Object.values(data.books));
@@ -9044,6 +9198,25 @@ var StatsComponent = ({ plugin }) => {
     const interval = setInterval(loadData, 5e3);
     return () => clearInterval(interval);
   }, []);
+  React6.useEffect(() => plugin.onSelectedHighlightsBookChange((bookId) => {
+    setSelectedBookId(bookId);
+    setBookQuery("");
+    setBookPickerOpen(false);
+    setExpandedHighlightPaths({});
+    setHighlightContentByPath({});
+  }), [plugin]);
+  React6.useEffect(() => {
+    if (!importMenuOpen)
+      return;
+    const closeImportMenuOnOutsideClick = (event) => {
+      var _a;
+      if (!((_a = importControlRef.current) == null ? void 0 : _a.contains(event.target))) {
+        setImportMenuOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", closeImportMenuOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeImportMenuOnOutsideClick);
+  }, [importMenuOpen]);
   const readingBook = React6.useMemo(() => {
     const reading = books.filter((b) => b.status === "reading").sort((a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime());
     return reading[0] || null;
@@ -9057,6 +9230,16 @@ var StatsComponent = ({ plugin }) => {
       return books.find((b) => b.id === selectedBookId) || null;
     return readingBook;
   }, [books, readingBook, selectedBookId]);
+  const availableBookTags = React6.useMemo(() => {
+    const current = new Set(((activeBook == null ? void 0 : activeBook.tags) || []).map((tag) => tag.toLocaleLowerCase()));
+    const query = bookTagInput.trim().toLocaleLowerCase();
+    return availableTags.filter((tag) => !current.has(tag.toLocaleLowerCase())).filter((tag) => !query || tag.toLocaleLowerCase().includes(query)).slice(0, 12);
+  }, [activeBook, availableTags, bookTagInput]);
+  React6.useEffect(() => {
+    setBookTagEditorOpen(false);
+    setBookTagInput("");
+    setBookTagStatus(null);
+  }, [activeBook == null ? void 0 : activeBook.id]);
   React6.useEffect(() => {
     if (selectedBookId && !books.some((b) => b.id === selectedBookId))
       setSelectedBookId(null);
@@ -9073,6 +9256,25 @@ var StatsComponent = ({ plugin }) => {
       sum += getMinutesForDay(day, activeBook);
     return sum;
   }, [activeBook, readingActivityByBook]);
+  const addTagToActiveBook = React6.useCallback(async (rawTag) => {
+    const tag = mergeImportTags([], rawTag)[0];
+    if (!activeBook || !tag || bookTagBusy)
+      return;
+    setBookTagBusy(true);
+    setBookTagStatus(null);
+    try {
+      await plugin.addReaderDocumentTags(activeBook.id, [tag]);
+      setBookTagInput("");
+      setBookTagEditorOpen(false);
+      loadData();
+    } catch (error) {
+      setBookTagStatus(t("stats.bookTagFailed", {
+        message: error instanceof Error ? error.message : String(error)
+      }));
+    } finally {
+      setBookTagBusy(false);
+    }
+  }, [activeBook, bookTagBusy, plugin]);
   const formatDate = React6.useCallback((iso) => {
     if (!iso)
       return "";
@@ -9136,6 +9338,149 @@ var StatsComponent = ({ plugin }) => {
     }).filter((x) => Number.isFinite(x.score)).sort((a, b) => a.score - b.score || byRecentActivity(a.b, b.b));
     return scored.slice(0, 20).map((x) => x.b);
   }, [bookQuery, books, readingActivityByBook, sortLocale]);
+  const closeImportDialog = React6.useCallback(() => {
+    if (importBusy)
+      return;
+    setImportDialog(null);
+    setImportUrl("");
+    setImportTitle("");
+    setSelectedImportFile(null);
+    setImportStatus(null);
+    setReaderLoginRequired(false);
+    setReaderEmail("");
+    setReaderPassword("");
+    setImportTags([]);
+    setImportTagInput("");
+    setImportDragActive(false);
+  }, [importBusy]);
+  const selectImportFile = React6.useCallback((file) => {
+    setSelectedImportFile(file);
+    setImportTitle(file ? getImportFileTitle(file) : "");
+    setImportStatus(null);
+    setReaderLoginRequired(false);
+    setImportDragActive(false);
+  }, []);
+  const saveUrlToReader = React6.useCallback(async () => {
+    const url = importUrl.trim();
+    if (!url) {
+      setImportStatus(t("stats.importUrlRequired"));
+      return;
+    }
+    try {
+      new URL(url);
+    } catch (e) {
+      setImportStatus(t("stats.importUrlInvalid"));
+      return;
+    }
+    setImportBusy(true);
+    setImportStatus(t("stats.importSaving"));
+    try {
+      await plugin.saveReaderDocument({
+        url,
+        title: importTitle.trim() || void 0,
+        tags: mergeImportTags(importTags, importTagInput),
+        location: "new",
+        saved_using: "obsidian-readwise-tracker"
+      });
+      setImportStatus(t("stats.importSaved"));
+      loadData();
+      window.setTimeout(() => closeImportDialog(), 700);
+    } catch (error) {
+      setImportStatus(t("stats.importFailed", {
+        message: error instanceof Error ? error.message : String(error)
+      }));
+    } finally {
+      setImportBusy(false);
+    }
+  }, [closeImportDialog, importTagInput, importTags, importTitle, importUrl, plugin]);
+  const saveFileToReader = React6.useCallback(async () => {
+    var _a;
+    const file = selectedImportFile;
+    if (!file) {
+      setImportStatus(t("stats.importFileRequired"));
+      return;
+    }
+    const extension = ((_a = file.name.split(".").pop()) == null ? void 0 : _a.toLowerCase()) || "";
+    const contentType = getReaderFileContentType(file);
+    if (!contentType) {
+      setImportStatus(t("stats.importFileUnsupported"));
+      return;
+    }
+    setImportBusy(true);
+    setImportStatus(t("stats.importSaving"));
+    try {
+      if (extension === "epub" || extension === "pdf") {
+        await plugin.uploadReaderFile(
+          file.name,
+          contentType,
+          await file.arrayBuffer(),
+          mergeImportTags(importTags, importTagInput)
+        );
+      } else {
+        const text = await file.text();
+        const isHtml = extension === "html" || extension === "htm" || file.type === "text/html";
+        await plugin.saveReaderDocument({
+          url: `https://obsidian.local/readwise-import/${encodeURIComponent(file.name)}#${Date.now()}`,
+          html: isHtml ? text : `<article><pre>${escapeHtml(text)}</pre></article>`,
+          should_clean_html: true,
+          title: importTitle.trim() || getImportFileTitle(file),
+          tags: mergeImportTags(importTags, importTagInput),
+          location: "new",
+          category: "article",
+          saved_using: "obsidian-readwise-tracker"
+        });
+      }
+      setImportStatus(t("stats.importSaved"));
+      loadData();
+      window.setTimeout(() => closeImportDialog(), 700);
+    } catch (error) {
+      if (isReaderAuthenticationError(error)) {
+        setReaderLoginRequired(true);
+        setImportStatus(t("stats.importLoginRequired"));
+      } else {
+        setImportStatus(t("stats.importFailed", {
+          message: error instanceof Error ? error.message : String(error)
+        }));
+      }
+    } finally {
+      setImportBusy(false);
+    }
+  }, [closeImportDialog, importTagInput, importTags, importTitle, plugin, selectedImportFile]);
+  const loginAndRetryFileUpload = React6.useCallback(async () => {
+    const file = selectedImportFile;
+    const contentType = file ? getReaderFileContentType(file) : null;
+    if (!file || !contentType) {
+      setImportStatus(t("stats.importFileRequired"));
+      return;
+    }
+    if (!readerEmail.trim() || !readerPassword) {
+      setImportStatus(t("stats.importLoginFieldsRequired"));
+      return;
+    }
+    setImportBusy(true);
+    setImportStatus(t("stats.importLoginInProgress"));
+    try {
+      await plugin.loginToReader(readerEmail.trim(), readerPassword);
+      setReaderPassword("");
+      setImportStatus(t("stats.importRetryingUpload"));
+      await plugin.uploadReaderFile(
+        file.name,
+        contentType,
+        await file.arrayBuffer(),
+        mergeImportTags(importTags, importTagInput)
+      );
+      setImportStatus(t("stats.importSaved"));
+      setReaderLoginRequired(false);
+      loadData();
+      window.setTimeout(() => closeImportDialog(), 700);
+    } catch (error) {
+      setImportStatus(t("stats.importLoginFailed", {
+        message: error instanceof Error ? error.message : String(error)
+      }));
+    } finally {
+      setImportBusy(false);
+    }
+  }, [closeImportDialog, importTagInput, importTags, plugin, readerEmail, readerPassword, selectedImportFile]);
   return /* @__PURE__ */ React6.createElement("div", { className: "readwise-stats-root p-4" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-shell" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-row" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-search" }, /* @__PURE__ */ React6.createElement(
     "input",
     {
@@ -9167,7 +9512,42 @@ var StatsComponent = ({ plugin }) => {
     },
     /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-title" }, b.title),
     b.author ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-author" }, b.author) : null
-  ))) : null), /* @__PURE__ */ React6.createElement(
+  ))) : null), /* @__PURE__ */ React6.createElement("div", { ref: importControlRef, className: "readwise-import-control" }, /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      onClick: () => setImportMenuOpen((open) => !open),
+      className: "readwise-import-trigger",
+      "aria-label": t("stats.importOpen"),
+      title: t("stats.importOpen")
+    },
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-trigger-glyph" }, "+")
+  ), importMenuOpen ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-menu" }, /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      onClick: () => {
+        setImportDialog("url");
+        setImportMenuOpen(false);
+        setImportStatus(null);
+      },
+      className: "readwise-import-menu-item"
+    },
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-menu-icon" }, "\u2197"),
+    /* @__PURE__ */ React6.createElement("span", null, t("stats.importUrl")),
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-shortcut" }, "A")
+  ), /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      onClick: () => {
+        setImportDialog("upload");
+        setImportMenuOpen(false);
+        setImportStatus(null);
+      },
+      className: "readwise-import-menu-item"
+    },
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-menu-icon" }, "\u21E7"),
+    /* @__PURE__ */ React6.createElement("span", null, t("stats.importUpload")),
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-shortcut" }, "U")
+  )) : null), /* @__PURE__ */ React6.createElement(
     "button",
     {
       onClick: () => {
@@ -9183,14 +9563,89 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-current-book-button"
     },
     t("stats.currentlyReading")
-  )), !activeBook ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-helper" }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React6.createElement(
+  )), !activeBook ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-helper" }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: "readwise-selected-book-delete",
+      "aria-label": t("stats.deleteBook"),
+      title: t("stats.deleteBook"),
+      disabled: deletingBookId !== null,
+      onClick: () => setBookDeleteConfirmationOpen(true)
+    },
+    deletingBookId === activeBook.id ? /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, "\u2026") : /* @__PURE__ */ React6.createElement("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" }, /* @__PURE__ */ React6.createElement("path", { d: "M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5" }))
+  ), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React6.createElement(
     "img",
     {
       src: activeBook.cover_url,
       alt: activeBook.title,
       className: "readwise-selected-book-cover-image"
     }
-  ) : /* @__PURE__ */ React6.createElement("span", { className: "readwise-selected-book-cover-placeholder" }, getBookPlaceholderLabel2(activeBook))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-body" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-title" }, activeBook.title), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-author" }, activeBook.author || ""), activeBook.tags && activeBook.tags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-tags" }, activeBook.tags.slice(0, 20).map((t2) => /* @__PURE__ */ React6.createElement("span", { key: t2, className: "readwise-selected-book-tag" }, t2))) : null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-labels" }, /* @__PURE__ */ React6.createElement("div", null, Math.min(100, Math.max(0, activeBook.reading_progress || 0)).toFixed(1), "%"), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-time" }, t("stats.spent"), ": ", formatRemaining2(spentMinutes), " \xB7 ", t("stats.remaining"), ": ", (() => {
+  ) : /* @__PURE__ */ React6.createElement("span", { className: "readwise-selected-book-cover-placeholder" }, getBookPlaceholderLabel2(activeBook))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-body" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-title" }, activeBook.title), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-author" }, activeBook.author || ""), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-tags" }, (activeBook.tags || []).slice(0, 20).map((t2) => /* @__PURE__ */ React6.createElement("span", { key: t2, className: "readwise-selected-book-tag" }, t2)), /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-control" }, /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: "readwise-book-tag-add",
+      "aria-label": t("stats.bookTagAdd"),
+      title: t("stats.bookTagAdd"),
+      onClick: () => {
+        setBookTagEditorOpen((open) => !open);
+        setBookTagStatus(null);
+      }
+    },
+    /* @__PURE__ */ React6.createElement("span", { className: "readwise-book-tag-add-glyph", "aria-hidden": "true" }, "+")
+  ), bookTagEditorOpen ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover-header" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover-title" }, t("stats.bookTagTitle")), /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: "readwise-book-tag-close",
+      "aria-label": t("stats.importClose"),
+      title: t("stats.importClose"),
+      onClick: () => {
+        setBookTagEditorOpen(false);
+        setBookTagInput("");
+        setBookTagStatus(null);
+      }
+    },
+    "\xD7"
+  )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-input-row" }, /* @__PURE__ */ React6.createElement(
+    "input",
+    {
+      autoFocus: true,
+      value: bookTagInput,
+      onChange: (event) => setBookTagInput(event.target.value),
+      onKeyDown: (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          void addTagToActiveBook(bookTagInput);
+        }
+        if (event.key === "Escape")
+          setBookTagEditorOpen(false);
+      },
+      placeholder: t("stats.bookTagPlaceholder"),
+      disabled: bookTagBusy,
+      className: "readwise-book-tag-input"
+    }
+  ), /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: "readwise-book-tag-submit",
+      disabled: bookTagBusy || !bookTagInput.trim(),
+      onClick: () => void addTagToActiveBook(bookTagInput)
+    },
+    t("stats.bookTagSubmit")
+  )), availableBookTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-options" }, availableBookTags.map((tag) => /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      key: tag,
+      type: "button",
+      disabled: bookTagBusy,
+      onClick: () => void addTagToActiveBook(tag),
+      className: "readwise-book-tag-option"
+    },
+    tag
+  ))) : null, bookTagStatus ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-status" }, bookTagStatus) : null) : null)), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-labels" }, /* @__PURE__ */ React6.createElement("div", null, Math.min(100, Math.max(0, activeBook.reading_progress || 0)).toFixed(1), "%"), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-time" }, t("stats.spent"), ": ", formatRemaining2(spentMinutes), " \xB7 ", t("stats.remaining"), ": ", (() => {
     const remaining = getRemainingMinutes(activeBook);
     return remaining === null ? "-" : formatRemaining2(remaining);
   })())), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-bar" }, /* @__PURE__ */ React6.createElement(
@@ -9310,7 +9765,227 @@ var StatsComponent = ({ plugin }) => {
         }
       ), !cached.quote && !cached.description ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-muted" }, t("stats.emptyNote")) : null)) : null
     );
-  }))))));
+  }))))), bookDeleteConfirmationOpen && activeBook ? /* @__PURE__ */ React6.createElement(
+    "div",
+    {
+      className: "readwise-import-modal-backdrop",
+      onMouseDown: (event) => {
+        if (event.target === event.currentTarget && !deletingBookId) {
+          setBookDeleteConfirmationOpen(false);
+        }
+      }
+    },
+    /* @__PURE__ */ React6.createElement(
+      "div",
+      {
+        className: "readwise-delete-confirmation",
+        role: "alertdialog",
+        "aria-modal": "true",
+        "aria-labelledby": "readwise-delete-confirmation-title"
+      },
+      /* @__PURE__ */ React6.createElement("div", { id: "readwise-delete-confirmation-title", className: "readwise-delete-confirmation-title" }, t("stats.deleteBookConfirmTitle")),
+      /* @__PURE__ */ React6.createElement("div", { className: "readwise-delete-confirmation-text" }, t("stats.deleteBookConfirmText", { title: activeBook.title })),
+      /* @__PURE__ */ React6.createElement("div", { className: "readwise-delete-confirmation-actions" }, /* @__PURE__ */ React6.createElement(
+        "button",
+        {
+          type: "button",
+          className: "readwise-delete-confirmation-cancel",
+          disabled: deletingBookId !== null,
+          onClick: () => setBookDeleteConfirmationOpen(false)
+        },
+        t("stats.deleteBookCancel")
+      ), /* @__PURE__ */ React6.createElement(
+        "button",
+        {
+          type: "button",
+          className: "readwise-delete-confirmation-submit",
+          disabled: deletingBookId !== null,
+          onClick: async () => {
+            if (deletingBookId)
+              return;
+            try {
+              setDeletingBookId(activeBook.id);
+              await plugin.deleteReaderBook(activeBook.readwise_id || activeBook.id);
+              await plugin.dataManager.removeBooks([activeBook.id]);
+              setBookDeleteConfirmationOpen(false);
+              setSelectedBookId(null);
+              setExpandedHighlightPaths({});
+              setHighlightContentByPath({});
+              loadData();
+            } catch (error) {
+              new import_obsidian4.Notice(t("stats.deleteBookFailed", {
+                message: error instanceof Error ? error.message : String(error)
+              }));
+            } finally {
+              setDeletingBookId(null);
+            }
+          }
+        },
+        deletingBookId ? t("stats.deleteBookDeleting") : t("stats.deleteBookConfirm")
+      ))
+    )
+  ) : null, importDialog ? /* @__PURE__ */ React6.createElement(
+    "div",
+    {
+      className: "readwise-import-modal-backdrop",
+      onMouseDown: (event) => {
+        if (event.target === event.currentTarget) {
+          closeImportDialog();
+        }
+      }
+    },
+    /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal", role: "dialog", "aria-modal": "true" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-header is-upload" }, /* @__PURE__ */ React6.createElement(
+      "button",
+      {
+        onClick: closeImportDialog,
+        className: "readwise-import-close",
+        "aria-label": t("stats.importClose"),
+        disabled: importBusy
+      },
+      "\xD7"
+    )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-body" }, importDialog === "url" ? /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importUrl")), /* @__PURE__ */ React6.createElement(
+      "input",
+      {
+        value: importUrl,
+        onChange: (event) => setImportUrl(event.target.value),
+        placeholder: "https://...",
+        disabled: importBusy,
+        className: "readwise-import-input"
+      }
+    )) : /* @__PURE__ */ React6.createElement(
+      "div",
+      {
+        className: `readwise-import-dropzone${importDragActive ? " is-dragging" : ""}`,
+        role: "button",
+        tabIndex: 0,
+        onClick: () => {
+          var _a;
+          return (_a = fileInputRef.current) == null ? void 0 : _a.click();
+        },
+        onKeyDown: (event) => {
+          var _a;
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            (_a = fileInputRef.current) == null ? void 0 : _a.click();
+          }
+        },
+        onDragEnter: (event) => {
+          event.preventDefault();
+          setImportDragActive(true);
+        },
+        onDragOver: (event) => {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "copy";
+          setImportDragActive(true);
+        },
+        onDragLeave: (event) => {
+          event.preventDefault();
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setImportDragActive(false);
+          }
+        },
+        onDrop: (event) => {
+          var _a;
+          event.preventDefault();
+          selectImportFile(((_a = event.dataTransfer.files) == null ? void 0 : _a[0]) || null);
+        }
+      },
+      /* @__PURE__ */ React6.createElement(
+        "input",
+        {
+          ref: fileInputRef,
+          type: "file",
+          accept: ".html,.htm,.txt,.md,.pdf,.epub,text/*",
+          className: "readwise-import-file-input",
+          onChange: (event) => {
+            var _a;
+            selectImportFile(((_a = event.currentTarget.files) == null ? void 0 : _a[0]) || null);
+          }
+        }
+      ),
+      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-icon", "aria-hidden": "true" }, "\u2191"),
+      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-title" }, selectedImportFile ? selectedImportFile.name : t("stats.importDropTitle")),
+      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-hint" }, selectedImportFile ? t("stats.importDropReplace") : t("stats.importDropHint"))
+    ), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importTitleLabel")), /* @__PURE__ */ React6.createElement(
+      "input",
+      {
+        value: importTitle,
+        onChange: (event) => setImportTitle(event.target.value),
+        placeholder: t("stats.importTitlePlaceholder"),
+        disabled: importBusy,
+        className: "readwise-import-input"
+      }
+    )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importTagsLabel")), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-tag-editor" }, importTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-selected-tags" }, importTags.map((tag) => /* @__PURE__ */ React6.createElement(
+      "button",
+      {
+        key: tag,
+        type: "button",
+        className: "readwise-import-tag is-selected",
+        disabled: importBusy,
+        onClick: () => setImportTags((current) => current.filter((item) => item !== tag)),
+        title: t("stats.importTagRemove")
+      },
+      tag,
+      /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, " \xD7")
+    ))) : null, /* @__PURE__ */ React6.createElement(
+      "input",
+      {
+        value: importTagInput,
+        onChange: (event) => setImportTagInput(event.target.value),
+        onKeyDown: (event) => {
+          if (event.key === "Enter" || event.key === ",") {
+            event.preventDefault();
+            setImportTags((current) => mergeImportTags(current, importTagInput));
+            setImportTagInput("");
+          }
+        },
+        placeholder: t("stats.importTagsPlaceholder"),
+        disabled: importBusy,
+        className: "readwise-import-input"
+      }
+    ), suggestedImportTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-tag-suggestions" }, suggestedImportTags.map((tag) => /* @__PURE__ */ React6.createElement(
+      "button",
+      {
+        key: tag,
+        type: "button",
+        className: "readwise-import-tag",
+        disabled: importBusy,
+        onClick: () => {
+          setImportTags((current) => mergeImportTags(current, tag));
+          setImportTagInput("");
+        }
+      },
+      tag
+    ))) : null)), importDialog === "upload" && readerLoginRequired ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login-title" }, t("stats.importLoginTitle")), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login-help" }, t("stats.importLoginHelp")), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importLoginEmail")), /* @__PURE__ */ React6.createElement(
+      "input",
+      {
+        type: "email",
+        autoComplete: "username",
+        value: readerEmail,
+        onChange: (event) => setReaderEmail(event.target.value),
+        disabled: importBusy,
+        className: "readwise-import-input"
+      }
+    )), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importLoginPassword")), /* @__PURE__ */ React6.createElement(
+      "input",
+      {
+        type: "password",
+        autoComplete: "current-password",
+        value: readerPassword,
+        onChange: (event) => setReaderPassword(event.target.value),
+        disabled: importBusy,
+        className: "readwise-import-input"
+      }
+    ))) : null, importStatus ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-status" }, importStatus) : null), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-actions" }, /* @__PURE__ */ React6.createElement(
+      "button",
+      {
+        onClick: importDialog === "url" ? saveUrlToReader : readerLoginRequired ? loginAndRetryFileUpload : saveFileToReader,
+        disabled: importBusy,
+        className: "readwise-import-primary"
+      },
+      importBusy ? t("stats.importSaving") : readerLoginRequired ? t("stats.importLoginSubmit") : t("stats.importSave")
+    )))
+  ) : null);
 };
 
 // src/plugin/workspace.ts
@@ -9650,6 +10325,7 @@ var ReadwiseNoteService = class {
 
 // src/services/readwise.ts
 var import_obsidian6 = require("obsidian");
+var https = __toESM(require("https"));
 
 // src/services/readwiseRateLimit.ts
 var DEFAULT_RATE_LIMIT_WAIT_MS = 5e3;
@@ -9688,6 +10364,12 @@ function getRateLimitWaitMs(source) {
 }
 
 // src/services/readwise.ts
+var ReaderAuthenticationError = class extends Error {
+  constructor(message = "Reader authentication is required.") {
+    super(message);
+    this.name = "ReaderAuthenticationError";
+  }
+};
 var ReadwiseService = class {
   constructor(token) {
     this.baseUrl = "https://readwise.io/api/v3";
@@ -9731,20 +10413,126 @@ var ReadwiseService = class {
   async sleep(ms) {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
   }
+  getHeader(headers, name) {
+    const expected = name.toLowerCase();
+    for (const [key, value] of Object.entries(headers)) {
+      if (key.toLowerCase() === expected) {
+        return value;
+      }
+    }
+    return void 0;
+  }
+  getHeaderString(headers, name) {
+    const raw = this.getHeader(headers, name);
+    if (typeof raw === "string") {
+      return raw;
+    }
+    if (Array.isArray(raw) && typeof raw[0] === "string") {
+      return raw[0];
+    }
+    return void 0;
+  }
+  extractCookieHeader(headers) {
+    const raw = this.getHeader(headers, "set-cookie");
+    if (!raw) {
+      return "";
+    }
+    const rawCookies = Array.isArray(raw) ? raw.filter((item) => typeof item === "string") : typeof raw === "string" ? raw.split(/,(?=\s*[^;,=\s]+=[^;,]*)/g) : Object.values(raw).filter((item) => typeof item === "string");
+    return rawCookies.map((cookie) => {
+      var _a;
+      return (_a = cookie.split(";")[0]) == null ? void 0 : _a.trim();
+    }).filter(Boolean).join("; ");
+  }
+  mergeCookies(...cookies) {
+    const byName = /* @__PURE__ */ new Map();
+    for (const cookieHeader of cookies) {
+      for (const part of cookieHeader.split(";")) {
+        const cookie = part.trim();
+        const eq = cookie.indexOf("=");
+        if (eq <= 0)
+          continue;
+        byName.set(cookie.slice(0, eq), cookie.slice(eq + 1));
+      }
+    }
+    return Array.from(byName.entries()).map(([key, value]) => `${key}=${value}`).join("; ");
+  }
+  getCookieValue(cookieHeader, name) {
+    for (const part of cookieHeader.split(";")) {
+      const cookie = part.trim();
+      const eq = cookie.indexOf("=");
+      if (eq <= 0)
+        continue;
+      if (cookie.slice(0, eq) === name) {
+        return cookie.slice(eq + 1);
+      }
+    }
+    return void 0;
+  }
+  extractLoginCsrfToken(html) {
+    const inputMatch = html.match(/<input[^>]+name=["']csrfmiddlewaretoken["'][^>]*>/i);
+    const input = inputMatch == null ? void 0 : inputMatch[0];
+    const valueMatch = input == null ? void 0 : input.match(/\svalue=["']([^"']+)["']/i);
+    return valueMatch == null ? void 0 : valueMatch[1];
+  }
+  async nodeRequest(url, options) {
+    return new Promise((resolve, reject) => {
+      const parsed = new URL(url);
+      const request2 = https.request(
+        {
+          method: options.method,
+          hostname: parsed.hostname,
+          path: `${parsed.pathname}${parsed.search}`,
+          headers: options.headers
+        },
+        (response) => {
+          const chunks = [];
+          response.on("data", (chunk) => {
+            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+          });
+          response.on("end", () => {
+            resolve({
+              status: response.statusCode || 0,
+              headers: response.headers,
+              text: Buffer.concat(chunks).toString("utf8"),
+              url
+            });
+          });
+        }
+      );
+      request2.on("error", reject);
+      if (options.body) {
+        request2.write(options.body);
+      }
+      request2.end();
+    });
+  }
+  isRedirect(status) {
+    return status >= 300 && status < 400;
+  }
   async request(endpoint, params = {}) {
+    return this.requestJson(endpoint, {
+      method: "GET",
+      params,
+      okStatuses: [200]
+    });
+  }
+  async requestJson(endpoint, options) {
     if (!this.token) {
       throw new Error("Readwise API token is not set.");
     }
     const url = new URL(`${this.baseUrl}${endpoint}`);
-    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
+    Object.keys(options.params || {}).forEach((key) => url.searchParams.append(key, options.params[key]));
     const requestParams = {
       url: url.toString(),
-      method: "GET",
+      method: options.method,
       headers: {
         "Authorization": `Token ${this.token}`,
         "Content-Type": "application/json"
       }
     };
+    if (typeof options.body !== "undefined") {
+      requestParams.body = JSON.stringify(options.body);
+    }
     for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
       let response;
       try {
@@ -9761,7 +10549,7 @@ var ReadwiseService = class {
         continue;
       }
       if (this.debug) {
-        console.log("[Readwise] GET", requestParams.url, "status", response.status);
+        console.log("[Readwise]", options.method, requestParams.url, "status", response.status);
         console.log("[Readwise] headers", response.headers);
       }
       if (response.status === 429) {
@@ -9775,7 +10563,7 @@ var ReadwiseService = class {
         await this.sleep(waitMs);
         continue;
       }
-      if (response.status !== 200) {
+      if (!options.okStatuses.includes(response.status)) {
         const message = typeof response.text === "string" && response.text.length > 0 ? `Readwise API request failed: ${response.status} ${response.text.slice(0, 200)}` : `Readwise API request failed: ${response.status}`;
         throw new Error(message);
       }
@@ -9785,6 +10573,235 @@ var ReadwiseService = class {
       return response.json;
     }
     throw new Error("Readwise API request failed: too many retries after rate limiting.");
+  }
+  async saveDocument(document2) {
+    return this.requestJson("/save/", {
+      method: "POST",
+      body: document2,
+      okStatuses: [200, 201]
+    });
+  }
+  async updateDocumentTags(documentIds, tags) {
+    var _a;
+    if (documentIds.length === 0 || tags.length === 0)
+      return;
+    const response = await this.requestJson("/bulk_update/", {
+      method: "PATCH",
+      body: {
+        updates: documentIds.map((id) => ({ id, tags }))
+      },
+      okStatuses: [200, 207]
+    });
+    const failures = ((_a = response.results) == null ? void 0 : _a.filter((result) => !result.success)) || [];
+    if (failures.length > 0) {
+      throw new Error(failures.map((failure) => failure.error || failure.id).join(", "));
+    }
+  }
+  async updateNewDocumentTagsWhenReady(documentIds, tags) {
+    if (documentIds.length === 0 || tags.length === 0)
+      return;
+    const retryDelaysMs = [500, 1e3, 2e3, 3e3, 4e3, 4e3];
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await this.updateDocumentTags(documentIds, tags);
+        return;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        const canRetry = /document not found/i.test(message) && attempt < retryDelaysMs.length;
+        if (!canRetry)
+          throw error;
+        await this.sleep(retryDelaysMs[attempt]);
+      }
+    }
+  }
+  async addDocumentTags(documentId, tags) {
+    var _a;
+    if (!documentId || tags.length === 0)
+      return;
+    const documentResponse = await this.request("/list/", { id: documentId });
+    const existingTags = Object.keys(((_a = documentResponse.results[0]) == null ? void 0 : _a.tags) || {});
+    const mergedTags = Array.from(new Map(
+      [...existingTags, ...tags].map((tag) => tag.trim()).filter(Boolean).map((tag) => [tag.toLocaleLowerCase(), tag])
+    ).values());
+    await this.updateDocumentTags([documentId], mergedTags);
+  }
+  async deleteReaderDocument(documentId, sessionCookie) {
+    if (!sessionCookie) {
+      throw new ReaderAuthenticationError("Sign in to Reader before deleting a book.");
+    }
+    const createEventId = () => {
+      const alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+      let timestamp = Date.now();
+      let timePart = "";
+      for (let index = 0; index < 10; index++) {
+        timePart = alphabet[timestamp % 32] + timePart;
+        timestamp = Math.floor(timestamp / 32);
+      }
+      const random = new Uint8Array(16);
+      crypto.getRandomValues(random);
+      return timePart + Array.from(random, (value) => alphabet[value % 32]).join("");
+    };
+    const now = Date.now();
+    const body = JSON.stringify({
+      events: [{
+        correlationId: createEventId(),
+        dataUpdates: {
+          forwardPatch: [{ op: "remove", path: `/documents/${documentId}` }],
+          itemsUpdated: [{ id: documentId, type: "documents" }],
+          reversePatch: []
+        },
+        environment: {
+          agent: { category: "desktop-app", version: "unknown" },
+          app: { category: "obsidian-plugin", version: "unknown" },
+          channel: "production"
+        },
+        id: createEventId(),
+        name: "full-document-deleted",
+        timestamp: now,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+        userInteraction: { name: "click" }
+      }],
+      schemaVersion: 10,
+      isChunkingSupported: true
+    });
+    const response = await (0, import_obsidian6.requestUrl)({
+      url: "https://readwise.io/reader/api/state/update/",
+      method: "POST",
+      body,
+      contentType: "text/plain;charset=UTF-8",
+      throw: false,
+      headers: {
+        "Cookie": sessionCookie,
+        "Content-Type": "text/plain;charset=UTF-8",
+        "Origin": "https://read.readwise.io",
+        "Referer": "https://read.readwise.io/",
+        ...this.getCookieValue(sessionCookie, "csrftoken") ? { "X-CSRFToken": this.getCookieValue(sessionCookie, "csrftoken") } : {}
+      }
+    });
+    if (response.status === 401 || response.status === 403) {
+      throw new ReaderAuthenticationError();
+    }
+    if (response.status !== 200) {
+      throw new Error(`Readwise delete failed: ${response.status} ${response.text.slice(0, 200)}`);
+    }
+  }
+  async loginToReader(email, password) {
+    const loginUrl = "https://readwise.io/accounts/login/?next=/read/authed";
+    const initial = await this.nodeRequest(loginUrl, {
+      method: "GET",
+      headers: {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Referer": "https://readwise.io/accounts/login/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Obsidian Readwise Tracker"
+      }
+    });
+    const initialCookie = this.extractCookieHeader(initial.headers);
+    const csrfToken = this.extractLoginCsrfToken(initial.text);
+    if (!csrfToken) {
+      throw new Error("Readwise login page did not contain a CSRF token.");
+    }
+    if (!this.getCookieValue(initialCookie, "csrftoken")) {
+      throw new Error("Readwise login did not return the csrftoken cookie.");
+    }
+    const body = new URLSearchParams();
+    body.set("csrfmiddlewaretoken", csrfToken);
+    body.set("login", email);
+    body.set("password", password);
+    const response = await this.nodeRequest(loginUrl, {
+      method: "POST",
+      body: body.toString(),
+      headers: {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": String(Buffer.byteLength(body.toString())),
+        "Cookie": initialCookie,
+        "Cache-Control": "max-age=0",
+        "Referer": loginUrl,
+        "Origin": "https://readwise.io",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
+        "X-CSRFToken": csrfToken,
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Obsidian Readwise Tracker"
+      }
+    });
+    const sessionCookie = this.mergeCookies(initialCookie, this.extractCookieHeader(response.headers));
+    const location = this.getHeaderString(response.headers, "location");
+    const redirectedToReader = this.isRedirect(response.status) && Boolean(location) && new URL(location, loginUrl).pathname.startsWith("/read/authed");
+    if (!redirectedToReader) {
+      const hasPasswordError = /password|incorrect|invalid|captcha|csrf|two-factor|2fa|verification/i.test(response.text);
+      const hint = hasPasswordError ? " Readwise returned the login page with an error." : location ? ` Redirected to ${location} instead of /read/authed.` : " The expected /read/authed redirect was not returned.";
+      throw new Error(`Readwise login failed: ${response.status}.${hint} Check credentials, 2FA, or CAPTCHA.`);
+    }
+    return { sessionCookie };
+  }
+  async uploadFile(fileName, contentType, body, sessionCookie) {
+    if (!sessionCookie) {
+      throw new ReaderAuthenticationError();
+    }
+    const signUrl = new URL("https://readwise.io/reader/api/sign_s3");
+    signUrl.searchParams.set("file_name", fileName);
+    signUrl.searchParams.set("type", contentType);
+    const signResponse = await (0, import_obsidian6.requestUrl)({
+      url: signUrl.toString(),
+      method: "GET",
+      throw: false,
+      headers: {
+        "Cookie": sessionCookie,
+        "Origin": "https://read.readwise.io",
+        "Referer": "https://read.readwise.io/"
+      }
+    });
+    if (signResponse.status === 401 || signResponse.status === 403) {
+      throw new ReaderAuthenticationError();
+    }
+    if (signResponse.status !== 200) {
+      throw new Error(`Readwise upload signing failed: ${signResponse.status}`);
+    }
+    const signed = signResponse.json;
+    if (!(signed == null ? void 0 : signed.url) || typeof signed.file_id !== "number") {
+      throw new Error("Readwise upload signing returned an invalid response.");
+    }
+    const uploadResponse = await (0, import_obsidian6.requestUrl)({
+      url: signed.url,
+      method: "PUT",
+      body,
+      contentType,
+      throw: false,
+      headers: {
+        "Content-Type": contentType
+      }
+    });
+    if (uploadResponse.status !== 200) {
+      throw new Error(`Readwise file upload failed: ${uploadResponse.status}`);
+    }
+    const registerResponse = await (0, import_obsidian6.requestUrl)({
+      url: "https://readwise.io/reader/upload_files/",
+      method: "POST",
+      body: JSON.stringify({
+        content_type: contentType,
+        reader_file_id: signed.file_id,
+        file_name: fileName
+      }),
+      contentType: "text/plain;charset=UTF-8",
+      throw: false,
+      headers: {
+        "Cookie": sessionCookie,
+        "Content-Type": "text/plain;charset=UTF-8",
+        "Origin": "https://read.readwise.io",
+        "Referer": "https://read.readwise.io/",
+        ...this.getCookieValue(sessionCookie, "csrftoken") ? { "X-CSRFToken": this.getCookieValue(sessionCookie, "csrftoken") } : {}
+      }
+    });
+    if (registerResponse.status === 401 || registerResponse.status === 403) {
+      throw new ReaderAuthenticationError();
+    }
+    if (registerResponse.status !== 200) {
+      throw new Error(`Readwise upload registration failed: ${registerResponse.status}`);
+    }
+    return registerResponse.json;
   }
   async getDocuments(location, category, updatedAfter, pageCursor) {
     const params = {};
@@ -10091,11 +11108,11 @@ var ReadwiseSyncService = class {
   async fetchDocuments(requests) {
     const documents = [];
     const seenIds = /* @__PURE__ */ new Set();
-    for (const request of requests) {
+    for (const request2 of requests) {
       const part = await this.readwiseService.getAllDocuments(
-        request.location,
+        request2.location,
         void 0,
-        request.updatedAfter
+        request2.updatedAfter
       );
       for (const document2 of part) {
         if (!seenIds.has(document2.id)) {
@@ -10212,6 +11229,7 @@ var import_obsidian9 = require("obsidian");
 var ALL_SYNC_LOCATIONS = ["new", "later", "shortlist", "feed", "archive"];
 var DEFAULT_SETTINGS = {
   readwiseToken: "",
+  readwiseReaderSessionCookie: "",
   debugLogging: false,
   readwiseBooksFolder: "Readwise/Books",
   readwiseLinkedHighlightsFolder: "Readwise/Highlights",
@@ -10344,6 +11362,8 @@ var ReadwiseTrackerPlugin = class extends import_obsidian10.Plugin {
   constructor() {
     super(...arguments);
     this.syncInFlight = null;
+    this.selectedHighlightsBookId = null;
+    this.selectedHighlightsBookListeners = /* @__PURE__ */ new Set();
   }
   async onload() {
     await this.loadSettings();
@@ -10365,8 +11385,70 @@ var ReadwiseTrackerPlugin = class extends import_obsidian10.Plugin {
   async activateView(viewType) {
     await activateReadwiseView(this.app.workspace, viewType);
   }
+  async openBookHighlights(bookId) {
+    this.selectedHighlightsBookId = bookId;
+    await this.activateView(STATS_VIEW_TYPE);
+    for (const listener of this.selectedHighlightsBookListeners) {
+      listener(bookId);
+    }
+  }
+  getSelectedHighlightsBookId() {
+    return this.selectedHighlightsBookId;
+  }
+  onSelectedHighlightsBookChange(listener) {
+    this.selectedHighlightsBookListeners.add(listener);
+    return () => this.selectedHighlightsBookListeners.delete(listener);
+  }
   async createInboxNoteFromHighlight(args) {
     return this.noteService.createInboxNoteFromHighlight(this.settings, args);
+  }
+  async saveReaderDocument(document2) {
+    const saved = await this.readwiseService.saveDocument(document2);
+    await this.readwiseService.addDocumentTags(saved.id, document2.tags || []);
+    await this.syncReadwiseData({ silent: true });
+    return saved;
+  }
+  async addReaderDocumentTags(documentId, tags) {
+    await this.readwiseService.addDocumentTags(documentId, tags);
+    await this.syncReadwiseData({ silent: true });
+  }
+  async deleteReaderBook(documentId) {
+    try {
+      await this.readwiseService.deleteReaderDocument(
+        documentId,
+        this.settings.readwiseReaderSessionCookie
+      );
+    } catch (error) {
+      if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
+        this.settings.readwiseReaderSessionCookie = "";
+        await this.saveSettings();
+      }
+      throw error;
+    }
+  }
+  async uploadReaderFile(fileName, contentType, body, tags = []) {
+    try {
+      const uploaded = await this.readwiseService.uploadFile(
+        fileName,
+        contentType,
+        body,
+        this.settings.readwiseReaderSessionCookie
+      );
+      await this.readwiseService.updateNewDocumentTagsWhenReady(uploaded.docs_ids || [], tags);
+      await this.syncReadwiseData({ silent: true });
+      return uploaded;
+    } catch (error) {
+      if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
+        this.settings.readwiseReaderSessionCookie = "";
+        await this.saveSettings();
+      }
+      throw error;
+    }
+  }
+  async loginToReader(email, password) {
+    const result = await this.readwiseService.loginToReader(email, password);
+    this.settings.readwiseReaderSessionCookie = result.sessionCookie;
+    await this.saveSettings();
   }
   async migrateReadwiseBookNotesToLinkedHighlights() {
     await this.noteService.migrateReadwiseBookNotesToLinkedHighlights(

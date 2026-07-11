@@ -2,12 +2,17 @@ import { Notice, Plugin, type TFile } from "obsidian";
 import { registerCommands } from "../commands/registerCommands";
 import { DataManager } from "../services/dataManager";
 import { ReadwiseNoteService } from "../services/readwiseNoteService";
-import { ReadwiseService } from "../services/readwise";
+import { ReaderAuthenticationError, ReadwiseService } from "../services/readwise";
 import { ReadwiseOfficialSyncService } from "../services/ReadwiseOfficialSyncService";
 import { ReadwiseSyncService } from "../services/ReadwiseSyncService";
 import { ReadwiseTrackerSettingTab } from "../settings/ReadwiseTrackerSettingTab";
 import { loadPluginSettings, savePluginSettings } from "../settings/persistence";
 import type { ReadwiseTrackerSettings } from "../settings/types";
+import type {
+  ReadwiseSaveDocumentRequest,
+  ReadwiseSaveDocumentResponse,
+  ReadwiseUploadFileResponse,
+} from "../models/readwise";
 import { DashboardView } from "../ui/DashboardView";
 import { StatsView } from "../ui/StatsView";
 import { t } from "../i18n";
@@ -24,6 +29,8 @@ export class ReadwiseTrackerPlugin extends Plugin {
   private syncService!: ReadwiseSyncService;
   private noteService!: ReadwiseNoteService;
   private syncInFlight: Promise<void> | null = null;
+  private selectedHighlightsBookId: string | null = null;
+  private selectedHighlightsBookListeners = new Set<(bookId: string) => void>();
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -51,8 +58,83 @@ export class ReadwiseTrackerPlugin extends Plugin {
     await activateReadwiseView(this.app.workspace, viewType);
   }
 
+  async openBookHighlights(bookId: string): Promise<void> {
+    this.selectedHighlightsBookId = bookId;
+    await this.activateView(STATS_VIEW_TYPE);
+    for (const listener of this.selectedHighlightsBookListeners) {
+      listener(bookId);
+    }
+  }
+
+  getSelectedHighlightsBookId(): string | null {
+    return this.selectedHighlightsBookId;
+  }
+
+  onSelectedHighlightsBookChange(listener: (bookId: string) => void): () => void {
+    this.selectedHighlightsBookListeners.add(listener);
+    return () => this.selectedHighlightsBookListeners.delete(listener);
+  }
+
   async createInboxNoteFromHighlight(args: CreateInboxNoteArgs): Promise<TFile> {
     return this.noteService.createInboxNoteFromHighlight(this.settings, args);
+  }
+
+  async saveReaderDocument(document: ReadwiseSaveDocumentRequest): Promise<ReadwiseSaveDocumentResponse> {
+    const saved = await this.readwiseService.saveDocument(document);
+    await this.readwiseService.addDocumentTags(saved.id, document.tags || []);
+    await this.syncReadwiseData({ silent: true });
+    return saved;
+  }
+
+  async addReaderDocumentTags(documentId: string, tags: string[]): Promise<void> {
+    await this.readwiseService.addDocumentTags(documentId, tags);
+    await this.syncReadwiseData({ silent: true });
+  }
+
+  async deleteReaderBook(documentId: string): Promise<void> {
+    try {
+      await this.readwiseService.deleteReaderDocument(
+        documentId,
+        this.settings.readwiseReaderSessionCookie,
+      );
+    } catch (error) {
+      if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
+        this.settings.readwiseReaderSessionCookie = "";
+        await this.saveSettings();
+      }
+      throw error;
+    }
+  }
+
+  async uploadReaderFile(
+    fileName: string,
+    contentType: string,
+    body: ArrayBuffer,
+    tags: string[] = [],
+  ): Promise<ReadwiseUploadFileResponse> {
+    try {
+      const uploaded = await this.readwiseService.uploadFile(
+        fileName,
+        contentType,
+        body,
+        this.settings.readwiseReaderSessionCookie,
+      );
+      await this.readwiseService.updateNewDocumentTagsWhenReady(uploaded.docs_ids || [], tags);
+      await this.syncReadwiseData({ silent: true });
+      return uploaded;
+    } catch (error) {
+      if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
+        this.settings.readwiseReaderSessionCookie = "";
+        await this.saveSettings();
+      }
+      throw error;
+    }
+  }
+
+  async loginToReader(email: string, password: string): Promise<void> {
+    const result = await this.readwiseService.loginToReader(email, password);
+    this.settings.readwiseReaderSessionCookie = result.sessionCookie;
+    await this.saveSettings();
   }
 
   async migrateReadwiseBookNotesToLinkedHighlights(): Promise<void> {

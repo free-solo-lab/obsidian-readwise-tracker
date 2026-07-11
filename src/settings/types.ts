@@ -4,6 +4,7 @@ export const ALL_SYNC_LOCATIONS: ReadwiseSyncLocation[] = ["new", "later", "shor
 
 export interface ReadwiseTrackerSettings {
   readwiseToken: string;
+  readwiseReaderSessionCookie: string;
   debugLogging: boolean;
   readwiseBooksFolder: string;
   readwiseLinkedHighlightsFolder: string;
@@ -22,6 +23,7 @@ export interface ReadwiseTrackerSettings {
 
 export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
   readwiseToken: "",
+  readwiseReaderSessionCookie: "",
   debugLogging: false,
   readwiseBooksFolder: "Readwise/Books",
   readwiseLinkedHighlightsFolder: "Readwise/Highlights",

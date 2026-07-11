@@ -457,6 +457,11 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     return dates;
   }, [completedBooks, locale, readingBooks]);
 
+  const selectBook = React.useCallback((bookId: string) => {
+    setSelectedBookId(bookId);
+    void plugin.openBookHighlights(bookId);
+  }, [plugin]);
+
   return (
     <div className="readwise-dashboard-root">
       <div className="readwise-dashboard-top">
@@ -501,7 +506,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
         emptyText={t("dashboard.noActiveBooks")}
         showReset={!!selectedBookId}
         onReset={() => setSelectedBookId(null)}
-        onToggleBook={(bookId) => setSelectedBookId((previous) => (previous === bookId ? null : bookId))}
+        onToggleBook={selectBook}
       />
 
       <ReadwiseBookSection
@@ -514,7 +519,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
         emptyText={t("dashboard.noCompletedBooks")}
         showReset={!!(selectedBookId && selectedBook && isCompletedBook(selectedBook))}
         onReset={() => setSelectedBookId(null)}
-        onToggleBook={(bookId) => setSelectedBookId((previous) => (previous === bookId ? null : bookId))}
+        onToggleBook={selectBook}
         collapsed={completedCollapsed}
         countLabel={`(${completedBooks.length})`}
         onToggleCollapsed={() => setCompletedCollapsed((value) => !value)}
