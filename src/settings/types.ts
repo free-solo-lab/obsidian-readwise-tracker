@@ -19,6 +19,8 @@ export interface ReadwiseTrackerSettings {
   requestDelayMs: number;
   /** How many times to wait out an HTTP 429 (respecting Retry-After) before giving up on a request. */
   maxRetries: number;
+  /** Stable keys of tag rows collapsed on the planning board. */
+  planningBoardCollapsedGroups: string[];
 }
 
 export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
@@ -31,4 +33,5 @@ export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
   syncLocations: ["new", "later", "shortlist"],
   requestDelayMs: 3200,
   maxRetries: 8,
+  planningBoardCollapsedGroups: [],
 };

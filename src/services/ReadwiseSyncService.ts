@@ -137,6 +137,7 @@ export class ReadwiseSyncService {
       reading_progress: readingProgress,
       words_count: document.word_count,
       notes_count: document.num_highlights || 0,
+      location: document.location as LocalBook["location"],
       status:
         document.location === "archive"
           ? "completed"

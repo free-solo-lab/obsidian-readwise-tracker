@@ -313,6 +313,20 @@ export class ReadwiseService {
         }
     }
 
+    public async updateDocumentLocation(documentId: string, location: 'new' | 'later' | 'archive'): Promise<void> {
+        if (!documentId) return;
+
+        const response = await this.requestJson<{
+            results?: Array<{ id: string; success: boolean; error?: string }>;
+        }>('/bulk_update/', {
+            method: 'PATCH',
+            body: { updates: [{ id: documentId, location }] },
+            okStatuses: [200, 207],
+        });
+        const failure = response.results?.find((result) => !result.success);
+        if (failure) throw new Error(failure.error || failure.id);
+    }
+
     public async updateNewDocumentTagsWhenReady(documentIds: string[], tags: string[]): Promise<void> {
         if (documentIds.length === 0 || tags.length === 0) return;
 

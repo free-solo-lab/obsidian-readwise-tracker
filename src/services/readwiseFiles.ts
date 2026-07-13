@@ -2,15 +2,8 @@ import { TFile, normalizePath, type App } from "obsidian";
 import type { LocalBook } from "../models/store";
 import type { ReadwiseTrackerSettings } from "../settings/types";
 import { currentSortLocale } from "../i18n";
-
-export function normalizeSearchName(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/ё/g, "е")
-    .replace(/[^a-z0-9а-я]+/gi, " ")
-    .trim()
-    .replace(/\s+/g, " ");
-}
+export { normalizeCompactName, normalizeSearchName } from "./readwiseFileNames";
+import { normalizeCompactName, normalizeSearchName } from "./readwiseFileNames";
 
 export function getBooksRoot(settings: ReadwiseTrackerSettings): string {
   return normalizePath(String(settings.readwiseBooksFolder || "")).replace(/^\/+/, "").replace(/\/+$/, "");
@@ -47,11 +40,17 @@ export function findBookNoteFile(
   }
 
   const wanted = normalizeSearchName(book.title);
+  const compactWanted = normalizeCompactName(book.title);
   for (const file of booksFiles) {
     const cache = app.metadataCache.getFileCache(file);
     const frontmatter = cache?.frontmatter as Record<string, unknown> | undefined;
     const title = typeof frontmatter?.title === "string" ? frontmatter.title : "";
-    if (normalizeSearchName(title) === wanted || normalizeSearchName(file.basename) === wanted) {
+    if (
+      normalizeSearchName(title) === wanted ||
+      normalizeSearchName(file.basename) === wanted ||
+      normalizeCompactName(title) === compactWanted ||
+      normalizeCompactName(file.basename) === compactWanted
+    ) {
       return file;
     }
   }
@@ -81,6 +80,7 @@ export function findHighlightFilesForBook(
 
   const rootPrefix = root ? `${root}/` : "";
   const wanted = normalizeSearchName(book.title);
+  const compactWanted = normalizeCompactName(book.title);
   return app.vault
     .getMarkdownFiles()
     .filter((file) => (root ? file.path.startsWith(rootPrefix) : false))
@@ -92,7 +92,14 @@ export function findHighlightFilesForBook(
       if (normalizedBook && normalizedBook.includes(wanted)) {
         return true;
       }
-      return normalizeSearchName(file.path).includes(wanted);
+      const compactBook = normalizeCompactName(bookField.replace(/^\[\[|\]\]$/g, ""));
+      if (compactBook && compactBook.includes(compactWanted)) {
+        return true;
+      }
+      return (
+        normalizeSearchName(file.path).includes(wanted) ||
+        normalizeCompactName(file.path).includes(compactWanted)
+      );
     })
     .sort((a, b) => a.basename.localeCompare(b.basename, sortLocale));
 }

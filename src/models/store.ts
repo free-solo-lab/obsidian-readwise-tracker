@@ -13,6 +13,7 @@ export interface LocalBook {
     cover_url?: string;
     reading_progress: number; // 0-100
     status: 'planned' | 'reading' | 'completed' | 'skipped';
+    location?: 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
     notes_count?: number;
 }
 

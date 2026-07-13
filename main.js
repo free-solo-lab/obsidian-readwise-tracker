@@ -7838,7 +7838,7 @@ var import_obsidian10 = require("obsidian");
 
 // src/ui/DashboardView.tsx
 var import_obsidian2 = require("obsidian");
-var React5 = __toESM(require_react());
+var React6 = __toESM(require_react());
 var ReactDOM = __toESM(require_client());
 
 // src/i18n/messages.ts
@@ -7964,12 +7964,32 @@ var messages = {
     "dashboard.updatesLegend": "Books (updates)",
     "dashboard.period365": "Last 365 days",
     "dashboard.periodDay": "1 day",
+    "dashboard.periodRange": "Selected period",
     "dashboard.remainingUnknown": "remaining: -",
     "dashboard.completedLabel": "read",
     "dashboard.currentlyReading": "Currently reading",
     "dashboard.completed": "Read",
     "dashboard.noActiveBooks": "No active books.",
     "dashboard.noCompletedBooks": "No read books yet.",
+    "dashboard.library": "Library",
+    "dashboard.viewMode": "Library view",
+    "dashboard.listView": "List",
+    "dashboard.boardView": "Board",
+    "dashboard.boardToRead": "To Read",
+    "dashboard.boardInProgress": "In Progress",
+    "dashboard.boardDone": "Done",
+    "dashboard.boardNoTag": "No tag",
+    "dashboard.boardEmpty": "No books match the current filters.",
+    "dashboard.unknownAuthor": "Unknown author",
+    "dashboard.readerInbox": "Reader: Inbox",
+    "dashboard.readerLater": "Reader: Later",
+    "dashboard.readerArchive": "Reader: Archive",
+    "dashboard.moveSuccess": "Moved in Readwise to {location}.",
+    "dashboard.moveFailed": "Could not move the book in Readwise: {message}",
+    "dashboard.dateRange": "Reading date range",
+    "dashboard.dateFrom": "From",
+    "dashboard.dateTo": "To",
+    "dashboard.dateClear": "Clear date range",
     "heatmap.mon": "Mon",
     "heatmap.wed": "Wed",
     "heatmap.fri": "Fri",
@@ -8105,12 +8125,32 @@ var messages = {
     "dashboard.updatesLegend": "\u041A\u043D\u0438\u0433\u0438 (\u043E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F)",
     "dashboard.period365": "\u0417\u0430 365 \u0434\u043D\u0435\u0439",
     "dashboard.periodDay": "\u0417\u0430 1 \u0434\u0435\u043D\u044C",
+    "dashboard.periodRange": "\u0412\u044B\u0431\u0440\u0430\u043D\u043D\u044B\u0439 \u043F\u0435\u0440\u0438\u043E\u0434",
     "dashboard.remainingUnknown": "\u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C: -",
     "dashboard.completedLabel": "\u043F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E",
     "dashboard.currentlyReading": "\u0421\u0435\u0439\u0447\u0430\u0441 \u0447\u0438\u0442\u0430\u044E",
     "dashboard.completed": "\u041F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E",
     "dashboard.noActiveBooks": "\u041D\u0435\u0442 \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0445 \u043A\u043D\u0438\u0433.",
     "dashboard.noCompletedBooks": "\u041F\u043E\u043A\u0430 \u043D\u0435\u0442 \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043D\u044B\u0445 \u043A\u043D\u0438\u0433.",
+    "dashboard.library": "\u0411\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0430",
+    "dashboard.viewMode": "\u0412\u0438\u0434 \u0431\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0438",
+    "dashboard.listView": "\u0421\u043F\u0438\u0441\u043E\u043A",
+    "dashboard.boardView": "\u0414\u043E\u0441\u043A\u0430",
+    "dashboard.boardToRead": "\u041A \u043F\u0440\u043E\u0447\u0442\u0435\u043D\u0438\u044E",
+    "dashboard.boardInProgress": "\u0427\u0438\u0442\u0430\u044E",
+    "dashboard.boardDone": "\u041F\u0440\u043E\u0447\u0438\u0442\u0430\u043D\u043E",
+    "dashboard.boardNoTag": "\u0411\u0435\u0437 \u0442\u0435\u0433\u0430",
+    "dashboard.boardEmpty": "\u041D\u0435\u0442 \u043A\u043D\u0438\u0433, \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0438\u0445 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\u044B\u043C \u0444\u0438\u043B\u044C\u0442\u0440\u0430\u043C.",
+    "dashboard.unknownAuthor": "\u0410\u0432\u0442\u043E\u0440 \u043D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D",
+    "dashboard.readerInbox": "Reader: Inbox",
+    "dashboard.readerLater": "Reader: Later",
+    "dashboard.readerArchive": "Reader: Archive",
+    "dashboard.moveSuccess": "\u041A\u043D\u0438\u0433\u0430 \u043F\u0435\u0440\u0435\u043C\u0435\u0449\u0435\u043D\u0430 \u0432 Readwise: {location}.",
+    "dashboard.moveFailed": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u0435\u0440\u0435\u043C\u0435\u0441\u0442\u0438\u0442\u044C \u043A\u043D\u0438\u0433\u0443 \u0432 Readwise: {message}",
+    "dashboard.dateRange": "\u041F\u0435\u0440\u0438\u043E\u0434 \u0447\u0442\u0435\u043D\u0438\u044F",
+    "dashboard.dateFrom": "\u0421",
+    "dashboard.dateTo": "\u041F\u043E",
+    "dashboard.dateClear": "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u043F\u0435\u0440\u0438\u043E\u0434",
     "heatmap.mon": "\u041F\u043D",
     "heatmap.wed": "\u0421\u0440",
     "heatmap.fri": "\u041F\u0442",
@@ -8429,6 +8469,218 @@ var ReadwiseTagFilterBar = ({
   })));
 };
 
+// src/ui/components/ReadwisePlanningBoard.tsx
+var React5 = __toESM(require_react());
+
+// src/ui/planningBoard.ts
+function getPlanningStatus(book) {
+  if (book.location === "archive")
+    return "completed";
+  if (book.location === "new")
+    return "reading";
+  if (book.location === "later" || book.location === "shortlist" || book.location === "feed")
+    return "planned";
+  const progress = Math.min(100, Math.max(0, book.reading_progress || 0));
+  if (book.status === "completed" || progress >= 100)
+    return "completed";
+  if (book.status === "reading")
+    return "reading";
+  return "planned";
+}
+function getReaderLocation(status) {
+  if (status === "completed")
+    return "archive";
+  if (status === "reading")
+    return "new";
+  return "later";
+}
+function groupPlanningBooksByTag(books, locale, tagScope = []) {
+  const groups = /* @__PURE__ */ new Map();
+  const scopedTags = new Set(tagScope);
+  const untagged = [];
+  for (const book of books) {
+    const tags = Array.from(new Set(
+      (book.tags || []).map((tag) => tag.trim()).filter(Boolean)
+    )).filter((tag) => scopedTags.size === 0 || scopedTags.has(tag));
+    if (tags.length === 0) {
+      if (scopedTags.size === 0)
+        untagged.push(book);
+      continue;
+    }
+    for (const tag of tags) {
+      groups.set(tag, [...groups.get(tag) || [], book]);
+    }
+  }
+  const result = Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b, locale)).map(([tag, groupedBooks]) => ({ tag, books: groupedBooks }));
+  if (untagged.length > 0)
+    result.push({ tag: null, books: untagged });
+  return result;
+}
+
+// src/ui/components/ReadwisePlanningBoard.tsx
+var columns = [
+  { status: "planned", label: "dashboard.boardToRead", readerLabel: "dashboard.readerLater" },
+  { status: "reading", label: "dashboard.boardInProgress", readerLabel: "dashboard.readerInbox" },
+  { status: "completed", label: "dashboard.boardDone", readerLabel: "dashboard.readerArchive" }
+];
+function initials(book) {
+  return `${book.title || ""} ${book.author || ""}`.trim().split(/\s+/).map((part) => part[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() || "B";
+}
+var PlanningCard = ({ book, selected, moving, onDragStart, onDragEnd, onSelect }) => {
+  const progress = Math.min(100, Math.max(0, book.reading_progress || 0));
+  return /* @__PURE__ */ React5.createElement(
+    "button",
+    {
+      type: "button",
+      draggable: !moving,
+      className: `readwise-planning-card${selected ? " is-selected" : ""}${moving ? " is-moving" : ""}`,
+      onDragStart,
+      onDragEnd,
+      onClick: moving ? void 0 : onSelect
+    },
+    /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-cover" }, book.cover_url ? /* @__PURE__ */ React5.createElement("img", { src: book.cover_url, alt: "" }) : /* @__PURE__ */ React5.createElement("span", null, initials(book))),
+    /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-card-content" }, /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-card-title" }, book.title), /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-card-author" }, book.author || t("dashboard.unknownAuthor")), /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-progress-row" }, /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-progress-track" }, /* @__PURE__ */ React5.createElement("span", { style: { width: `${progress}%` } })), /* @__PURE__ */ React5.createElement("span", null, progress.toFixed(0), "%")))
+  );
+};
+var ReadwisePlanningBoard = ({
+  books,
+  selectedBookId,
+  selectedTags,
+  sortLocale,
+  collapsedGroupKeys,
+  onSelectBook,
+  onMoveBook,
+  onCollapsedGroupKeysChange
+}) => {
+  const [draggedBookId, setDraggedBookId] = React5.useState(null);
+  const [dropStatus, setDropStatus] = React5.useState(null);
+  const [movingBookId, setMovingBookId] = React5.useState(null);
+  const collapsedGroups = React5.useMemo(() => new Set(collapsedGroupKeys), [collapsedGroupKeys]);
+  const groups = React5.useMemo(
+    () => groupPlanningBooksByTag(books, sortLocale, selectedTags),
+    [books, selectedTags, sortLocale]
+  );
+  const counts = React5.useMemo(() => {
+    const result = { planned: 0, reading: 0, completed: 0 };
+    for (const book of books)
+      result[getPlanningStatus(book)] += 1;
+    return result;
+  }, [books]);
+  if (books.length === 0)
+    return /* @__PURE__ */ React5.createElement("div", { className: "readwise-empty-state" }, t("dashboard.boardEmpty"));
+  return /* @__PURE__ */ React5.createElement("div", { className: "readwise-planning-board" }, /* @__PURE__ */ React5.createElement("div", { className: "readwise-planning-columns-header" }, columns.map((column) => /* @__PURE__ */ React5.createElement("div", { key: column.status, className: `readwise-planning-column-title is-${column.status}` }, /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-status-dot" }), /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-column-label" }, /* @__PURE__ */ React5.createElement("span", null, t(column.label)), /* @__PURE__ */ React5.createElement("span", null, t(column.readerLabel))), /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-count" }, counts[column.status])))), groups.map((group) => {
+    const groupKey = JSON.stringify(group.tag);
+    const collapsed = collapsedGroups.has(groupKey);
+    const groupLabel = group.tag || t("dashboard.boardNoTag");
+    return /* @__PURE__ */ React5.createElement("section", { key: groupKey, className: `readwise-planning-tag-group${collapsed ? " is-collapsed" : ""}` }, /* @__PURE__ */ React5.createElement(
+      "button",
+      {
+        type: "button",
+        className: "readwise-planning-tag-heading",
+        "aria-expanded": !collapsed,
+        title: t(collapsed ? "stats.expand" : "stats.collapse"),
+        onClick: () => {
+          onCollapsedGroupKeysChange(
+            collapsed ? collapsedGroupKeys.filter((key) => key !== groupKey) : [...collapsedGroupKeys, groupKey]
+          );
+          setDropStatus(null);
+        }
+      },
+      /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-tag-chevron", "aria-hidden": "true" }, collapsed ? "\u25B6" : "\u25BC"),
+      /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-tag-icon" }, "#"),
+      /* @__PURE__ */ React5.createElement("span", null, groupLabel),
+      /* @__PURE__ */ React5.createElement("span", { className: "readwise-planning-count" }, group.books.length)
+    ), collapsed ? null : /* @__PURE__ */ React5.createElement("div", { className: "readwise-planning-columns" }, columns.map((column) => /* @__PURE__ */ React5.createElement(
+      "div",
+      {
+        key: column.status,
+        className: `readwise-planning-column${dropStatus === column.status ? " is-drop-target" : ""}`,
+        onDragEnter: (event) => {
+          if (!draggedBookId)
+            return;
+          event.preventDefault();
+          setDropStatus(column.status);
+        },
+        onDragOver: (event) => {
+          if (!draggedBookId)
+            return;
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "move";
+        },
+        onDrop: (event) => {
+          event.preventDefault();
+          const bookId = draggedBookId || event.dataTransfer.getData("text/plain");
+          setDraggedBookId(null);
+          setDropStatus(null);
+          if (!bookId)
+            return;
+          const book = books.find((candidate) => candidate.id === bookId);
+          if (!book || getPlanningStatus(book) === column.status)
+            return;
+          setMovingBookId(bookId);
+          void onMoveBook(bookId, column.status).finally(() => setMovingBookId(null));
+        }
+      },
+      group.books.filter((book) => getPlanningStatus(book) === column.status).map((book) => /* @__PURE__ */ React5.createElement(
+        PlanningCard,
+        {
+          key: book.id,
+          book,
+          selected: selectedBookId === book.id,
+          moving: movingBookId === book.id,
+          onDragStart: (event) => {
+            setDraggedBookId(book.id);
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", book.id);
+          },
+          onDragEnd: () => {
+            setDraggedBookId(null);
+            setDropStatus(null);
+          },
+          onSelect: () => onSelectBook(book.id)
+        }
+      ))
+    ))));
+  }));
+};
+
+// src/ui/dateRangeFilter.ts
+function parseDateKey(dateKey) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey))
+    return null;
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+function resolveHeatmapDateRange(range, today) {
+  const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const selectedEnd = parseDateKey(range.to) || normalizedToday;
+  const selectedStart = parseDateKey(range.from);
+  const start = selectedStart || new Date(selectedEnd);
+  if (!selectedStart)
+    start.setDate(start.getDate() - 364);
+  if (start > selectedEnd)
+    return { start: selectedEnd, end: start };
+  return { start, end: selectedEnd };
+}
+function isDateKeyInRange(dateKey, range) {
+  if (!dateKey)
+    return false;
+  if (range.from && dateKey < range.from)
+    return false;
+  if (range.to && dateKey > range.to)
+    return false;
+  return true;
+}
+function hasBookActivityInRange(book, activityByDate, range) {
+  const activityDates = Object.entries(activityByDate || {}).filter(([, activity]) => hasReadingActivity(activity)).map(([dateKey]) => dateKey);
+  if (activityDates.length > 0) {
+    return activityDates.some((dateKey) => isDateKeyInRange(dateKey, range));
+  }
+  const fallbackDate = (book.updated_at || book.created_at || "").slice(0, 10);
+  return isDateKeyInRange(fallbackDate, range);
+}
+
 // src/ui/DashboardView.tsx
 var DASHBOARD_VIEW_TYPE = "readwise-dashboard-view";
 function isCompletedBook(book) {
@@ -8436,6 +8688,11 @@ function isCompletedBook(book) {
 }
 function isReadingBook(book) {
   return book.status === "reading" && !isCompletedBook(book);
+}
+function openDatePicker(event) {
+  var _a;
+  const input = event.currentTarget;
+  (_a = input.showPicker) == null ? void 0 : _a.call(input);
 }
 var DashboardView = class extends import_obsidian2.ItemView {
   constructor(leaf, plugin) {
@@ -8463,39 +8720,50 @@ var DashboardView = class extends import_obsidian2.ItemView {
     if (!this.root) {
       return;
     }
-    this.root.render(/* @__PURE__ */ React5.createElement(DashboardComponent, { plugin: this.plugin }));
+    this.root.render(/* @__PURE__ */ React6.createElement(DashboardComponent, { plugin: this.plugin }));
   }
 };
 var DashboardComponent = ({ plugin }) => {
-  const [books, setBooks] = React5.useState([]);
-  const [readingActivity, setReadingActivity] = React5.useState({});
-  const [readingActivityByBook, setReadingActivityByBook] = React5.useState({});
-  const [selectedBookId, setSelectedBookId] = React5.useState(null);
-  const [completedCollapsed, setCompletedCollapsed] = React5.useState(true);
-  const [selectedTags, setSelectedTags] = React5.useState([]);
-  const [selectedDateKey, setSelectedDateKey] = React5.useState(null);
-  const [visibleWeekCount, setVisibleWeekCount] = React5.useState(53);
+  const [books, setBooks] = React6.useState([]);
+  const [readingActivity, setReadingActivity] = React6.useState({});
+  const [readingActivityByBook, setReadingActivityByBook] = React6.useState({});
+  const [selectedBookId, setSelectedBookId] = React6.useState(null);
+  const [completedCollapsed, setCompletedCollapsed] = React6.useState(true);
+  const [selectedTags, setSelectedTags] = React6.useState([]);
+  const [selectedDateKey, setSelectedDateKey] = React6.useState(null);
+  const [visibleWeekCount, setVisibleWeekCount] = React6.useState(53);
+  const [booksView, setBooksView] = React6.useState("list");
+  const [collapsedBoardGroups, setCollapsedBoardGroups] = React6.useState(
+    () => plugin.settings.planningBoardCollapsedGroups || []
+  );
+  const [dateFrom, setDateFrom] = React6.useState("");
+  const [dateTo, setDateTo] = React6.useState("");
   const locale = getCurrentLocale();
   const dateLocale = getDateLocale(locale);
   const sortLocale = getSortLocale(locale);
-  const loadData = React5.useCallback(() => {
+  const updateCollapsedBoardGroups = React6.useCallback((groupKeys) => {
+    setCollapsedBoardGroups(groupKeys);
+    plugin.settings.planningBoardCollapsedGroups = groupKeys;
+    void plugin.saveSettings();
+  }, [plugin]);
+  const loadData = React6.useCallback(() => {
     const data = plugin.dataManager.getData();
     setBooks(Object.values(data.books));
     setReadingActivity(data.readingActivity || {});
     setReadingActivityByBook(data.readingActivityByBook || {});
   }, [plugin]);
-  React5.useEffect(() => {
+  React6.useEffect(() => {
     loadData();
     const interval = window.setInterval(loadData, 3e3);
     return () => window.clearInterval(interval);
   }, [loadData]);
-  const selectedBook = React5.useMemo(() => {
+  const selectedBook = React6.useMemo(() => {
     if (!selectedBookId) {
       return null;
     }
     return books.find((book) => book.id === selectedBookId) || null;
   }, [books, selectedBookId]);
-  const allTags = React5.useMemo(() => {
+  const allTags = React6.useMemo(() => {
     const set = /* @__PURE__ */ new Set();
     for (const book of books) {
       if (!book.tags) {
@@ -8510,7 +8778,7 @@ var DashboardComponent = ({ plugin }) => {
     }
     return Array.from(set).sort((a, b) => a.localeCompare(b, sortLocale));
   }, [books, sortLocale]);
-  const isBookMatchingTags = React5.useCallback(
+  const isBookMatchingTags = React6.useCallback(
     (book) => {
       if (selectedTags.length === 0) {
         return true;
@@ -8524,11 +8792,11 @@ var DashboardComponent = ({ plugin }) => {
     },
     [selectedTags]
   );
-  const filteredBooks = React5.useMemo(
+  const filteredBooks = React6.useMemo(
     () => selectedTags.length === 0 ? books : books.filter(isBookMatchingTags),
     [books, isBookMatchingTags, selectedTags.length]
   );
-  React5.useEffect(() => {
+  React6.useEffect(() => {
     if (!selectedBookId) {
       return;
     }
@@ -8537,17 +8805,23 @@ var DashboardComponent = ({ plugin }) => {
       setSelectedBookId(null);
     }
   }, [books, isBookMatchingTags, selectedBookId]);
-  React5.useEffect(() => {
+  React6.useEffect(() => {
     if (selectedDateKey && selectedBookId) {
       setSelectedBookId(null);
     }
   }, [selectedBookId, selectedDateKey]);
-  const activeBookIdsForSelectedDate = React5.useMemo(() => {
-    if (!selectedDateKey) {
+  const activeBookIdsForDateFilter = React6.useMemo(() => {
+    if (!selectedDateKey && !dateFrom && !dateTo) {
       return null;
     }
     const set = /* @__PURE__ */ new Set();
     for (const book of filteredBooks) {
+      if (!selectedDateKey) {
+        if (hasBookActivityInRange(book, readingActivityByBook[book.id], { from: dateFrom, to: dateTo })) {
+          set.add(book.id);
+        }
+        continue;
+      }
       const byDay = readingActivityByBook[book.id];
       if (byDay && hasReadingActivity(byDay[selectedDateKey])) {
         set.add(book.id);
@@ -8559,8 +8833,8 @@ var DashboardComponent = ({ plugin }) => {
       }
     }
     return set;
-  }, [filteredBooks, readingActivityByBook, selectedDateKey]);
-  const fallbackUpdatesByDate = React5.useMemo(() => {
+  }, [dateFrom, dateTo, filteredBooks, readingActivityByBook, selectedDateKey]);
+  const fallbackUpdatesByDate = React6.useMemo(() => {
     const counts = {};
     const sourceBooks = selectedBookId ? books.filter((book) => book.id === selectedBookId) : filteredBooks;
     for (const book of sourceBooks) {
@@ -8573,7 +8847,7 @@ var DashboardComponent = ({ plugin }) => {
     }
     return counts;
   }, [books, filteredBooks, selectedBookId]);
-  const activitySource = React5.useMemo(() => {
+  const activitySource = React6.useMemo(() => {
     if (selectedBookId) {
       return readingActivityByBook[selectedBookId] || {};
     }
@@ -8598,7 +8872,7 @@ var DashboardComponent = ({ plugin }) => {
     }
     return readingActivity || {};
   }, [filteredBooks, readingActivity, readingActivityByBook, selectedBookId, selectedTags.length]);
-  const heatmapMode = React5.useMemo(() => {
+  const heatmapMode = React6.useMemo(() => {
     const values = Object.values(activitySource);
     if (values.some((value) => (value.minutes || 0) > 0.01 || (value.words || 0) > 0.01)) {
       return "minutes";
@@ -8612,7 +8886,7 @@ var DashboardComponent = ({ plugin }) => {
     }
     return "updates";
   }, [activitySource, selectedBook, selectedBookId]);
-  const heatmapValueByDate = React5.useCallback(
+  const heatmapValueByDate = React6.useCallback(
     (dateKey) => {
       var _a;
       if (heatmapMode === "minutes") {
@@ -8625,7 +8899,7 @@ var DashboardComponent = ({ plugin }) => {
     },
     [activitySource, fallbackUpdatesByDate, heatmapMode, selectedBook]
   );
-  const heatmapColors = React5.useMemo(
+  const heatmapColors = React6.useMemo(
     () => [
       "var(--rwt-heatmap-0)",
       "var(--rwt-heatmap-1)",
@@ -8635,8 +8909,15 @@ var DashboardComponent = ({ plugin }) => {
     ],
     []
   );
-  const heatmapData = React5.useMemo(() => {
+  const displayedHeatmapValueByDate = React6.useCallback((dateKey) => {
+    if ((dateFrom || dateTo) && !isDateKeyInRange(dateKey, { from: dateFrom, to: dateTo })) {
+      return 0;
+    }
+    return heatmapValueByDate(dateKey);
+  }, [dateFrom, dateTo, heatmapValueByDate]);
+  const heatmapData = React6.useMemo(() => {
     const today = new Date();
+    const selectedRange = resolveHeatmapDateRange({ from: dateFrom, to: dateTo }, today);
     const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const rangeStart = new Date(rangeEnd);
     rangeStart.setDate(rangeStart.getDate() - 364);
@@ -8659,9 +8940,9 @@ var DashboardComponent = ({ plugin }) => {
     let maxValue = 0;
     let totalValue = 0;
     let activeDays = 0;
-    for (let date = new Date(rangeStart); date <= rangeEnd; date.setDate(date.getDate() + 1)) {
+    for (let date = new Date(selectedRange.start); date <= selectedRange.end; date.setDate(date.getDate() + 1)) {
       const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-      const value = heatmapValueByDate(key);
+      const value = displayedHeatmapValueByDate(key);
       totalValue += value;
       if (value > maxValue) {
         maxValue = value;
@@ -8680,9 +8961,9 @@ var DashboardComponent = ({ plugin }) => {
       avgValue: activeDays > 0 ? totalValue / activeDays : 0,
       legendLabel: heatmapMode === "minutes" ? t("dashboard.minutesLegend") : heatmapMode === "progressPoints" ? t("dashboard.progressLegend") : t("dashboard.updatesLegend")
     };
-  }, [heatmapMode, heatmapValueByDate]);
-  const heatmapViewportRef = React5.useRef(null);
-  React5.useEffect(() => {
+  }, [dateFrom, dateTo, displayedHeatmapValueByDate, heatmapMode]);
+  const heatmapViewportRef = React6.useRef(null);
+  React6.useEffect(() => {
     const element = heatmapViewportRef.current;
     if (!element) {
       return;
@@ -8699,11 +8980,11 @@ var DashboardComponent = ({ plugin }) => {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  const displayedWeeks = React5.useMemo(() => {
+  const displayedWeeks = React6.useMemo(() => {
     const count = Math.max(1, Math.min(heatmapData.weeks.length, visibleWeekCount || heatmapData.weeks.length));
     return heatmapData.weeks.slice(Math.max(0, heatmapData.weeks.length - count));
   }, [heatmapData.weeks, visibleWeekCount]);
-  const monthLabelByWeekIndex = React5.useMemo(() => {
+  const monthLabelByWeekIndex = React6.useMemo(() => {
     const labels = new Array(displayedWeeks.length).fill(null);
     let previousMonth = null;
     for (let weekIndex = 0; weekIndex < displayedWeeks.length; weekIndex += 1) {
@@ -8720,11 +9001,11 @@ var DashboardComponent = ({ plugin }) => {
     }
     return labels;
   }, [dateLocale, displayedWeeks, heatmapData.rangeEnd, heatmapData.rangeStart]);
-  const selectedDayValue = React5.useMemo(
+  const selectedDayValue = React6.useMemo(
     () => selectedDateKey ? heatmapValueByDate(selectedDateKey) : null,
     [heatmapValueByDate, selectedDateKey]
   );
-  const selectedDayLabel = React5.useMemo(() => {
+  const selectedDayLabel = React6.useMemo(() => {
     if (!selectedDateKey) {
       return null;
     }
@@ -8735,10 +9016,10 @@ var DashboardComponent = ({ plugin }) => {
     }
     return new Intl.DateTimeFormat(dateLocale, { day: "numeric", month: "short" }).format(date);
   }, [dateLocale, selectedDateKey]);
-  const statsPanel = React5.useMemo(() => {
+  const statsPanel = React6.useMemo(() => {
     if (!selectedDateKey) {
       return {
-        periodLabel: t("dashboard.period365"),
+        periodLabel: dateFrom || dateTo ? `${t("dashboard.periodRange")}: ${dateFrom || "\u2026"} \u2014 ${dateTo || "\u2026"}` : t("dashboard.period365"),
         total: heatmapData.totalValue,
         max: heatmapData.maxValue,
         avg: heatmapData.avgValue,
@@ -8759,23 +9040,29 @@ var DashboardComponent = ({ plugin }) => {
     heatmapData.avgValue,
     heatmapData.maxValue,
     heatmapData.totalValue,
+    dateFrom,
+    dateTo,
     selectedDateKey,
     selectedDayLabel,
     selectedDayValue
   ]);
-  const readingBooks = React5.useMemo(
-    () => filteredBooks.filter(isReadingBook).filter((book) => activeBookIdsForSelectedDate ? activeBookIdsForSelectedDate.has(book.id) : true).sort(
+  const readingBooks = React6.useMemo(
+    () => filteredBooks.filter(isReadingBook).filter((book) => activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true).sort(
       (a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime()
     ),
-    [activeBookIdsForSelectedDate, filteredBooks]
+    [activeBookIdsForDateFilter, filteredBooks]
   );
-  const completedBooks = React5.useMemo(
-    () => filteredBooks.filter(isCompletedBook).filter((book) => activeBookIdsForSelectedDate ? activeBookIdsForSelectedDate.has(book.id) : true).sort(
+  const completedBooks = React6.useMemo(
+    () => filteredBooks.filter(isCompletedBook).filter((book) => activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true).sort(
       (a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime()
     ),
-    [activeBookIdsForSelectedDate, filteredBooks]
+    [activeBookIdsForDateFilter, filteredBooks]
   );
-  const readingRightLabelByBookId = React5.useMemo(() => {
+  const boardBooks = React6.useMemo(
+    () => filteredBooks.filter((book) => activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true).sort((a, b) => a.title.localeCompare(b.title, sortLocale)),
+    [activeBookIdsForDateFilter, filteredBooks, sortLocale]
+  );
+  const readingRightLabelByBookId = React6.useMemo(() => {
     const labels = {};
     for (const book of readingBooks) {
       const remainingMinutes = getRemainingMinutes(book);
@@ -8783,25 +9070,45 @@ var DashboardComponent = ({ plugin }) => {
     }
     return labels;
   }, [locale, readingBooks]);
-  const completedRightLabelByBookId = React5.useMemo(() => {
+  const completedRightLabelByBookId = React6.useMemo(() => {
     const labels = {};
     for (const book of completedBooks) {
       labels[book.id] = t("dashboard.completedLabel");
     }
     return labels;
   }, [completedBooks]);
-  const rightDateByBookId = React5.useMemo(() => {
+  const rightDateByBookId = React6.useMemo(() => {
     const dates = {};
     for (const book of [...readingBooks, ...completedBooks]) {
       dates[book.id] = formatShortDate(book.updated_at || book.created_at, locale);
     }
     return dates;
   }, [completedBooks, locale, readingBooks]);
-  const selectBook = React5.useCallback((bookId) => {
+  const selectBook = React6.useCallback((bookId) => {
     setSelectedBookId(bookId);
     void plugin.openBookHighlights(bookId);
   }, [plugin]);
-  return /* @__PURE__ */ React5.createElement("div", { className: "readwise-dashboard-root" }, /* @__PURE__ */ React5.createElement("div", { className: "readwise-dashboard-top" }, /* @__PURE__ */ React5.createElement(
+  const moveBook = React6.useCallback(async (bookId, status) => {
+    const previous = books.find((book) => book.id === bookId);
+    if (!previous)
+      return;
+    const location = getReaderLocation(status);
+    const optimistic = { ...previous, location, status };
+    setBooks((current) => current.map((book) => book.id === bookId ? optimistic : book));
+    try {
+      await plugin.moveReaderDocument(bookId, location);
+      loadData();
+      new import_obsidian2.Notice(t("dashboard.moveSuccess", { location: t(
+        status === "planned" ? "dashboard.readerLater" : status === "reading" ? "dashboard.readerInbox" : "dashboard.readerArchive"
+      ) }));
+    } catch (error) {
+      setBooks((current) => current.map((book) => book.id === bookId ? previous : book));
+      new import_obsidian2.Notice(t("dashboard.moveFailed", {
+        message: error instanceof Error ? error.message : String(error)
+      }));
+    }
+  }, [books, loadData, plugin]);
+  return /* @__PURE__ */ React6.createElement("div", { className: "readwise-dashboard-root" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-dashboard-top" }, /* @__PURE__ */ React6.createElement(
     ReadwiseTagFilterBar,
     {
       allTags,
@@ -8810,7 +9117,7 @@ var DashboardComponent = ({ plugin }) => {
         (previous) => previous.includes(tag) ? previous.filter((value) => value !== tag) : [...previous, tag]
       )
     }
-  ), /* @__PURE__ */ React5.createElement(
+  ), /* @__PURE__ */ React6.createElement(
     ReadwiseHeatmapPanel,
     {
       displayedWeeks,
@@ -8822,16 +9129,87 @@ var DashboardComponent = ({ plugin }) => {
       heatmapColors,
       statsPanel,
       viewportRef: heatmapViewportRef,
-      heatmapValueByDate,
+      heatmapValueByDate: displayedHeatmapValueByDate,
       heatmapLevel: (value) => getHeatmapLevel(value, heatmapMode),
       heatmapValueFormat: (value) => formatHeatmapValue(value, heatmapMode, locale),
       onToggleDate: (dateKey) => {
         setSelectedDateKey((previous) => previous === dateKey ? null : dateKey);
+        setDateFrom("");
+        setDateTo("");
         setSelectedBookId(null);
         setCompletedCollapsed(false);
       }
     }
-  )), /* @__PURE__ */ React5.createElement(
+  )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-books-view-toolbar" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-date-range-filter", "aria-label": t("dashboard.dateRange") }, /* @__PURE__ */ React6.createElement("label", null, /* @__PURE__ */ React6.createElement("span", null, t("dashboard.dateFrom")), /* @__PURE__ */ React6.createElement(
+    "input",
+    {
+      type: "date",
+      value: dateFrom,
+      max: dateTo || void 0,
+      onClick: openDatePicker,
+      onChange: (event) => {
+        setDateFrom(event.currentTarget.value);
+        setSelectedDateKey(null);
+        setSelectedBookId(null);
+      }
+    }
+  )), /* @__PURE__ */ React6.createElement("label", null, /* @__PURE__ */ React6.createElement("span", null, t("dashboard.dateTo")), /* @__PURE__ */ React6.createElement(
+    "input",
+    {
+      type: "date",
+      value: dateTo,
+      min: dateFrom || void 0,
+      onClick: openDatePicker,
+      onChange: (event) => {
+        setDateTo(event.currentTarget.value);
+        setSelectedDateKey(null);
+        setSelectedBookId(null);
+      }
+    }
+  )), /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: `readwise-date-range-clear${dateFrom || dateTo ? "" : " is-hidden"}`,
+      onClick: () => {
+        setDateFrom("");
+        setDateTo("");
+      },
+      "aria-label": t("dashboard.dateClear"),
+      title: t("dashboard.dateClear")
+    },
+    "\xD7"
+  )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-view-switch", role: "group", "aria-label": t("dashboard.viewMode") }, /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: booksView === "list" ? "is-active" : "",
+      onClick: () => setBooksView("list")
+    },
+    /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, "\u2637"),
+    t("dashboard.listView")
+  ), /* @__PURE__ */ React6.createElement(
+    "button",
+    {
+      type: "button",
+      className: booksView === "board" ? "is-active" : "",
+      onClick: () => setBooksView("board")
+    },
+    /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, "\u25A5"),
+    t("dashboard.boardView")
+  ))), booksView === "board" ? /* @__PURE__ */ React6.createElement(
+    ReadwisePlanningBoard,
+    {
+      books: boardBooks,
+      selectedBookId,
+      selectedTags,
+      sortLocale,
+      collapsedGroupKeys: collapsedBoardGroups,
+      onSelectBook: selectBook,
+      onMoveBook: moveBook,
+      onCollapsedGroupKeysChange: updateCollapsedBoardGroups
+    }
+  ) : /* @__PURE__ */ React6.createElement(React6.Fragment, null, /* @__PURE__ */ React6.createElement(
     ReadwiseBookSection,
     {
       title: t("dashboard.currentlyReading"),
@@ -8845,7 +9223,7 @@ var DashboardComponent = ({ plugin }) => {
       onReset: () => setSelectedBookId(null),
       onToggleBook: selectBook
     }
-  ), /* @__PURE__ */ React5.createElement(
+  ), /* @__PURE__ */ React6.createElement(
     ReadwiseBookSection,
     {
       title: t("dashboard.completed"),
@@ -8862,19 +9240,26 @@ var DashboardComponent = ({ plugin }) => {
       countLabel: `(${completedBooks.length})`,
       onToggleCollapsed: () => setCompletedCollapsed((value) => !value)
     }
-  ));
+  )));
 };
 
 // src/ui/StatsView.tsx
 var import_obsidian4 = require("obsidian");
-var React6 = __toESM(require_react());
+var React7 = __toESM(require_react());
 var ReactDOM2 = __toESM(require_client());
 
 // src/services/readwiseFiles.ts
 var import_obsidian3 = require("obsidian");
+
+// src/services/readwiseFileNames.ts
 function normalizeSearchName(value) {
   return value.toLowerCase().replace(/ё/g, "\u0435").replace(/[^a-z0-9а-я]+/gi, " ").trim().replace(/\s+/g, " ");
 }
+function normalizeCompactName(value) {
+  return normalizeSearchName(value).replace(/\s+/g, "");
+}
+
+// src/services/readwiseFiles.ts
 function getBooksRoot(settings) {
   return (0, import_obsidian3.normalizePath)(String(settings.readwiseBooksFolder || "")).replace(/^\/+/, "").replace(/\/+$/, "");
 }
@@ -8898,11 +9283,12 @@ function findBookNoteFile(app, settings, book) {
     }
   }
   const wanted = normalizeSearchName(book.title);
+  const compactWanted = normalizeCompactName(book.title);
   for (const file of booksFiles) {
     const cache = app.metadataCache.getFileCache(file);
     const frontmatter = cache == null ? void 0 : cache.frontmatter;
     const title = typeof (frontmatter == null ? void 0 : frontmatter.title) === "string" ? frontmatter.title : "";
-    if (normalizeSearchName(title) === wanted || normalizeSearchName(file.basename) === wanted) {
+    if (normalizeSearchName(title) === wanted || normalizeSearchName(file.basename) === wanted || normalizeCompactName(title) === compactWanted || normalizeCompactName(file.basename) === compactWanted) {
       return file;
     }
   }
@@ -8921,6 +9307,7 @@ function findHighlightFilesForBook(app, settings, book) {
   }
   const rootPrefix = root ? `${root}/` : "";
   const wanted = normalizeSearchName(book.title);
+  const compactWanted = normalizeCompactName(book.title);
   return app.vault.getMarkdownFiles().filter((file) => root ? file.path.startsWith(rootPrefix) : false).filter((file) => {
     const cache = app.metadataCache.getFileCache(file);
     const frontmatter = cache == null ? void 0 : cache.frontmatter;
@@ -8929,7 +9316,11 @@ function findHighlightFilesForBook(app, settings, book) {
     if (normalizedBook && normalizedBook.includes(wanted)) {
       return true;
     }
-    return normalizeSearchName(file.path).includes(wanted);
+    const compactBook = normalizeCompactName(bookField.replace(/^\[\[|\]\]$/g, ""));
+    if (compactBook && compactBook.includes(compactWanted)) {
+      return true;
+    }
+    return normalizeSearchName(file.path).includes(wanted) || normalizeCompactName(file.path).includes(compactWanted);
   }).sort((a, b) => a.basename.localeCompare(b.basename, sortLocale));
 }
 
@@ -9084,13 +9475,13 @@ var StatsView = class extends import_obsidian4.ItemView {
     if (!this.root)
       return;
     this.root.render(
-      /* @__PURE__ */ React6.createElement(StatsComponent, { plugin: this.plugin })
+      /* @__PURE__ */ React7.createElement(StatsComponent, { plugin: this.plugin })
     );
   }
 };
 var MarkdownBlock = ({ plugin, markdown, sourcePath }) => {
-  const ref = React6.useRef(null);
-  React6.useEffect(() => {
+  const ref = React7.useRef(null);
+  React7.useEffect(() => {
     if (!ref.current)
       return;
     const el = ref.current;
@@ -9101,7 +9492,7 @@ var MarkdownBlock = ({ plugin, markdown, sourcePath }) => {
       component.unload();
     };
   }, [markdown, plugin.app, sourcePath]);
-  return /* @__PURE__ */ React6.createElement("div", { ref });
+  return /* @__PURE__ */ React7.createElement("div", { ref });
 };
 function getBookPlaceholderLabel2(book) {
   const source = `${book.title || ""} ${book.author || ""}`.trim();
@@ -9144,46 +9535,46 @@ function mergeImportTags(tags, pending = "") {
   return Array.from(unique.values());
 }
 var StatsComponent = ({ plugin }) => {
-  const [books, setBooks] = React6.useState([]);
-  const [readingActivityByBook, setReadingActivityByBook] = React6.useState({});
-  const [highlightsSort, setHighlightsSort] = React6.useState("date");
-  const [highlightsSortDir, setHighlightsSortDir] = React6.useState("asc");
-  const [expandedHighlightPaths, setExpandedHighlightPaths] = React6.useState({});
-  const [highlightContentByPath, setHighlightContentByPath] = React6.useState({});
-  const [creatingInboxPath, setCreatingInboxPath] = React6.useState(null);
-  const [deletingBookId, setDeletingBookId] = React6.useState(null);
-  const [bookDeleteConfirmationOpen, setBookDeleteConfirmationOpen] = React6.useState(false);
-  const [selectedBookId, setSelectedBookId] = React6.useState(
+  const [books, setBooks] = React7.useState([]);
+  const [readingActivityByBook, setReadingActivityByBook] = React7.useState({});
+  const [highlightsSort, setHighlightsSort] = React7.useState("date");
+  const [highlightsSortDir, setHighlightsSortDir] = React7.useState("asc");
+  const [expandedHighlightPaths, setExpandedHighlightPaths] = React7.useState({});
+  const [highlightContentByPath, setHighlightContentByPath] = React7.useState({});
+  const [creatingInboxPath, setCreatingInboxPath] = React7.useState(null);
+  const [deletingBookId, setDeletingBookId] = React7.useState(null);
+  const [bookDeleteConfirmationOpen, setBookDeleteConfirmationOpen] = React7.useState(false);
+  const [selectedBookId, setSelectedBookId] = React7.useState(
     () => plugin.getSelectedHighlightsBookId()
   );
-  const [bookQuery, setBookQuery] = React6.useState("");
-  const [bookPickerOpen, setBookPickerOpen] = React6.useState(false);
-  const [importMenuOpen, setImportMenuOpen] = React6.useState(false);
-  const [importDialog, setImportDialog] = React6.useState(null);
-  const [importUrl, setImportUrl] = React6.useState("");
-  const [importTitle, setImportTitle] = React6.useState("");
-  const [selectedImportFile, setSelectedImportFile] = React6.useState(null);
-  const [importStatus, setImportStatus] = React6.useState(null);
-  const [importBusy, setImportBusy] = React6.useState(false);
-  const [readerLoginRequired, setReaderLoginRequired] = React6.useState(false);
-  const [readerEmail, setReaderEmail] = React6.useState("");
-  const [readerPassword, setReaderPassword] = React6.useState("");
-  const [importTags, setImportTags] = React6.useState([]);
-  const [importTagInput, setImportTagInput] = React6.useState("");
-  const [importDragActive, setImportDragActive] = React6.useState(false);
-  const [bookTagEditorOpen, setBookTagEditorOpen] = React6.useState(false);
-  const [bookTagInput, setBookTagInput] = React6.useState("");
-  const [bookTagBusy, setBookTagBusy] = React6.useState(false);
-  const [bookTagStatus, setBookTagStatus] = React6.useState(null);
-  const fileInputRef = React6.useRef(null);
-  const importControlRef = React6.useRef(null);
+  const [bookQuery, setBookQuery] = React7.useState("");
+  const [bookPickerOpen, setBookPickerOpen] = React7.useState(false);
+  const [importMenuOpen, setImportMenuOpen] = React7.useState(false);
+  const [importDialog, setImportDialog] = React7.useState(null);
+  const [importUrl, setImportUrl] = React7.useState("");
+  const [importTitle, setImportTitle] = React7.useState("");
+  const [selectedImportFile, setSelectedImportFile] = React7.useState(null);
+  const [importStatus, setImportStatus] = React7.useState(null);
+  const [importBusy, setImportBusy] = React7.useState(false);
+  const [readerLoginRequired, setReaderLoginRequired] = React7.useState(false);
+  const [readerEmail, setReaderEmail] = React7.useState("");
+  const [readerPassword, setReaderPassword] = React7.useState("");
+  const [importTags, setImportTags] = React7.useState([]);
+  const [importTagInput, setImportTagInput] = React7.useState("");
+  const [importDragActive, setImportDragActive] = React7.useState(false);
+  const [bookTagEditorOpen, setBookTagEditorOpen] = React7.useState(false);
+  const [bookTagInput, setBookTagInput] = React7.useState("");
+  const [bookTagBusy, setBookTagBusy] = React7.useState(false);
+  const [bookTagStatus, setBookTagStatus] = React7.useState(null);
+  const fileInputRef = React7.useRef(null);
+  const importControlRef = React7.useRef(null);
   const locale = getCurrentLocale();
   const dateLocale = getDateLocale(locale);
   const sortLocale = getSortLocale(locale);
-  const availableTags = React6.useMemo(() => Array.from(new Set(
+  const availableTags = React7.useMemo(() => Array.from(new Set(
     books.flatMap((book) => book.tags || []).map((tag) => tag.trim()).filter(Boolean)
   )).sort((a, b) => a.localeCompare(b, sortLocale)), [books, sortLocale]);
-  const suggestedImportTags = React6.useMemo(() => {
+  const suggestedImportTags = React7.useMemo(() => {
     const query = importTagInput.trim().toLocaleLowerCase();
     const selected = new Set(importTags.map((tag) => tag.toLocaleLowerCase()));
     return availableTags.filter((tag) => !selected.has(tag.toLocaleLowerCase())).filter((tag) => !query || tag.toLocaleLowerCase().includes(query)).slice(0, 12);
@@ -9193,19 +9584,19 @@ var StatsComponent = ({ plugin }) => {
     setBooks(Object.values(data.books));
     setReadingActivityByBook(data.readingActivityByBook || {});
   };
-  React6.useEffect(() => {
+  React7.useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 5e3);
     return () => clearInterval(interval);
   }, []);
-  React6.useEffect(() => plugin.onSelectedHighlightsBookChange((bookId) => {
+  React7.useEffect(() => plugin.onSelectedHighlightsBookChange((bookId) => {
     setSelectedBookId(bookId);
     setBookQuery("");
     setBookPickerOpen(false);
     setExpandedHighlightPaths({});
     setHighlightContentByPath({});
   }), [plugin]);
-  React6.useEffect(() => {
+  React7.useEffect(() => {
     if (!importMenuOpen)
       return;
     const closeImportMenuOnOutsideClick = (event) => {
@@ -9217,37 +9608,37 @@ var StatsComponent = ({ plugin }) => {
     document.addEventListener("pointerdown", closeImportMenuOnOutsideClick);
     return () => document.removeEventListener("pointerdown", closeImportMenuOnOutsideClick);
   }, [importMenuOpen]);
-  const readingBook = React6.useMemo(() => {
+  const readingBook = React7.useMemo(() => {
     const reading = books.filter((b) => b.status === "reading").sort((a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime());
     return reading[0] || null;
   }, [books]);
-  React6.useEffect(() => {
+  React7.useEffect(() => {
     if (!selectedBookId && readingBook)
       setSelectedBookId(readingBook.id);
   }, [readingBook, selectedBookId]);
-  const activeBook = React6.useMemo(() => {
+  const activeBook = React7.useMemo(() => {
     if (selectedBookId)
       return books.find((b) => b.id === selectedBookId) || null;
     return readingBook;
   }, [books, readingBook, selectedBookId]);
-  const availableBookTags = React6.useMemo(() => {
+  const availableBookTags = React7.useMemo(() => {
     const current = new Set(((activeBook == null ? void 0 : activeBook.tags) || []).map((tag) => tag.toLocaleLowerCase()));
     const query = bookTagInput.trim().toLocaleLowerCase();
     return availableTags.filter((tag) => !current.has(tag.toLocaleLowerCase())).filter((tag) => !query || tag.toLocaleLowerCase().includes(query)).slice(0, 12);
   }, [activeBook, availableTags, bookTagInput]);
-  React6.useEffect(() => {
+  React7.useEffect(() => {
     setBookTagEditorOpen(false);
     setBookTagInput("");
     setBookTagStatus(null);
   }, [activeBook == null ? void 0 : activeBook.id]);
-  React6.useEffect(() => {
+  React7.useEffect(() => {
     if (selectedBookId && !books.some((b) => b.id === selectedBookId))
       setSelectedBookId(null);
   }, [books, selectedBookId]);
-  const formatRemaining2 = React6.useCallback((minutesRaw) => {
+  const formatRemaining2 = React7.useCallback((minutesRaw) => {
     return formatDurationCompact(minutesRaw, locale);
   }, [locale]);
-  const spentMinutes = React6.useMemo(() => {
+  const spentMinutes = React7.useMemo(() => {
     if (!activeBook)
       return 0;
     const byDay = readingActivityByBook[activeBook.id] || {};
@@ -9256,7 +9647,7 @@ var StatsComponent = ({ plugin }) => {
       sum += getMinutesForDay(day, activeBook);
     return sum;
   }, [activeBook, readingActivityByBook]);
-  const addTagToActiveBook = React6.useCallback(async (rawTag) => {
+  const addTagToActiveBook = React7.useCallback(async (rawTag) => {
     const tag = mergeImportTags([], rawTag)[0];
     if (!activeBook || !tag || bookTagBusy)
       return;
@@ -9275,7 +9666,7 @@ var StatsComponent = ({ plugin }) => {
       setBookTagBusy(false);
     }
   }, [activeBook, bookTagBusy, plugin]);
-  const formatDate = React6.useCallback((iso) => {
+  const formatDate = React7.useCallback((iso) => {
     if (!iso)
       return "";
     const d = new Date(iso);
@@ -9283,17 +9674,17 @@ var StatsComponent = ({ plugin }) => {
       return "";
     return new Intl.DateTimeFormat(dateLocale, { day: "numeric", month: "short" }).format(d);
   }, [dateLocale]);
-  const bookNoteFile = React6.useMemo(() => {
+  const bookNoteFile = React7.useMemo(() => {
     if (!activeBook)
       return null;
     return findBookNoteFile(plugin.app, plugin.settings, activeBook);
   }, [activeBook, plugin.app, plugin.settings]);
-  const highlightsFiles = React6.useMemo(() => {
+  const highlightsFiles = React7.useMemo(() => {
     if (!activeBook)
       return [];
     return findHighlightFilesForBook(plugin.app, plugin.settings, activeBook);
   }, [activeBook, plugin.app, plugin.settings]);
-  const highlightItems = React6.useMemo(() => {
+  const highlightItems = React7.useMemo(() => {
     const items = highlightsFiles.map((f) => {
       const cache = plugin.app.metadataCache.getFileCache(f);
       const fm = cache == null ? void 0 : cache.frontmatter;
@@ -9324,7 +9715,7 @@ var StatsComponent = ({ plugin }) => {
     });
     return sorted;
   }, [highlightsFiles, highlightsSort, highlightsSortDir, plugin.app.metadataCache, sortLocale]);
-  const bookMatches = React6.useMemo(() => {
+  const bookMatches = React7.useMemo(() => {
     const q = normalizeSearchName(bookQuery);
     const byRecentActivity = (a, b) => compareBooksByRecentActivity(a, b, readingActivityByBook, sortLocale);
     const list = books.slice().sort(byRecentActivity);
@@ -9338,7 +9729,7 @@ var StatsComponent = ({ plugin }) => {
     }).filter((x) => Number.isFinite(x.score)).sort((a, b) => a.score - b.score || byRecentActivity(a.b, b.b));
     return scored.slice(0, 20).map((x) => x.b);
   }, [bookQuery, books, readingActivityByBook, sortLocale]);
-  const closeImportDialog = React6.useCallback(() => {
+  const closeImportDialog = React7.useCallback(() => {
     if (importBusy)
       return;
     setImportDialog(null);
@@ -9353,14 +9744,14 @@ var StatsComponent = ({ plugin }) => {
     setImportTagInput("");
     setImportDragActive(false);
   }, [importBusy]);
-  const selectImportFile = React6.useCallback((file) => {
+  const selectImportFile = React7.useCallback((file) => {
     setSelectedImportFile(file);
     setImportTitle(file ? getImportFileTitle(file) : "");
     setImportStatus(null);
     setReaderLoginRequired(false);
     setImportDragActive(false);
   }, []);
-  const saveUrlToReader = React6.useCallback(async () => {
+  const saveUrlToReader = React7.useCallback(async () => {
     const url = importUrl.trim();
     if (!url) {
       setImportStatus(t("stats.importUrlRequired"));
@@ -9393,7 +9784,7 @@ var StatsComponent = ({ plugin }) => {
       setImportBusy(false);
     }
   }, [closeImportDialog, importTagInput, importTags, importTitle, importUrl, plugin]);
-  const saveFileToReader = React6.useCallback(async () => {
+  const saveFileToReader = React7.useCallback(async () => {
     var _a;
     const file = selectedImportFile;
     if (!file) {
@@ -9446,7 +9837,7 @@ var StatsComponent = ({ plugin }) => {
       setImportBusy(false);
     }
   }, [closeImportDialog, importTagInput, importTags, importTitle, plugin, selectedImportFile]);
-  const loginAndRetryFileUpload = React6.useCallback(async () => {
+  const loginAndRetryFileUpload = React7.useCallback(async () => {
     const file = selectedImportFile;
     const contentType = file ? getReaderFileContentType(file) : null;
     if (!file || !contentType) {
@@ -9481,7 +9872,7 @@ var StatsComponent = ({ plugin }) => {
       setImportBusy(false);
     }
   }, [closeImportDialog, importTagInput, importTags, plugin, readerEmail, readerPassword, selectedImportFile]);
-  return /* @__PURE__ */ React6.createElement("div", { className: "readwise-stats-root p-4" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-shell" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-row" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-search" }, /* @__PURE__ */ React6.createElement(
+  return /* @__PURE__ */ React7.createElement("div", { className: "readwise-stats-root p-4" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker-shell" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker-row" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-search" }, /* @__PURE__ */ React7.createElement(
     "input",
     {
       value: bookQuery,
@@ -9496,7 +9887,7 @@ var StatsComponent = ({ plugin }) => {
       placeholder: t("stats.searchPlaceholder"),
       className: "readwise-book-search-input"
     }
-  ), bookPickerOpen && bookMatches.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker" }, bookMatches.map((b) => /* @__PURE__ */ React6.createElement(
+  ), bookPickerOpen && bookMatches.length > 0 ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker" }, bookMatches.map((b) => /* @__PURE__ */ React7.createElement(
     "div",
     {
       key: b.id,
@@ -9510,9 +9901,9 @@ var StatsComponent = ({ plugin }) => {
       },
       className: "readwise-book-picker-item"
     },
-    /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-title" }, b.title),
-    b.author ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-author" }, b.author) : null
-  ))) : null), /* @__PURE__ */ React6.createElement("div", { ref: importControlRef, className: "readwise-import-control" }, /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker-title" }, b.title),
+    b.author ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker-author" }, b.author) : null
+  ))) : null), /* @__PURE__ */ React7.createElement("div", { ref: importControlRef, className: "readwise-import-control" }, /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => setImportMenuOpen((open) => !open),
@@ -9520,8 +9911,8 @@ var StatsComponent = ({ plugin }) => {
       "aria-label": t("stats.importOpen"),
       title: t("stats.importOpen")
     },
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-trigger-glyph" }, "+")
-  ), importMenuOpen ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-menu" }, /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-import-trigger-glyph" }, "+")
+  ), importMenuOpen ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-menu" }, /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => {
@@ -9531,10 +9922,10 @@ var StatsComponent = ({ plugin }) => {
       },
       className: "readwise-import-menu-item"
     },
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-menu-icon" }, "\u2197"),
-    /* @__PURE__ */ React6.createElement("span", null, t("stats.importUrl")),
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-shortcut" }, "A")
-  ), /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-import-menu-icon" }, "\u2197"),
+    /* @__PURE__ */ React7.createElement("span", null, t("stats.importUrl")),
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-import-shortcut" }, "A")
+  ), /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => {
@@ -9544,10 +9935,10 @@ var StatsComponent = ({ plugin }) => {
       },
       className: "readwise-import-menu-item"
     },
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-menu-icon" }, "\u21E7"),
-    /* @__PURE__ */ React6.createElement("span", null, t("stats.importUpload")),
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-import-shortcut" }, "U")
-  )) : null), /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-import-menu-icon" }, "\u21E7"),
+    /* @__PURE__ */ React7.createElement("span", null, t("stats.importUpload")),
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-import-shortcut" }, "U")
+  )) : null), /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => {
@@ -9563,7 +9954,7 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-current-book-button"
     },
     t("stats.currentlyReading")
-  )), !activeBook ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-picker-helper" }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React6.createElement(
+  )), !activeBook ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-picker-helper" }, t("stats.selectBook")) : null), !activeBook ? null : /* @__PURE__ */ React7.createElement("div", null, /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-card" }, /* @__PURE__ */ React7.createElement(
     "button",
     {
       type: "button",
@@ -9573,15 +9964,15 @@ var StatsComponent = ({ plugin }) => {
       disabled: deletingBookId !== null,
       onClick: () => setBookDeleteConfirmationOpen(true)
     },
-    deletingBookId === activeBook.id ? /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, "\u2026") : /* @__PURE__ */ React6.createElement("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" }, /* @__PURE__ */ React6.createElement("path", { d: "M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5" }))
-  ), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React6.createElement(
+    deletingBookId === activeBook.id ? /* @__PURE__ */ React7.createElement("span", { "aria-hidden": "true" }, "\u2026") : /* @__PURE__ */ React7.createElement("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" }, /* @__PURE__ */ React7.createElement("path", { d: "M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5" }))
+  ), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-cover" }, activeBook.cover_url ? /* @__PURE__ */ React7.createElement(
     "img",
     {
       src: activeBook.cover_url,
       alt: activeBook.title,
       className: "readwise-selected-book-cover-image"
     }
-  ) : /* @__PURE__ */ React6.createElement("span", { className: "readwise-selected-book-cover-placeholder" }, getBookPlaceholderLabel2(activeBook))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-body" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-title" }, activeBook.title), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-author" }, activeBook.author || ""), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-tags" }, (activeBook.tags || []).slice(0, 20).map((t2) => /* @__PURE__ */ React6.createElement("span", { key: t2, className: "readwise-selected-book-tag" }, t2)), /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-control" }, /* @__PURE__ */ React6.createElement(
+  ) : /* @__PURE__ */ React7.createElement("span", { className: "readwise-selected-book-cover-placeholder" }, getBookPlaceholderLabel2(activeBook))), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-body" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-title" }, activeBook.title), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-author" }, activeBook.author || ""), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-tags" }, (activeBook.tags || []).slice(0, 20).map((t2) => /* @__PURE__ */ React7.createElement("span", { key: t2, className: "readwise-selected-book-tag" }, t2)), /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-control" }, /* @__PURE__ */ React7.createElement(
     "button",
     {
       type: "button",
@@ -9593,8 +9984,8 @@ var StatsComponent = ({ plugin }) => {
         setBookTagStatus(null);
       }
     },
-    /* @__PURE__ */ React6.createElement("span", { className: "readwise-book-tag-add-glyph", "aria-hidden": "true" }, "+")
-  ), bookTagEditorOpen ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover-header" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-popover-title" }, t("stats.bookTagTitle")), /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("span", { className: "readwise-book-tag-add-glyph", "aria-hidden": "true" }, "+")
+  ), bookTagEditorOpen ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-popover" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-popover-header" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-popover-title" }, t("stats.bookTagTitle")), /* @__PURE__ */ React7.createElement(
     "button",
     {
       type: "button",
@@ -9608,7 +9999,7 @@ var StatsComponent = ({ plugin }) => {
       }
     },
     "\xD7"
-  )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-input-row" }, /* @__PURE__ */ React6.createElement(
+  )), /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-input-row" }, /* @__PURE__ */ React7.createElement(
     "input",
     {
       autoFocus: true,
@@ -9626,7 +10017,7 @@ var StatsComponent = ({ plugin }) => {
       disabled: bookTagBusy,
       className: "readwise-book-tag-input"
     }
-  ), /* @__PURE__ */ React6.createElement(
+  ), /* @__PURE__ */ React7.createElement(
     "button",
     {
       type: "button",
@@ -9635,7 +10026,7 @@ var StatsComponent = ({ plugin }) => {
       onClick: () => void addTagToActiveBook(bookTagInput)
     },
     t("stats.bookTagSubmit")
-  )), availableBookTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-options" }, availableBookTags.map((tag) => /* @__PURE__ */ React6.createElement(
+  )), availableBookTags.length > 0 ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-options" }, availableBookTags.map((tag) => /* @__PURE__ */ React7.createElement(
     "button",
     {
       key: tag,
@@ -9645,30 +10036,30 @@ var StatsComponent = ({ plugin }) => {
       className: "readwise-book-tag-option"
     },
     tag
-  ))) : null, bookTagStatus ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-book-tag-status" }, bookTagStatus) : null) : null)), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-labels" }, /* @__PURE__ */ React6.createElement("div", null, Math.min(100, Math.max(0, activeBook.reading_progress || 0)).toFixed(1), "%"), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-time" }, t("stats.spent"), ": ", formatRemaining2(spentMinutes), " \xB7 ", t("stats.remaining"), ": ", (() => {
+  ))) : null, bookTagStatus ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-book-tag-status" }, bookTagStatus) : null) : null)), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-progress" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-progress-labels" }, /* @__PURE__ */ React7.createElement("div", null, Math.min(100, Math.max(0, activeBook.reading_progress || 0)).toFixed(1), "%"), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-progress-time" }, t("stats.spent"), ": ", formatRemaining2(spentMinutes), " \xB7 ", t("stats.remaining"), ": ", (() => {
     const remaining = getRemainingMinutes(activeBook);
     return remaining === null ? "-" : formatRemaining2(remaining);
-  })())), /* @__PURE__ */ React6.createElement("div", { className: "readwise-selected-book-progress-bar" }, /* @__PURE__ */ React6.createElement(
+  })())), /* @__PURE__ */ React7.createElement("div", { className: "readwise-selected-book-progress-bar" }, /* @__PURE__ */ React7.createElement(
     "div",
     {
       className: "readwise-selected-book-progress-fill",
       style: { width: `${Math.min(100, Math.max(0, activeBook.reading_progress || 0))}%` }
     }
-  ))))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-section" }, /* @__PURE__ */ React6.createElement("h2", { className: "readwise-highlights-title" }, t("stats.highlights")), highlightItems.length === 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-empty" }, t("stats.noHighlights")) : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlights-toolbar" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-sort-control", "aria-label": t("stats.sortHighlights") }, /* @__PURE__ */ React6.createElement(
+  ))))), /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlights-section" }, /* @__PURE__ */ React7.createElement("h2", { className: "readwise-highlights-title" }, t("stats.highlights")), highlightItems.length === 0 ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlights-empty" }, t("stats.noHighlights")) : /* @__PURE__ */ React7.createElement("div", null, /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlights-toolbar" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-sort-control", "aria-label": t("stats.sortHighlights") }, /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => setHighlightsSort("date"),
       className: `readwise-sort-option${highlightsSort === "date" ? " is-active" : ""}`
     },
     t("stats.sortByDate")
-  ), /* @__PURE__ */ React6.createElement(
+  ), /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => setHighlightsSort("index"),
       className: `readwise-sort-option${highlightsSort === "index" ? " is-active" : ""}`
     },
     t("stats.sortByIndex")
-  ), /* @__PURE__ */ React6.createElement(
+  ), /* @__PURE__ */ React7.createElement(
     "button",
     {
       onClick: () => setHighlightsSortDir((d) => d === "asc" ? "desc" : "asc"),
@@ -9676,7 +10067,7 @@ var StatsComponent = ({ plugin }) => {
       title: t("stats.toggleSortDirection")
     },
     highlightsSortDir === "asc" ? "\u2191" : "\u2193"
-  ))), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-list" }, highlightItems.slice(0, 300).map((h) => {
+  ))), /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-list" }, highlightItems.slice(0, 300).map((h) => {
     const isExpanded = !!expandedHighlightPaths[h.file.path];
     const cached = highlightContentByPath[h.file.path];
     const toggleHighlight = async () => {
@@ -9700,7 +10091,7 @@ var StatsComponent = ({ plugin }) => {
         }
       }
     };
-    return /* @__PURE__ */ React6.createElement(
+    return /* @__PURE__ */ React7.createElement(
       "div",
       {
         key: h.file.path,
@@ -9721,7 +10112,7 @@ var StatsComponent = ({ plugin }) => {
           }
         }
       },
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-card-header" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-title-row" }, /* @__PURE__ */ React6.createElement("span", { className: "readwise-highlight-toggle", "aria-hidden": "true" }, isExpanded ? "\u25BE" : "\u25B8"), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-title-stack" }, /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-card-header" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-title-row" }, /* @__PURE__ */ React7.createElement("span", { className: "readwise-highlight-toggle", "aria-hidden": "true" }, isExpanded ? "\u25BE" : "\u25B8"), /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-title-stack" }, /* @__PURE__ */ React7.createElement(
         "button",
         {
           onClick: (event) => {
@@ -9733,7 +10124,7 @@ var StatsComponent = ({ plugin }) => {
           title: h.title
         },
         typeof h.index === "number" ? `${String(h.index).padStart(3, "0")} \xB7 ${h.title}` : h.title
-      ), h.date ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-date" }, formatDate(h.date)) : null)), /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-actions" }, /* @__PURE__ */ React6.createElement(
+      ), h.date ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-date" }, formatDate(h.date)) : null)), /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-actions" }, /* @__PURE__ */ React7.createElement(
         "button",
         {
           onClick: async (event) => {
@@ -9750,10 +10141,10 @@ var StatsComponent = ({ plugin }) => {
           "aria-label": t("stats.createInboxNote"),
           title: t("stats.createInboxNote")
         },
-        /* @__PURE__ */ React6.createElement("span", { className: "readwise-highlight-create-icon" }, creatingInboxPath === h.file.path ? "\u2026" : "\u270E"),
-        /* @__PURE__ */ React6.createElement("span", { className: "readwise-highlight-create-label" }, t("stats.inInbox"))
+        /* @__PURE__ */ React7.createElement("span", { className: "readwise-highlight-create-icon" }, creatingInboxPath === h.file.path ? "\u2026" : "\u270E"),
+        /* @__PURE__ */ React7.createElement("span", { className: "readwise-highlight-create-label" }, t("stats.inInbox"))
       ))),
-      isExpanded ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-content" }, !cached ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-muted" }, t("stats.loading")) : /* @__PURE__ */ React6.createElement("div", null, /* @__PURE__ */ React6.createElement(
+      isExpanded ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-content" }, !cached ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-muted" }, t("stats.loading")) : /* @__PURE__ */ React7.createElement("div", null, /* @__PURE__ */ React7.createElement(
         MarkdownBlock,
         {
           plugin,
@@ -9763,9 +10154,9 @@ var StatsComponent = ({ plugin }) => {
             cached.description || ""
           ].filter(Boolean).join("\n\n")
         }
-      ), !cached.quote && !cached.description ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-highlight-muted" }, t("stats.emptyNote")) : null)) : null
+      ), !cached.quote && !cached.description ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-highlight-muted" }, t("stats.emptyNote")) : null)) : null
     );
-  }))))), bookDeleteConfirmationOpen && activeBook ? /* @__PURE__ */ React6.createElement(
+  }))))), bookDeleteConfirmationOpen && activeBook ? /* @__PURE__ */ React7.createElement(
     "div",
     {
       className: "readwise-import-modal-backdrop",
@@ -9775,7 +10166,7 @@ var StatsComponent = ({ plugin }) => {
         }
       }
     },
-    /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement(
       "div",
       {
         className: "readwise-delete-confirmation",
@@ -9783,9 +10174,9 @@ var StatsComponent = ({ plugin }) => {
         "aria-modal": "true",
         "aria-labelledby": "readwise-delete-confirmation-title"
       },
-      /* @__PURE__ */ React6.createElement("div", { id: "readwise-delete-confirmation-title", className: "readwise-delete-confirmation-title" }, t("stats.deleteBookConfirmTitle")),
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-delete-confirmation-text" }, t("stats.deleteBookConfirmText", { title: activeBook.title })),
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-delete-confirmation-actions" }, /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement("div", { id: "readwise-delete-confirmation-title", className: "readwise-delete-confirmation-title" }, t("stats.deleteBookConfirmTitle")),
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-delete-confirmation-text" }, t("stats.deleteBookConfirmText", { title: activeBook.title })),
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-delete-confirmation-actions" }, /* @__PURE__ */ React7.createElement(
         "button",
         {
           type: "button",
@@ -9794,7 +10185,7 @@ var StatsComponent = ({ plugin }) => {
           onClick: () => setBookDeleteConfirmationOpen(false)
         },
         t("stats.deleteBookCancel")
-      ), /* @__PURE__ */ React6.createElement(
+      ), /* @__PURE__ */ React7.createElement(
         "button",
         {
           type: "button",
@@ -9824,7 +10215,7 @@ var StatsComponent = ({ plugin }) => {
         deletingBookId ? t("stats.deleteBookDeleting") : t("stats.deleteBookConfirm")
       ))
     )
-  ) : null, importDialog ? /* @__PURE__ */ React6.createElement(
+  ) : null, importDialog ? /* @__PURE__ */ React7.createElement(
     "div",
     {
       className: "readwise-import-modal-backdrop",
@@ -9834,7 +10225,7 @@ var StatsComponent = ({ plugin }) => {
         }
       }
     },
-    /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal", role: "dialog", "aria-modal": "true" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-header is-upload" }, /* @__PURE__ */ React6.createElement(
+    /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-modal", role: "dialog", "aria-modal": "true" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-modal-header is-upload" }, /* @__PURE__ */ React7.createElement(
       "button",
       {
         onClick: closeImportDialog,
@@ -9843,7 +10234,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy
       },
       "\xD7"
-    )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-body" }, importDialog === "url" ? /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importUrl")), /* @__PURE__ */ React6.createElement(
+    )), /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-modal-body" }, importDialog === "url" ? /* @__PURE__ */ React7.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React7.createElement("span", null, t("stats.importUrl")), /* @__PURE__ */ React7.createElement(
       "input",
       {
         value: importUrl,
@@ -9852,7 +10243,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy,
         className: "readwise-import-input"
       }
-    )) : /* @__PURE__ */ React6.createElement(
+    )) : /* @__PURE__ */ React7.createElement(
       "div",
       {
         className: `readwise-import-dropzone${importDragActive ? " is-dragging" : ""}`,
@@ -9890,7 +10281,7 @@ var StatsComponent = ({ plugin }) => {
           selectImportFile(((_a = event.dataTransfer.files) == null ? void 0 : _a[0]) || null);
         }
       },
-      /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement(
         "input",
         {
           ref: fileInputRef,
@@ -9903,10 +10294,10 @@ var StatsComponent = ({ plugin }) => {
           }
         }
       ),
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-icon", "aria-hidden": "true" }, "\u2191"),
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-title" }, selectedImportFile ? selectedImportFile.name : t("stats.importDropTitle")),
-      /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-dropzone-hint" }, selectedImportFile ? t("stats.importDropReplace") : t("stats.importDropHint"))
-    ), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importTitleLabel")), /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-dropzone-icon", "aria-hidden": "true" }, "\u2191"),
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-dropzone-title" }, selectedImportFile ? selectedImportFile.name : t("stats.importDropTitle")),
+      /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-dropzone-hint" }, selectedImportFile ? t("stats.importDropReplace") : t("stats.importDropHint"))
+    ), /* @__PURE__ */ React7.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React7.createElement("span", null, t("stats.importTitleLabel")), /* @__PURE__ */ React7.createElement(
       "input",
       {
         value: importTitle,
@@ -9915,7 +10306,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy,
         className: "readwise-import-input"
       }
-    )), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importTagsLabel")), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-tag-editor" }, importTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-selected-tags" }, importTags.map((tag) => /* @__PURE__ */ React6.createElement(
+    )), /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-field" }, /* @__PURE__ */ React7.createElement("span", null, t("stats.importTagsLabel")), /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-tag-editor" }, importTags.length > 0 ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-selected-tags" }, importTags.map((tag) => /* @__PURE__ */ React7.createElement(
       "button",
       {
         key: tag,
@@ -9926,8 +10317,8 @@ var StatsComponent = ({ plugin }) => {
         title: t("stats.importTagRemove")
       },
       tag,
-      /* @__PURE__ */ React6.createElement("span", { "aria-hidden": "true" }, " \xD7")
-    ))) : null, /* @__PURE__ */ React6.createElement(
+      /* @__PURE__ */ React7.createElement("span", { "aria-hidden": "true" }, " \xD7")
+    ))) : null, /* @__PURE__ */ React7.createElement(
       "input",
       {
         value: importTagInput,
@@ -9943,7 +10334,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy,
         className: "readwise-import-input"
       }
-    ), suggestedImportTags.length > 0 ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-tag-suggestions" }, suggestedImportTags.map((tag) => /* @__PURE__ */ React6.createElement(
+    ), suggestedImportTags.length > 0 ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-tag-suggestions" }, suggestedImportTags.map((tag) => /* @__PURE__ */ React7.createElement(
       "button",
       {
         key: tag,
@@ -9956,7 +10347,7 @@ var StatsComponent = ({ plugin }) => {
         }
       },
       tag
-    ))) : null)), importDialog === "upload" && readerLoginRequired ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login" }, /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login-title" }, t("stats.importLoginTitle")), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-login-help" }, t("stats.importLoginHelp")), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importLoginEmail")), /* @__PURE__ */ React6.createElement(
+    ))) : null)), importDialog === "upload" && readerLoginRequired ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-login" }, /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-login-title" }, t("stats.importLoginTitle")), /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-login-help" }, t("stats.importLoginHelp")), /* @__PURE__ */ React7.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React7.createElement("span", null, t("stats.importLoginEmail")), /* @__PURE__ */ React7.createElement(
       "input",
       {
         type: "email",
@@ -9966,7 +10357,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy,
         className: "readwise-import-input"
       }
-    )), /* @__PURE__ */ React6.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React6.createElement("span", null, t("stats.importLoginPassword")), /* @__PURE__ */ React6.createElement(
+    )), /* @__PURE__ */ React7.createElement("label", { className: "readwise-import-field" }, /* @__PURE__ */ React7.createElement("span", null, t("stats.importLoginPassword")), /* @__PURE__ */ React7.createElement(
       "input",
       {
         type: "password",
@@ -9976,7 +10367,7 @@ var StatsComponent = ({ plugin }) => {
         disabled: importBusy,
         className: "readwise-import-input"
       }
-    ))) : null, importStatus ? /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-status" }, importStatus) : null), /* @__PURE__ */ React6.createElement("div", { className: "readwise-import-modal-actions" }, /* @__PURE__ */ React6.createElement(
+    ))) : null, importStatus ? /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-status" }, importStatus) : null), /* @__PURE__ */ React7.createElement("div", { className: "readwise-import-modal-actions" }, /* @__PURE__ */ React7.createElement(
       "button",
       {
         onClick: importDialog === "url" ? saveUrlToReader : readerLoginRequired ? loginAndRetryFileUpload : saveFileToReader,
@@ -10597,6 +10988,19 @@ var ReadwiseService = class {
       throw new Error(failures.map((failure) => failure.error || failure.id).join(", "));
     }
   }
+  async updateDocumentLocation(documentId, location) {
+    var _a;
+    if (!documentId)
+      return;
+    const response = await this.requestJson("/bulk_update/", {
+      method: "PATCH",
+      body: { updates: [{ id: documentId, location }] },
+      okStatuses: [200, 207]
+    });
+    const failure = (_a = response.results) == null ? void 0 : _a.find((result) => !result.success);
+    if (failure)
+      throw new Error(failure.error || failure.id);
+  }
   async updateNewDocumentTagsWhenReady(documentIds, tags) {
     if (documentIds.length === 0 || tags.length === 0)
       return;
@@ -11184,6 +11588,7 @@ var ReadwiseSyncService = class {
       reading_progress: readingProgress,
       words_count: document2.word_count,
       notes_count: document2.num_highlights || 0,
+      location: document2.location,
       status: document2.location === "archive" ? "completed" : readingProgress > 0 ? "reading" : "planned"
     };
   }
@@ -11236,7 +11641,8 @@ var DEFAULT_SETTINGS = {
   readwiseInboxFolder: "Inbox/Readwise",
   syncLocations: ["new", "later", "shortlist"],
   requestDelayMs: 3200,
-  maxRetries: 8
+  maxRetries: 8,
+  planningBoardCollapsedGroups: []
 };
 
 // src/settings/ReadwiseTrackerSettingTab.ts
@@ -11410,6 +11816,19 @@ var ReadwiseTrackerPlugin = class extends import_obsidian10.Plugin {
   }
   async addReaderDocumentTags(documentId, tags) {
     await this.readwiseService.addDocumentTags(documentId, tags);
+    await this.syncReadwiseData({ silent: true });
+  }
+  async moveReaderDocument(documentId, location) {
+    await this.readwiseService.updateDocumentLocation(documentId, location);
+    const current = this.dataManager.getBook(documentId);
+    if (current) {
+      this.dataManager.saveBook({
+        ...current,
+        location,
+        status: location === "archive" ? "completed" : location === "new" ? "reading" : "planned",
+        updated_at: new Date().toISOString()
+      });
+    }
     await this.syncReadwiseData({ silent: true });
   }
   async deleteReaderBook(documentId) {

@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf } from "obsidian";
+import { ItemView, Notice, WorkspaceLeaf } from "obsidian";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import type { ReadwiseTrackerViewHost } from "../plugin/contracts";
@@ -16,7 +16,10 @@ import {
 import { ReadwiseBookSection } from "./components/ReadwiseBookSection";
 import { ReadwiseHeatmapPanel } from "./components/ReadwiseHeatmapPanel";
 import { ReadwiseTagFilterBar } from "./components/ReadwiseTagFilterBar";
+import { ReadwisePlanningBoard } from "./components/ReadwisePlanningBoard";
 import { getCurrentLocale, getDateLocale, getSortLocale, t } from "../i18n";
+import { getReaderLocation, type PlanningStatus } from "./planningBoard";
+import { hasBookActivityInRange, isDateKeyInRange, resolveHeatmapDateRange } from "./dateRangeFilter";
 
 export const DASHBOARD_VIEW_TYPE = "readwise-dashboard-view";
 
@@ -26,6 +29,11 @@ function isCompletedBook(book: LocalBook): boolean {
 
 function isReadingBook(book: LocalBook): boolean {
   return book.status === "reading" && !isCompletedBook(book);
+}
+
+function openDatePicker(event: React.MouseEvent<HTMLInputElement>): void {
+  const input = event.currentTarget as HTMLInputElement & { showPicker?: () => void };
+  input.showPicker?.();
 }
 
 export class DashboardView extends ItemView {
@@ -76,9 +84,21 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [selectedDateKey, setSelectedDateKey] = React.useState<string | null>(null);
   const [visibleWeekCount, setVisibleWeekCount] = React.useState<number>(53);
+  const [booksView, setBooksView] = React.useState<"list" | "board">("list");
+  const [collapsedBoardGroups, setCollapsedBoardGroups] = React.useState<string[]>(
+    () => plugin.settings.planningBoardCollapsedGroups || [],
+  );
+  const [dateFrom, setDateFrom] = React.useState("");
+  const [dateTo, setDateTo] = React.useState("");
   const locale = getCurrentLocale();
   const dateLocale = getDateLocale(locale);
   const sortLocale = getSortLocale(locale);
+
+  const updateCollapsedBoardGroups = React.useCallback((groupKeys: string[]) => {
+    setCollapsedBoardGroups(groupKeys);
+    plugin.settings.planningBoardCollapsedGroups = groupKeys;
+    void plugin.saveSettings();
+  }, [plugin]);
 
   const loadData = React.useCallback(() => {
     const data = plugin.dataManager.getData();
@@ -152,13 +172,19 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     }
   }, [selectedBookId, selectedDateKey]);
 
-  const activeBookIdsForSelectedDate = React.useMemo(() => {
-    if (!selectedDateKey) {
+  const activeBookIdsForDateFilter = React.useMemo(() => {
+    if (!selectedDateKey && !dateFrom && !dateTo) {
       return null;
     }
 
     const set = new Set<string>();
     for (const book of filteredBooks) {
+      if (!selectedDateKey) {
+        if (hasBookActivityInRange(book, readingActivityByBook[book.id], { from: dateFrom, to: dateTo })) {
+          set.add(book.id);
+        }
+        continue;
+      }
       const byDay = readingActivityByBook[book.id];
       if (byDay && hasReadingActivity(byDay[selectedDateKey])) {
         set.add(book.id);
@@ -171,7 +197,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
       }
     }
     return set;
-  }, [filteredBooks, readingActivityByBook, selectedDateKey]);
+  }, [dateFrom, dateTo, filteredBooks, readingActivityByBook, selectedDateKey]);
 
   const fallbackUpdatesByDate = React.useMemo(() => {
     const counts: Record<string, number> = {};
@@ -254,8 +280,16 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     [],
   );
 
+  const displayedHeatmapValueByDate = React.useCallback((dateKey: string) => {
+    if ((dateFrom || dateTo) && !isDateKeyInRange(dateKey, { from: dateFrom, to: dateTo })) {
+      return 0;
+    }
+    return heatmapValueByDate(dateKey);
+  }, [dateFrom, dateTo, heatmapValueByDate]);
+
   const heatmapData = React.useMemo(() => {
     const today = new Date();
+    const selectedRange = resolveHeatmapDateRange({ from: dateFrom, to: dateTo }, today);
     const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const rangeStart = new Date(rangeEnd);
     rangeStart.setDate(rangeStart.getDate() - 364);
@@ -283,9 +317,9 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     let maxValue = 0;
     let totalValue = 0;
     let activeDays = 0;
-    for (let date = new Date(rangeStart); date <= rangeEnd; date.setDate(date.getDate() + 1)) {
+    for (let date = new Date(selectedRange.start); date <= selectedRange.end; date.setDate(date.getDate() + 1)) {
       const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-      const value = heatmapValueByDate(key);
+      const value = displayedHeatmapValueByDate(key);
       totalValue += value;
       if (value > maxValue) {
         maxValue = value;
@@ -310,7 +344,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
             ? t("dashboard.progressLegend")
             : t("dashboard.updatesLegend"),
     };
-  }, [heatmapMode, heatmapValueByDate]);
+  }, [dateFrom, dateTo, displayedHeatmapValueByDate, heatmapMode]);
 
   const heatmapViewportRef = React.useRef<HTMLDivElement | null>(null);
   React.useEffect(() => {
@@ -381,7 +415,9 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
   const statsPanel = React.useMemo(() => {
     if (!selectedDateKey) {
       return {
-        periodLabel: t("dashboard.period365"),
+        periodLabel: dateFrom || dateTo
+          ? `${t("dashboard.periodRange")}: ${dateFrom || "…"} — ${dateTo || "…"}`
+          : t("dashboard.period365"),
         total: heatmapData.totalValue,
         max: heatmapData.maxValue,
         avg: heatmapData.avgValue,
@@ -403,6 +439,8 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     heatmapData.avgValue,
     heatmapData.maxValue,
     heatmapData.totalValue,
+    dateFrom,
+    dateTo,
     selectedDateKey,
     selectedDayLabel,
     selectedDayValue,
@@ -412,24 +450,31 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     () =>
       filteredBooks
         .filter(isReadingBook)
-        .filter((book) => (activeBookIdsForSelectedDate ? activeBookIdsForSelectedDate.has(book.id) : true))
+        .filter((book) => (activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true))
         .sort(
           (a, b) =>
             new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime(),
         ),
-    [activeBookIdsForSelectedDate, filteredBooks],
+    [activeBookIdsForDateFilter, filteredBooks],
   );
 
   const completedBooks = React.useMemo(
     () =>
       filteredBooks
         .filter(isCompletedBook)
-        .filter((book) => (activeBookIdsForSelectedDate ? activeBookIdsForSelectedDate.has(book.id) : true))
+        .filter((book) => (activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true))
         .sort(
           (a, b) =>
             new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime(),
         ),
-    [activeBookIdsForSelectedDate, filteredBooks],
+    [activeBookIdsForDateFilter, filteredBooks],
+  );
+
+  const boardBooks = React.useMemo(
+    () => filteredBooks
+      .filter((book) => (activeBookIdsForDateFilter ? activeBookIdsForDateFilter.has(book.id) : true))
+      .sort((a, b) => a.title.localeCompare(b.title, sortLocale)),
+    [activeBookIdsForDateFilter, filteredBooks, sortLocale],
   );
 
   const readingRightLabelByBookId = React.useMemo(() => {
@@ -462,6 +507,30 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
     void plugin.openBookHighlights(bookId);
   }, [plugin]);
 
+  const moveBook = React.useCallback(async (bookId: string, status: PlanningStatus) => {
+    const previous = books.find((book) => book.id === bookId);
+    if (!previous) return;
+    const location = getReaderLocation(status);
+    const optimistic = { ...previous, location, status };
+    setBooks((current) => current.map((book) => book.id === bookId ? optimistic : book));
+    try {
+      await plugin.moveReaderDocument(bookId, location);
+      loadData();
+      new Notice(t("dashboard.moveSuccess", { location: t(
+        status === "planned"
+          ? "dashboard.readerLater"
+          : status === "reading"
+            ? "dashboard.readerInbox"
+            : "dashboard.readerArchive",
+      ) }));
+    } catch (error) {
+      setBooks((current) => current.map((book) => book.id === bookId ? previous : book));
+      new Notice(t("dashboard.moveFailed", {
+        message: error instanceof Error ? error.message : String(error),
+      }));
+    }
+  }, [books, loadData, plugin]);
+
   return (
     <div className="readwise-dashboard-root">
       <div className="readwise-dashboard-top">
@@ -485,17 +554,94 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
           heatmapColors={heatmapColors}
           statsPanel={statsPanel}
           viewportRef={heatmapViewportRef}
-          heatmapValueByDate={heatmapValueByDate}
+          heatmapValueByDate={displayedHeatmapValueByDate}
           heatmapLevel={(value) => getHeatmapLevel(value, heatmapMode)}
           heatmapValueFormat={(value) => formatHeatmapValue(value, heatmapMode, locale)}
           onToggleDate={(dateKey) => {
             setSelectedDateKey((previous) => (previous === dateKey ? null : dateKey));
+            setDateFrom("");
+            setDateTo("");
             setSelectedBookId(null);
             setCompletedCollapsed(false);
           }}
         />
       </div>
 
+      <div className="readwise-books-view-toolbar">
+        <div className="readwise-date-range-filter" aria-label={t("dashboard.dateRange")}>
+          <label>
+            <span>{t("dashboard.dateFrom")}</span>
+            <input
+              type="date"
+              value={dateFrom}
+              max={dateTo || undefined}
+              onClick={openDatePicker}
+              onChange={(event) => {
+                setDateFrom(event.currentTarget.value);
+                setSelectedDateKey(null);
+                setSelectedBookId(null);
+              }}
+            />
+          </label>
+          <label>
+            <span>{t("dashboard.dateTo")}</span>
+            <input
+              type="date"
+              value={dateTo}
+              min={dateFrom || undefined}
+              onClick={openDatePicker}
+              onChange={(event) => {
+                setDateTo(event.currentTarget.value);
+                setSelectedDateKey(null);
+                setSelectedBookId(null);
+              }}
+            />
+          </label>
+          <button
+            type="button"
+            className={`readwise-date-range-clear${dateFrom || dateTo ? "" : " is-hidden"}`}
+            onClick={() => {
+              setDateFrom("");
+              setDateTo("");
+            }}
+            aria-label={t("dashboard.dateClear")}
+            title={t("dashboard.dateClear")}
+          >
+            ×
+          </button>
+        </div>
+        <div className="readwise-view-switch" role="group" aria-label={t("dashboard.viewMode")}>
+          <button
+            type="button"
+            className={booksView === "list" ? "is-active" : ""}
+            onClick={() => setBooksView("list")}
+          >
+            <span aria-hidden="true">☷</span>
+            {t("dashboard.listView")}
+          </button>
+          <button
+            type="button"
+            className={booksView === "board" ? "is-active" : ""}
+            onClick={() => setBooksView("board")}
+          >
+            <span aria-hidden="true">▥</span>
+            {t("dashboard.boardView")}
+          </button>
+        </div>
+      </div>
+
+      {booksView === "board" ? (
+        <ReadwisePlanningBoard
+          books={boardBooks}
+          selectedBookId={selectedBookId}
+          selectedTags={selectedTags}
+          sortLocale={sortLocale}
+          collapsedGroupKeys={collapsedBoardGroups}
+          onSelectBook={selectBook}
+          onMoveBook={moveBook}
+          onCollapsedGroupKeysChange={updateCollapsedBoardGroups}
+        />
+      ) : <>
       <ReadwiseBookSection
         title={t("dashboard.currentlyReading")}
         books={readingBooks}
@@ -524,6 +670,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
         countLabel={`(${completedBooks.length})`}
         onToggleCollapsed={() => setCompletedCollapsed((value) => !value)}
       />
+      </>}
     </div>
   );
 };

@@ -91,6 +91,20 @@ export class ReadwiseTrackerPlugin extends Plugin {
     await this.syncReadwiseData({ silent: true });
   }
 
+  async moveReaderDocument(documentId: string, location: "new" | "later" | "archive"): Promise<void> {
+    await this.readwiseService.updateDocumentLocation(documentId, location);
+    const current = this.dataManager.getBook(documentId);
+    if (current) {
+      this.dataManager.saveBook({
+        ...current,
+        location,
+        status: location === "archive" ? "completed" : location === "new" ? "reading" : "planned",
+        updated_at: new Date().toISOString(),
+      });
+    }
+    await this.syncReadwiseData({ silent: true });
+  }
+
   async deleteReaderBook(documentId: string): Promise<void> {
     try {
       await this.readwiseService.deleteReaderDocument(
