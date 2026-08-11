@@ -10,6 +10,7 @@ import { ReadwiseService } from "./readwise";
 import { inferPdfReadingActivity } from "./readwisePdfActivity";
 import { createRegularSyncPlan, type ReadwiseSyncRequest } from "./readwiseSyncPlan";
 import { t } from "../i18n";
+import { reconcilePendingReaderLocation } from "./readerLocation";
 
 export class ReadwiseSyncService {
   constructor(
@@ -41,8 +42,7 @@ export class ReadwiseSyncService {
   }
 
   private async fetchDocuments(requests: ReadwiseSyncRequest[]): Promise<ReadwiseDocument[]> {
-    const documents: ReadwiseDocument[] = [];
-    const seenIds = new Set<string>();
+    const documents = new Map<string, ReadwiseDocument>();
 
     for (const request of requests) {
       const part = await this.readwiseService.getAllDocuments(
@@ -51,14 +51,16 @@ export class ReadwiseSyncService {
         request.updatedAfter,
       );
       for (const document of part) {
-        if (!seenIds.has(document.id)) {
-          seenIds.add(document.id);
-          documents.push(document);
-        }
+        if (!documents.has(document.id)) documents.set(document.id, document);
       }
     }
 
-    return documents;
+    for (const documentId of Object.keys(this.dataManager.getData().pendingReaderLocations)) {
+      const document = await this.readwiseService.getDocument(documentId);
+      if (document) documents.set(document.id, document);
+    }
+
+    return Array.from(documents.values());
   }
 
   private async applyDocuments(
@@ -84,13 +86,19 @@ export class ReadwiseSyncService {
 
     for (const document of filteredDocuments) {
       const existingBook = data.books[document.id];
-      const book = this.toLocalBook(document);
+      let book = this.toLocalBook(document);
+      const pendingLocation = data.pendingReaderLocations[document.id];
+      if (pendingLocation) {
+        const reconciled = reconcilePendingReaderLocation(book, pendingLocation, existingBook?.updated_at);
+        book = reconciled.book;
+        if (reconciled.confirmed) delete data.pendingReaderLocations[document.id];
+      }
       let pdfTimelineRebuilt = false;
 
       if (isPdfDocument(document)) {
         const inferredActivity = await inferPdfReadingActivity(this.app, this.getSettings(), book);
         if (inferredActivity && Object.keys(inferredActivity).length > 0) {
-          this.dataManager.replaceBookReadingActivity(book.id, inferredActivity);
+          await this.dataManager.replaceBookReadingActivity(book.id, inferredActivity);
           pdfTimelineRebuilt = true;
         }
       }
@@ -98,19 +106,19 @@ export class ReadwiseSyncService {
       if (!existingBook) {
         newCount += 1;
         if (!pdfTimelineRebuilt) {
-          this.trackProgressDelta(book, book.reading_progress);
+          await this.trackProgressDelta(book, book.reading_progress);
         }
       } else {
         updateCount += 1;
         if (!pdfTimelineRebuilt) {
-          this.trackProgressDelta(book, book.reading_progress - clampProgress(existingBook.reading_progress));
+          await this.trackProgressDelta(book, book.reading_progress - clampProgress(existingBook.reading_progress));
         }
       }
 
-      this.dataManager.saveBook(book);
+      await this.dataManager.saveBook(book);
     }
 
-    this.dataManager.updateLastSync();
+    await this.dataManager.updateLastSync();
     if (!options?.silent) {
       new Notice(t("notice.syncComplete", { newCount, updateCount }));
     }
@@ -147,7 +155,7 @@ export class ReadwiseSyncService {
     };
   }
 
-  private trackProgressDelta(book: LocalBook, progressDelta: number): void {
+  private async trackProgressDelta(book: LocalBook, progressDelta: number): Promise<void> {
     const delta = clampProgress(progressDelta);
     if (delta <= 0.01) {
       return;
@@ -157,7 +165,7 @@ export class ReadwiseSyncService {
     const totalWords = Math.max(0, book.words_count || 0);
     if (totalWords > 0) {
       const deltaWords = (totalWords * delta) / 100;
-      this.dataManager.addReadingActivity(
+      await this.dataManager.addReadingActivity(
         dateKey,
         {
           words: deltaWords,
@@ -170,7 +178,7 @@ export class ReadwiseSyncService {
       return;
     }
 
-    this.dataManager.addReadingActivity(
+    await this.dataManager.addReadingActivity(
       dateKey,
       {
         progressPoints: delta,

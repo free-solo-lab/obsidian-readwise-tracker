@@ -19,10 +19,10 @@ interface ReadwiseHeatmapPanelProps {
   heatmapColors: string[];
   statsPanel: StatsPanelData;
   viewportRef: React.RefObject<HTMLDivElement>;
-  heatmapValueByDate(dateKey: string): number;
-  heatmapLevel(value: number): number;
-  heatmapValueFormat(value: number): string;
-  onToggleDate(dateKey: string): void;
+  heatmapValueByDate: (dateKey: string) => number;
+  heatmapLevel: (value: number) => number;
+  heatmapValueFormat: (value: number) => string;
+  onToggleDate: (dateKey: string) => void;
 }
 
 export const ReadwiseHeatmapPanel: React.FC<ReadwiseHeatmapPanelProps> = ({

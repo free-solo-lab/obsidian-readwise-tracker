@@ -14,7 +14,7 @@ export async function activateReadwiseView(workspace: Workspace, viewType: strin
   }
 
   if (leaf) {
-    workspace.revealLeaf(leaf);
+    await workspace.revealLeaf(leaf);
   }
 }
 

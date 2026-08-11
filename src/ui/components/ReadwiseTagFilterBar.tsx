@@ -3,7 +3,7 @@ import * as React from "react";
 interface ReadwiseTagFilterBarProps {
   allTags: string[];
   selectedTags: string[];
-  onToggleTag(tag: string): void;
+  onToggleTag: (tag: string) => void;
 }
 
 export const ReadwiseTagFilterBar: React.FC<ReadwiseTagFilterBarProps> = ({

@@ -19,8 +19,16 @@ export interface ReadwiseTrackerSettings {
   requestDelayMs: number;
   /** How many times to wait out an HTTP 429 (respecting Retry-After) before giving up on a request. */
   maxRetries: number;
-  /** Stable keys of tag rows collapsed on the planning board. */
-  planningBoardCollapsedGroups: string[];
+  /** Start date used by the reading Gantt plan; empty means today. */
+  ganttStartDate: string;
+  /** Explicit daily reading budget in minutes; zero means use the observed average. */
+  ganttDailyMinutes: number;
+  /** Expanded directions shared by the board and Gantt views. */
+  ganttFocusTags: string[];
+  /** User-defined order of directions shared by the board and Gantt views. */
+  ganttDirectionOrder: string[];
+  /** User-defined book order inside each direction. */
+  ganttDirectionBookOrder: Record<string, string[]>;
 }
 
 export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
@@ -33,5 +41,9 @@ export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
   syncLocations: ["new", "later", "shortlist"],
   requestDelayMs: 3200,
   maxRetries: 8,
-  planningBoardCollapsedGroups: [],
+  ganttStartDate: "",
+  ganttDailyMinutes: 0,
+  ganttFocusTags: [],
+  ganttDirectionOrder: [],
+  ganttDirectionBookOrder: {},
 };

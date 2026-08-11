@@ -26,7 +26,7 @@ export class ReadwiseNoteService {
     await this.ensureFolderExists(inboxFolder);
 
     const highlightCache = this.app.metadataCache.getFileCache(args.highlightFile);
-    const frontmatter = highlightCache?.frontmatter as Record<string, unknown> | undefined;
+    const frontmatter: Record<string, unknown> | undefined = highlightCache?.frontmatter;
     const highlightTitle =
       (typeof frontmatter?.title === "string" ? frontmatter.title : undefined) || args.highlightFile.basename;
     const highlightDate = typeof frontmatter?.date === "string" ? frontmatter.date : "";

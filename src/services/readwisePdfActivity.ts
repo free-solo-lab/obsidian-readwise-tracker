@@ -23,7 +23,7 @@ export async function inferPdfReadingActivity(
   const dateKeys = highlightFiles
     .map((file) => {
       const cache = app.metadataCache.getFileCache(file);
-      const frontmatter = cache?.frontmatter as Record<string, unknown> | undefined;
+      const frontmatter: Record<string, unknown> | undefined = cache?.frontmatter;
       return typeof frontmatter?.date === "string" ? frontmatter.date : "";
     })
     .filter((date) => date.length > 0)

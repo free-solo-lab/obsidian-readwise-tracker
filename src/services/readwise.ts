@@ -1,5 +1,4 @@
 import { requestUrl, RequestUrlParam } from 'obsidian';
-import * as https from 'https';
 import {
     ReadwiseDocument,
     ReadwiseListResponse,
@@ -20,7 +19,7 @@ export class ReaderAuthenticationError extends Error {
     }
 }
 
-interface NodeHttpResponse {
+interface ReaderHttpResponse {
     status: number;
     headers: Record<string, unknown>;
     text: string;
@@ -155,44 +154,27 @@ export class ReadwiseService {
         return valueMatch?.[1];
     }
 
-    private async nodeRequest(
+    private async readerRequest(
         url: string,
         options: {
             method: 'GET' | 'POST';
             headers?: Record<string, string>;
             body?: string;
         },
-    ): Promise<NodeHttpResponse> {
-        return new Promise((resolve, reject) => {
-            const parsed = new URL(url);
-            const request = https.request(
-                {
-                    method: options.method,
-                    hostname: parsed.hostname,
-                    path: `${parsed.pathname}${parsed.search}`,
-                    headers: options.headers,
-                },
-                (response) => {
-                    const chunks: Buffer[] = [];
-                    response.on('data', (chunk) => {
-                        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-                    });
-                    response.on('end', () => {
-                        resolve({
-                            status: response.statusCode || 0,
-                            headers: response.headers as Record<string, unknown>,
-                            text: Buffer.concat(chunks).toString('utf8'),
-                            url,
-                        });
-                    });
-                },
-            );
-            request.on('error', reject);
-            if (options.body) {
-                request.write(options.body);
-            }
-            request.end();
+    ): Promise<ReaderHttpResponse> {
+        const response = await requestUrl({
+            url,
+            method: options.method,
+            headers: options.headers,
+            body: options.body,
+            throw: false,
         });
+        return {
+            status: response.status,
+            headers: response.headers,
+            text: response.text,
+            url,
+        };
     }
 
     private isRedirect(status: number): boolean {
@@ -221,7 +203,9 @@ export class ReadwiseService {
         }
 
         const url = new URL(`${this.baseUrl}${endpoint}`);
-        Object.keys(options.params || {}).forEach(key => url.searchParams.append(key, options.params![key]));
+        for (const [key, value] of Object.entries(options.params || {})) {
+            url.searchParams.append(key, value);
+        }
 
         const requestParams: RequestUrlParam = {
             url: url.toString(),
@@ -316,15 +300,17 @@ export class ReadwiseService {
     public async updateDocumentLocation(documentId: string, location: 'new' | 'later' | 'archive'): Promise<void> {
         if (!documentId) return;
 
-        const response = await this.requestJson<{
-            results?: Array<{ id: string; success: boolean; error?: string }>;
-        }>('/bulk_update/', {
+        await this.requestJson<ReadwiseSaveDocumentResponse>(`/update/${encodeURIComponent(documentId)}/`, {
             method: 'PATCH',
-            body: { updates: [{ id: documentId, location }] },
-            okStatuses: [200, 207],
+            body: { location },
+            okStatuses: [200],
         });
-        const failure = response.results?.find((result) => !result.success);
-        if (failure) throw new Error(failure.error || failure.id);
+    }
+
+    public async getDocument(documentId: string): Promise<ReadwiseDocument | undefined> {
+        if (!documentId) return undefined;
+        const response = await this.request<ReadwiseListResponse>('/list/', { id: documentId });
+        return response.results[0];
     }
 
     public async updateNewDocumentTagsWhenReady(documentIds: string[], tags: string[]): Promise<void> {
@@ -400,6 +386,7 @@ export class ReadwiseService {
             isChunkingSupported: true,
         });
 
+        const csrfToken = this.getCookieValue(sessionCookie, 'csrftoken');
         const response = await requestUrl({
             url: 'https://readwise.io/reader/api/state/update/',
             method: 'POST',
@@ -411,9 +398,7 @@ export class ReadwiseService {
                 'Content-Type': 'text/plain;charset=UTF-8',
                 'Origin': 'https://read.readwise.io',
                 'Referer': 'https://read.readwise.io/',
-                ...(this.getCookieValue(sessionCookie, 'csrftoken')
-                    ? { 'X-CSRFToken': this.getCookieValue(sessionCookie, 'csrftoken')! }
-                    : {}),
+                ...(csrfToken ? { 'X-CSRFToken': csrfToken } : {}),
             },
         });
 
@@ -427,7 +412,7 @@ export class ReadwiseService {
 
     public async loginToReader(email: string, password: string): Promise<ReadwiseReaderLoginResponse> {
         const loginUrl = 'https://readwise.io/accounts/login/?next=/read/authed';
-        const initial = await this.nodeRequest(loginUrl, {
+        const initial = await this.readerRequest(loginUrl, {
             method: 'GET',
             headers: {
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -449,13 +434,12 @@ export class ReadwiseService {
         body.set('login', email);
         body.set('password', password);
 
-        const response = await this.nodeRequest(loginUrl, {
+        const response = await this.readerRequest(loginUrl, {
             method: 'POST',
             body: body.toString(),
             headers: {
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': String(Buffer.byteLength(body.toString())),
                 'Cookie': initialCookie,
                 'Cache-Control': 'max-age=0',
                 'Referer': loginUrl,
@@ -473,8 +457,8 @@ export class ReadwiseService {
         const sessionCookie = this.mergeCookies(initialCookie, this.extractCookieHeader(response.headers));
         const location = this.getHeaderString(response.headers, 'location');
         const redirectedToReader = this.isRedirect(response.status)
-            && Boolean(location)
-            && new URL(location!, loginUrl).pathname.startsWith('/read/authed');
+            && location !== undefined
+            && new URL(location, loginUrl).pathname.startsWith('/read/authed');
 
         if (!redirectedToReader) {
             const hasPasswordError = /password|incorrect|invalid|captcha|csrf|two-factor|2fa|verification/i.test(response.text);
@@ -541,6 +525,7 @@ export class ReadwiseService {
             throw new Error(`Readwise file upload failed: ${uploadResponse.status}`);
         }
 
+        const csrfToken = this.getCookieValue(sessionCookie, 'csrftoken');
         const registerResponse = await requestUrl({
             url: 'https://readwise.io/reader/upload_files/',
             method: 'POST',
@@ -556,9 +541,7 @@ export class ReadwiseService {
                 'Content-Type': 'text/plain;charset=UTF-8',
                 'Origin': 'https://read.readwise.io',
                 'Referer': 'https://read.readwise.io/',
-                ...(this.getCookieValue(sessionCookie, 'csrftoken')
-                    ? { 'X-CSRFToken': this.getCookieValue(sessionCookie, 'csrftoken')! }
-                    : {}),
+                ...(csrfToken ? { 'X-CSRFToken': csrfToken } : {}),
             },
         });
 

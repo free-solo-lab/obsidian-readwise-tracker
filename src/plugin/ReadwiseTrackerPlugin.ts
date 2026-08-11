@@ -1,6 +1,7 @@
 import { Notice, Plugin, type TFile } from "obsidian";
 import { registerCommands } from "../commands/registerCommands";
 import { DataManager } from "../services/dataManager";
+import { applyReaderLocation } from "../services/readerLocation";
 import { ReadwiseNoteService } from "../services/readwiseNoteService";
 import { ReaderAuthenticationError, ReadwiseService } from "../services/readwise";
 import { ReadwiseOfficialSyncService } from "../services/ReadwiseOfficialSyncService";
@@ -94,15 +95,11 @@ export class ReadwiseTrackerPlugin extends Plugin {
   async moveReaderDocument(documentId: string, location: "new" | "later" | "archive"): Promise<void> {
     await this.readwiseService.updateDocumentLocation(documentId, location);
     const current = this.dataManager.getBook(documentId);
-    if (current) {
-      this.dataManager.saveBook({
-        ...current,
-        location,
-        status: location === "archive" ? "completed" : location === "new" ? "reading" : "planned",
-        updated_at: new Date().toISOString(),
-      });
-    }
-    await this.syncReadwiseData({ silent: true });
+    await this.dataManager.saveReaderLocationChange(
+      documentId,
+      location,
+      current ? applyReaderLocation(current, location, new Date().toISOString()) : undefined,
+    );
   }
 
   async deleteReaderBook(documentId: string): Promise<void> {

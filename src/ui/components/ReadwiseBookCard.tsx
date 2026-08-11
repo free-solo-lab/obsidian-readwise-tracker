@@ -8,7 +8,7 @@ interface ReadwiseBookCardProps {
   rightDate: string;
   accentColor: string;
   isSelected: boolean;
-  onToggle(): void;
+  onToggle: () => void;
   author?: string;
 }
 

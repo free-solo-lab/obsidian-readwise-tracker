@@ -13,7 +13,7 @@ export interface ReadwiseDocument {
     reading_progress?: number;
     word_count?: number;
     num_highlights?: number;
-    tags?: Record<string, any>;
+    tags?: Record<string, unknown>;
     summary?: string;
     parent_id?: string | null;
     readable_title?: string;

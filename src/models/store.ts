@@ -48,6 +48,7 @@ export interface PluginData {
     plans: Record<string, ReadingPlan>;
     readingActivity: Record<string, ReadingActivityDay>;
     readingActivityByBook: Record<string, Record<string, ReadingActivityDay>>;
+    pendingReaderLocations: Record<string, 'new' | 'later' | 'archive'>;
     lastSync: string | null;
 }
 
@@ -57,5 +58,6 @@ export const DEFAULT_DATA: PluginData = {
     plans: {},
     readingActivity: {},
     readingActivityByBook: {},
+    pendingReaderLocations: {},
     lastSync: null
 };

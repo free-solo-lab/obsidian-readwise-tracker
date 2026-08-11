@@ -17,9 +17,11 @@ import { ReadwiseBookSection } from "./components/ReadwiseBookSection";
 import { ReadwiseHeatmapPanel } from "./components/ReadwiseHeatmapPanel";
 import { ReadwiseTagFilterBar } from "./components/ReadwiseTagFilterBar";
 import { ReadwisePlanningBoard } from "./components/ReadwisePlanningBoard";
+import { ReadwiseGanttChart } from "./components/ReadwiseGanttChart";
 import { getCurrentLocale, getDateLocale, getSortLocale, t } from "../i18n";
-import { getReaderLocation, type PlanningStatus } from "./planningBoard";
+import { getPlanningStatus, getReaderLocation, mergeVisibleOrder, type PlanningStatus } from "./planningBoard";
 import { hasBookActivityInRange, isDateKeyInRange, resolveHeatmapDateRange } from "./dateRangeFilter";
+import { orderBooksForGantt } from "./ganttPlanning";
 
 export const DASHBOARD_VIEW_TYPE = "readwise-dashboard-view";
 
@@ -34,6 +36,11 @@ function isReadingBook(book: LocalBook): boolean {
 function openDatePicker(event: React.MouseEvent<HTMLInputElement>): void {
   const input = event.currentTarget as HTMLInputElement & { showPicker?: () => void };
   input.showPicker?.();
+}
+
+function todayDateKey(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
 export class DashboardView extends ItemView {
@@ -84,9 +91,21 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [selectedDateKey, setSelectedDateKey] = React.useState<string | null>(null);
   const [visibleWeekCount, setVisibleWeekCount] = React.useState<number>(53);
-  const [booksView, setBooksView] = React.useState<"list" | "board">("list");
-  const [collapsedBoardGroups, setCollapsedBoardGroups] = React.useState<string[]>(
-    () => plugin.settings.planningBoardCollapsedGroups || [],
+  const [booksView, setBooksView] = React.useState<"list" | "board" | "gantt">("list");
+  const [ganttStartDate, setGanttStartDate] = React.useState(
+    () => plugin.settings.ganttStartDate || todayDateKey(),
+  );
+  const [ganttDailyMinutes, setGanttDailyMinutes] = React.useState(
+    () => plugin.settings.ganttDailyMinutes || 0,
+  );
+  const [ganttFocusTags, setGanttFocusTags] = React.useState<string[]>(
+    () => plugin.settings.ganttFocusTags || [],
+  );
+  const [ganttDirectionOrder, setGanttDirectionOrder] = React.useState<string[]>(
+    () => plugin.settings.ganttDirectionOrder || [],
+  );
+  const [ganttDirectionBookOrder, setGanttDirectionBookOrder] = React.useState<Record<string, string[]>>(
+    () => plugin.settings.ganttDirectionBookOrder || {},
   );
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
@@ -94,11 +113,56 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
   const dateLocale = getDateLocale(locale);
   const sortLocale = getSortLocale(locale);
 
-  const updateCollapsedBoardGroups = React.useCallback((groupKeys: string[]) => {
-    setCollapsedBoardGroups(groupKeys);
-    plugin.settings.planningBoardCollapsedGroups = groupKeys;
+  const updateGanttStartDate = React.useCallback((value: string) => {
+    setGanttStartDate(value);
+    plugin.settings.ganttStartDate = value;
     void plugin.saveSettings();
   }, [plugin]);
+
+  const updateGanttDailyMinutes = React.useCallback((value: number) => {
+    setGanttDailyMinutes(value);
+    plugin.settings.ganttDailyMinutes = value;
+    void plugin.saveSettings();
+  }, [plugin]);
+
+  const updateGanttFocusTags = React.useCallback((tags: string[]) => {
+    setGanttFocusTags(tags);
+    plugin.settings.ganttFocusTags = tags;
+    void plugin.saveSettings();
+  }, [plugin]);
+
+  const updateGanttDirectionOrder = React.useCallback((visibleDirectionKeys: string[]) => {
+    const next = mergeVisibleOrder(visibleDirectionKeys, ganttDirectionOrder);
+    setGanttDirectionOrder(next);
+    plugin.settings.ganttDirectionOrder = next;
+    void plugin.saveSettings();
+  }, [ganttDirectionOrder, plugin]);
+
+  const updateGanttDirectionBookOrder = React.useCallback((directionKey: string, visibleBookIds: string[]) => {
+    setGanttDirectionBookOrder((previous) => {
+      const nextForDirection = mergeVisibleOrder(visibleBookIds, previous[directionKey] || []);
+      const next = { ...previous, [directionKey]: nextForDirection };
+      plugin.settings.ganttDirectionBookOrder = next;
+      void plugin.saveSettings();
+      return next;
+    });
+  }, [plugin]);
+
+  const clearAllFilters = React.useCallback(() => {
+    setSelectedTags([]);
+    setSelectedDateKey(null);
+    setDateFrom("");
+    setDateTo("");
+    setSelectedBookId(null);
+  }, []);
+
+  const hasActiveFilters = (
+    selectedTags.length > 0 ||
+    selectedDateKey !== null ||
+    dateFrom !== "" ||
+    dateTo !== "" ||
+    selectedBookId !== null
+  );
 
   const loadData = React.useCallback(() => {
     const data = plugin.dataManager.getData();
@@ -373,7 +437,7 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
   }, [heatmapData.weeks, visibleWeekCount]);
 
   const monthLabelByWeekIndex = React.useMemo(() => {
-    const labels: Array<string | null> = new Array(displayedWeeks.length).fill(null);
+    const labels = displayedWeeks.map((): string | null => null);
     let previousMonth: string | null = null;
 
     for (let weekIndex = 0; weekIndex < displayedWeeks.length; weekIndex += 1) {
@@ -476,6 +540,26 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
       .sort((a, b) => a.title.localeCompare(b.title, sortLocale)),
     [activeBookIdsForDateFilter, filteredBooks, sortLocale],
   );
+
+  const ganttBooks = React.useMemo(() => {
+    const schedulableBooks = boardBooks
+      .filter((book) => (
+        !isCompletedBook(book) &&
+        getPlanningStatus(book) !== "completed" &&
+        book.status !== "skipped"
+      ));
+    return orderBooksForGantt(schedulableBooks, {
+      focusTags: ganttFocusTags,
+      directionOrder: ganttDirectionOrder,
+      directionBookOrder: ganttDirectionBookOrder,
+    }, sortLocale);
+  }, [
+    boardBooks,
+    ganttDirectionBookOrder,
+    ganttDirectionOrder,
+    ganttFocusTags,
+    sortLocale,
+  ]);
 
   const readingRightLabelByBookId = React.useMemo(() => {
     const labels: Record<string, string> = {};
@@ -610,23 +694,43 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
             ×
           </button>
         </div>
-        <div className="readwise-view-switch" role="group" aria-label={t("dashboard.viewMode")}>
+        <div className="readwise-view-controls">
           <button
             type="button"
-            className={booksView === "list" ? "is-active" : ""}
-            onClick={() => setBooksView("list")}
+            className="readwise-clear-all-filters"
+            disabled={!hasActiveFilters}
+            onClick={clearAllFilters}
+            title={t("dashboard.clearAllFilters")}
           >
-            <span aria-hidden="true">☷</span>
-            {t("dashboard.listView")}
+            <span aria-hidden="true">↺</span>
+            {t("dashboard.clearFilters")}
           </button>
-          <button
-            type="button"
-            className={booksView === "board" ? "is-active" : ""}
-            onClick={() => setBooksView("board")}
-          >
-            <span aria-hidden="true">▥</span>
-            {t("dashboard.boardView")}
-          </button>
+          <div className="readwise-view-switch" role="group" aria-label={t("dashboard.viewMode")}>
+            <button
+              type="button"
+              className={booksView === "list" ? "is-active" : ""}
+              onClick={() => setBooksView("list")}
+            >
+              <span aria-hidden="true">☷</span>
+              {t("dashboard.listView")}
+            </button>
+            <button
+              type="button"
+              className={booksView === "board" ? "is-active" : ""}
+              onClick={() => setBooksView("board")}
+            >
+              <span aria-hidden="true">▥</span>
+              {t("dashboard.boardView")}
+            </button>
+            <button
+              type="button"
+              className={booksView === "gantt" ? "is-active" : ""}
+              onClick={() => setBooksView("gantt")}
+            >
+              <span aria-hidden="true">▰</span>
+              {t("dashboard.ganttView")}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -636,10 +740,34 @@ const DashboardComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plu
           selectedBookId={selectedBookId}
           selectedTags={selectedTags}
           sortLocale={sortLocale}
-          collapsedGroupKeys={collapsedBoardGroups}
+          focusTags={ganttFocusTags}
+          directionOrder={ganttDirectionOrder}
+          directionBookOrder={ganttDirectionBookOrder}
+          readingActivityByBook={readingActivityByBook}
           onSelectBook={selectBook}
           onMoveBook={moveBook}
-          onCollapsedGroupKeysChange={updateCollapsedBoardGroups}
+          onFocusTagsChange={updateGanttFocusTags}
+          onDirectionOrderChange={updateGanttDirectionOrder}
+        />
+      ) : booksView === "gantt" ? (
+        <ReadwiseGanttChart
+          books={ganttBooks}
+          readingActivity={readingActivity}
+          locale={locale}
+          dateLocale={dateLocale}
+          sortLocale={sortLocale}
+          selectedBookId={selectedBookId}
+          startDate={ganttStartDate}
+          dailyMinutes={ganttDailyMinutes}
+          focusTags={ganttFocusTags}
+          directionOrder={ganttDirectionOrder}
+          directionBookOrder={ganttDirectionBookOrder}
+          onStartDateChange={updateGanttStartDate}
+          onDailyMinutesChange={updateGanttDailyMinutes}
+          onFocusTagsChange={updateGanttFocusTags}
+          onDirectionOrderChange={updateGanttDirectionOrder}
+          onDirectionBookOrderChange={updateGanttDirectionBookOrder}
+          onSelectBook={selectBook}
         />
       ) : <>
       <ReadwiseBookSection

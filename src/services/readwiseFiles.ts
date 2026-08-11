@@ -32,7 +32,7 @@ export function findBookNoteFile(
 
   for (const file of booksFiles) {
     const cache = app.metadataCache.getFileCache(file);
-    const frontmatter = cache?.frontmatter as Record<string, unknown> | undefined;
+    const frontmatter: Record<string, unknown> | undefined = cache?.frontmatter;
     const url = typeof frontmatter?.url === "string" ? frontmatter.url : "";
     if (readwiseId && url.includes(readwiseId)) {
       return file;
@@ -43,7 +43,7 @@ export function findBookNoteFile(
   const compactWanted = normalizeCompactName(book.title);
   for (const file of booksFiles) {
     const cache = app.metadataCache.getFileCache(file);
-    const frontmatter = cache?.frontmatter as Record<string, unknown> | undefined;
+    const frontmatter: Record<string, unknown> | undefined = cache?.frontmatter;
     const title = typeof frontmatter?.title === "string" ? frontmatter.title : "";
     if (
       normalizeSearchName(title) === wanted ||
@@ -86,7 +86,7 @@ export function findHighlightFilesForBook(
     .filter((file) => (root ? file.path.startsWith(rootPrefix) : false))
     .filter((file) => {
       const cache = app.metadataCache.getFileCache(file);
-      const frontmatter = cache?.frontmatter as Record<string, unknown> | undefined;
+      const frontmatter: Record<string, unknown> | undefined = cache?.frontmatter;
       const bookField = typeof frontmatter?.book === "string" ? frontmatter.book : "";
       const normalizedBook = normalizeSearchName(bookField.replace(/^\[\[|\]\]$/g, ""));
       if (normalizedBook && normalizedBook.includes(wanted)) {

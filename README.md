@@ -1,6 +1,6 @@
 # Readwise Reading Tracker
 
-Readwise Reading Tracker is an Obsidian plugin for tracking reading progress and managing your Readwise Reader library. It turns reading activity into an Obsidian-native dashboard with a heatmap, current and completed books, highlight navigation, Reader imports, tag management, and inbox notes created from highlights.
+Readwise Reading Tracker is an Obsidian plugin for tracking reading progress, planning what to read next, and managing your Readwise Reader library. It turns reading activity into an Obsidian-native dashboard with a heatmap, a topic-based planning board, a Gantt reading plan, highlight navigation, Reader imports, tag management, and inbox notes created from highlights.
 
 It also supports a Zettelkasten-style workflow: you can quickly review highlight notes, move promising fragments into your inbox, and keep the basic links back to the source book, highlight, and reading context.
 
@@ -12,6 +12,14 @@ It also supports a Zettelkasten-style workflow: you can quickly review highlight
 - Track reading progress with a daily heatmap.
 - Click a dashboard book to filter its heatmap activity and open its highlights in the right sidebar.
 - Show current and completed books with progress and remaining-time estimates.
+- Organize the library on a tag-based planning board with separate To Read, In Progress, and Done counts for every direction.
+- Focus one or several reading directions by expanding their rows; non-focused directions stay collapsed.
+- Reorder directions and books with drag and drop. Their visual order is also their planning priority.
+- Build a Gantt reading plan from focused directions, remaining reading time, and your observed or configured daily pace.
+- Keep completed books out of the Gantt plan while retaining them on the planning board.
+- Filter the dashboard by date and clear every active filter with one action.
+- Flag in-progress books that have had no reading activity for more than two weeks.
+- Move books between Reader Later, Inbox, and Archive directly from the board.
 - Build reading timelines for regular books, EPUBs, and PDFs.
 - Save URLs and upload EPUB, PDF, HTML, TXT, or Markdown files directly to Reader.
 - Add existing or new Reader tags without leaving Obsidian.
@@ -20,8 +28,15 @@ It also supports a Zettelkasten-style workflow: you can quickly review highlight
 - Create clean inbox notes from highlights with Obsidian Properties for `book`, `source`, `date`, and `created`.
 - Keep data local in your vault plugin data.
 
-5. Enable `Readwise Reading Tracker` in Obsidian community plugin settings.
-6. Open the plugin settings and configure your Readwise token.
+## Reading Focus And Planning
+
+The Board groups books by Reader state and reading direction. Expand a direction to put it in focus and reveal its books. You can focus several directions at once, drag directions into priority order, drag books within a direction, and move books between Reader Later, Inbox, and Archive.
+
+![Topic-based planning board with focused and collapsed reading directions](assets/img/planning-board.png)
+
+The Gantt view uses the same focus and priority order. It schedules unfinished books sequentially from their remaining reading time and your daily reading pace. Change the plan start date or minutes per day to immediately recalculate the timeline. Books already in Done are excluded.
+
+![Gantt reading plan generated from focused directions and remaining reading time](assets/img/gantt-plan.png)
 
 ## Manual Installation
 
@@ -31,7 +46,6 @@ It also supports a Zettelkasten-style workflow: you can quickly review highlight
 main.js
 manifest.json
 styles.css
-versions.json
 ```
 
 2. Create this folder in your vault:
@@ -183,8 +197,7 @@ The plugin may read markdown files from the configured Readwise folders in your 
 
 ```bash
 npm install
-npm test
-npm run build
+npm run check
 npm run release
 ```
 

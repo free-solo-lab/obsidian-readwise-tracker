@@ -1,4 +1,4 @@
-import { Component, ItemView, MarkdownRenderer, Notice, WorkspaceLeaf, TFile } from 'obsidian';
+import { Component, ItemView, MarkdownRenderer, Notice, WorkspaceLeaf } from 'obsidian';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import type { ReadwiseTrackerViewHost } from '../plugin/contracts';
@@ -182,8 +182,8 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
     React.useEffect(() => {
         loadData();
         // Poll for changes or subscribe if event system existed
-        const interval = setInterval(loadData, 5000); 
-        return () => clearInterval(interval);
+        const interval = window.setInterval(loadData, 5000);
+        return () => window.clearInterval(interval);
     }, []);
 
     React.useEffect(() => plugin.onSelectedHighlightsBookChange((bookId) => {
@@ -203,8 +203,8 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
             }
         };
 
-        document.addEventListener('pointerdown', closeImportMenuOnOutsideClick);
-        return () => document.removeEventListener('pointerdown', closeImportMenuOnOutsideClick);
+        activeDocument.addEventListener('pointerdown', closeImportMenuOnOutsideClick);
+        return () => activeDocument.removeEventListener('pointerdown', closeImportMenuOnOutsideClick);
     }, [importMenuOpen]);
 
     const readingBook = React.useMemo(() => {
@@ -294,12 +294,12 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
     const highlightItems = React.useMemo(() => {
         const items = highlightsFiles.map((f) => {
             const cache = plugin.app.metadataCache.getFileCache(f);
-            const fm = cache?.frontmatter as Record<string, unknown> | undefined;
-            const title = (fm?.title as string | undefined) || f.basename;
+            const fm: Record<string, unknown> | undefined = cache?.frontmatter;
+            const title = typeof fm?.title === 'string' ? fm.title : f.basename;
             const index = typeof fm?.index === 'number' ? fm.index : undefined;
             const date = typeof fm?.date === 'string' ? fm.date : '';
             const dateTs = date ? new Date(date).getTime() : Number.NaN;
-            return { file: f as TFile, title, index, date, dateTs };
+            return { file: f, title, index, date, dateTs };
         });
 
         const dir = highlightsSortDir === 'asc' ? 1 : -1;
@@ -840,7 +840,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                                                             onClick={(event) => {
                                                                 event.stopPropagation();
                                                                 event.preventDefault();
-                                                                plugin.app.workspace.getLeaf(false).openFile(h.file);
+                                                                void plugin.app.workspace.getLeaf(false).openFile(h.file);
                                                             }}
                                                             className="readwise-highlight-title"
                                                             title={h.title}
@@ -857,14 +857,18 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
 
                                                 <div className="readwise-highlight-actions">
                                                     <button
-                                                        onClick={async (event) => {
+                                                        onClick={(event) => {
                                                             event.stopPropagation();
-                                                            try {
-                                                                setCreatingInboxPath(h.file.path);
-                                                                await plugin.createInboxNoteFromHighlight({ highlightFile: h.file, book: activeBook, bookFile: bookNoteFile });
-                                                            } finally {
-                                                                setCreatingInboxPath((cur) => (cur === h.file.path ? null : cur));
-                                                            }
+                                                            void (async () => {
+                                                                try {
+                                                                    setCreatingInboxPath(h.file.path);
+                                                                    await plugin.createInboxNoteFromHighlight({ highlightFile: h.file, book: activeBook, bookFile: bookNoteFile });
+                                                                } catch (error) {
+                                                                    new Notice(error instanceof Error ? error.message : String(error));
+                                                                } finally {
+                                                                    setCreatingInboxPath((cur) => (cur === h.file.path ? null : cur));
+                                                                }
+                                                            })();
                                                         }}
                                                         disabled={creatingInboxPath === h.file.path}
                                                         className="readwise-highlight-create"
@@ -946,24 +950,26 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                                 type="button"
                                 className="readwise-delete-confirmation-submit"
                                 disabled={deletingBookId !== null}
-                                onClick={async () => {
-                                    if (deletingBookId) return;
-                                    try {
-                                        setDeletingBookId(activeBook.id);
-                                        await plugin.deleteReaderBook(activeBook.readwise_id || activeBook.id);
-                                        await plugin.dataManager.removeBooks([activeBook.id]);
-                                        setBookDeleteConfirmationOpen(false);
-                                        setSelectedBookId(null);
-                                        setExpandedHighlightPaths({});
-                                        setHighlightContentByPath({});
-                                        loadData();
-                                    } catch (error) {
-                                        new Notice(t('stats.deleteBookFailed', {
-                                            message: error instanceof Error ? error.message : String(error),
-                                        }));
-                                    } finally {
-                                        setDeletingBookId(null);
-                                    }
+                                onClick={() => {
+                                    void (async () => {
+                                        if (deletingBookId) return;
+                                        try {
+                                            setDeletingBookId(activeBook.id);
+                                            await plugin.deleteReaderBook(activeBook.readwise_id || activeBook.id);
+                                            await plugin.dataManager.removeBooks([activeBook.id]);
+                                            setBookDeleteConfirmationOpen(false);
+                                            setSelectedBookId(null);
+                                            setExpandedHighlightPaths({});
+                                            setHighlightContentByPath({});
+                                            loadData();
+                                        } catch (error) {
+                                            new Notice(t('stats.deleteBookFailed', {
+                                                message: error instanceof Error ? error.message : String(error),
+                                            }));
+                                        } finally {
+                                            setDeletingBookId(null);
+                                        }
+                                    })();
                                 }}
                             >
                                 {deletingBookId ? t('stats.deleteBookDeleting') : t('stats.deleteBookConfirm')}
@@ -1164,11 +1170,13 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
 
                         <div className="readwise-import-modal-actions">
                             <button
-                                onClick={importDialog === 'url'
-                                    ? saveUrlToReader
-                                    : readerLoginRequired
-                                        ? loginAndRetryFileUpload
-                                        : saveFileToReader}
+                                onClick={() => {
+                                    void (importDialog === 'url'
+                                        ? saveUrlToReader()
+                                        : readerLoginRequired
+                                            ? loginAndRetryFileUpload()
+                                            : saveFileToReader());
+                                }}
                                 disabled={importBusy}
                                 className="readwise-import-primary"
                             >

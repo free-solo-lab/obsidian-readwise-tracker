@@ -1,28 +1,26 @@
-import { Plugin } from 'obsidian';
+import type { Plugin } from 'obsidian';
 import { PluginData, DEFAULT_DATA, LocalBook, Topic, ReadingPlan, ReadingActivityDay } from '../models/store';
+import { isPluginDataRecord, updatePluginData } from './pluginDataPersistence';
 
 export class DataManager {
     private plugin: Plugin;
     private data: PluginData;
-    private saveChain: Promise<void> = Promise.resolve();
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
-        this.data = DEFAULT_DATA;
+        this.data = this.createData();
     }
 
-    public async loadData() {
-        this.data = Object.assign({}, DEFAULT_DATA, await this.plugin.loadData());
+    public async loadData(): Promise<void> {
+        const loaded: unknown = await this.plugin.loadData();
+        this.data = this.createData(isPluginDataRecord(loaded) ? loaded : {});
     }
 
-    public async saveData() {
-        this.saveChain = this.saveChain
-            .catch(() => undefined)
-            .then(async () => {
-                const existing = (await this.plugin.loadData()) ?? {};
-                await this.plugin.saveData(Object.assign({}, existing, this.data));
-            });
-        return this.saveChain;
+    public saveData(): Promise<void> {
+        return updatePluginData(
+            this.plugin,
+            (existing) => Object.assign({}, existing, this.data) as Record<string, unknown>,
+        );
     }
 
     public getData(): PluginData {
@@ -33,15 +31,26 @@ export class DataManager {
         return this.data.books[id];
     }
 
-    public saveBook(book: LocalBook) {
+    public saveBook(book: LocalBook): Promise<void> {
         this.data.books[book.id] = book;
-        this.saveData();
+        return this.saveData();
+    }
+
+    public saveReaderLocationChange(
+        documentId: string,
+        location: 'new' | 'later' | 'archive',
+        book?: LocalBook,
+    ): Promise<void> {
+        this.data.pendingReaderLocations[documentId] = location;
+        if (book) this.data.books[documentId] = book;
+        return this.saveData();
     }
 
     public async removeBooks(bookIds: string[]) {
         for (const id of bookIds) {
             delete this.data.books[id];
             delete this.data.readingActivityByBook[id];
+            delete this.data.pendingReaderLocations[id];
         }
         this.rebuildGlobalReadingActivity();
         await this.saveData();
@@ -51,25 +60,25 @@ export class DataManager {
         return Object.values(this.data.topics).sort((a, b) => a.order_index - b.order_index);
     }
 
-    public saveTopic(topic: Topic) {
+    public saveTopic(topic: Topic): Promise<void> {
         this.data.topics[topic.id] = topic;
-        this.saveData();
+        return this.saveData();
     }
 
     public getPlans(): ReadingPlan[] {
         return Object.values(this.data.plans);
     }
 
-    public savePlan(plan: ReadingPlan) {
+    public savePlan(plan: ReadingPlan): Promise<void> {
         this.data.plans[plan.id] = plan;
-        this.saveData();
+        return this.saveData();
     }
     
     public addReadingActivity(
         dateKey: string,
         delta: Partial<Pick<ReadingActivityDay, 'minutes' | 'words' | 'progressPoints' | 'events'>>,
         bookId?: string
-    ) {
+    ): Promise<void> {
         if (bookId) {
             const byBook = this.data.readingActivityByBook[bookId] || {};
             const existingBook = byBook[dateKey] || { minutes: 0, words: 0, progressPoints: 0, events: 0 };
@@ -83,21 +92,38 @@ export class DataManager {
         }
 
         this.rebuildGlobalReadingActivity();
-        this.saveData();
+        return this.saveData();
     }
 
-    public replaceBookReadingActivity(bookId: string, activityByDate: Record<string, ReadingActivityDay>) {
+    public replaceBookReadingActivity(
+        bookId: string,
+        activityByDate: Record<string, ReadingActivityDay>,
+    ): Promise<void> {
         this.data.readingActivityByBook[bookId] = activityByDate;
         this.rebuildGlobalReadingActivity();
-        this.saveData();
+        return this.saveData();
     }
 
-    public updateLastSync() {
+    public updateLastSync(): Promise<void> {
         this.data.lastSync = new Date().toISOString();
-        this.saveData();
+        return this.saveData();
     }
 
-    private rebuildGlobalReadingActivity() {
+    private createData(loaded: Partial<PluginData> | Record<string, unknown> = {}): PluginData {
+        const stored = loaded as Partial<PluginData>;
+        return {
+            ...DEFAULT_DATA,
+            ...stored,
+            books: { ...(stored.books || {}) },
+            topics: { ...(stored.topics || {}) },
+            plans: { ...(stored.plans || {}) },
+            readingActivity: { ...(stored.readingActivity || {}) },
+            readingActivityByBook: { ...(stored.readingActivityByBook || {}) },
+            pendingReaderLocations: { ...(stored.pendingReaderLocations || {}) },
+        };
+    }
+
+    private rebuildGlobalReadingActivity(): void {
         const aggregated: Record<string, ReadingActivityDay> = {};
         for (const byBook of Object.values(this.data.readingActivityByBook)) {
             for (const [dateKey, day] of Object.entries(byBook || {})) {

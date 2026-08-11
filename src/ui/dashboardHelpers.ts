@@ -66,6 +66,17 @@ export function getBookLastActivityTime(
   return latest || (Number.isFinite(fallback) ? fallback : 0);
 }
 
+export function getBookInactivityDays(
+  book: LocalBook,
+  readingActivityByBook: Record<string, Record<string, ReadingActivityDay>>,
+  now: Date = new Date(),
+): number | null {
+  const lastActivityTime = getBookLastActivityTime(book, readingActivityByBook);
+  const nowTime = now.getTime();
+  if (lastActivityTime <= 0 || !Number.isFinite(nowTime)) return null;
+  return Math.max(0, Math.floor((nowTime - lastActivityTime) / (24 * 60 * 60 * 1000)));
+}
+
 export function compareBooksByRecentActivity(
   a: LocalBook,
   b: LocalBook,
@@ -121,7 +132,7 @@ export function formatRemaining(minutesRaw: number, locale: SupportedLocale = "r
 }
 
 export function getRemainingMinutes(book: LocalBook): number | null {
-  const totalWords = book.words_count || 0;
+  const totalWords = getEstimatedTotalWords(book);
   if (totalWords <= 0) {
     return null;
   }

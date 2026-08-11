@@ -1,7 +1,7 @@
 {
 	"id": "readwise-reading-tracker",
 	"name": "Readwise Reading Tracker",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"minAppVersion": "1.7.2",
 	"description": "Track reading activity, manage Reader books and tags, import files and URLs, and turn highlights into linked notes.",
 	"author": "Kostya Struga",

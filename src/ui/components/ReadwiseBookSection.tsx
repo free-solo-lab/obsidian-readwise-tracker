@@ -12,11 +12,11 @@ interface ReadwiseBookSectionProps {
   accentColor: string;
   emptyText: string;
   showReset: boolean;
-  onReset(): void;
-  onToggleBook(bookId: string): void;
+  onReset: () => void;
+  onToggleBook: (bookId: string) => void;
   collapsed?: boolean;
   countLabel?: string;
-  onToggleCollapsed?(): void;
+  onToggleCollapsed?: () => void;
 }
 
 export const ReadwiseBookSection: React.FC<ReadwiseBookSectionProps> = ({

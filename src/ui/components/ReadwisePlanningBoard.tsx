@@ -1,17 +1,30 @@
 import * as React from "react";
-import type { LocalBook } from "../../models/store";
+import type { LocalBook, ReadingActivityDay } from "../../models/store";
 import { t } from "../../i18n";
-import { getPlanningStatus, groupPlanningBooksByTag, type PlanningStatus } from "../planningBoard";
+import {
+  countPlanningBooksByStatus,
+  getPlanningDirectionKey,
+  getPlanningStatus,
+  groupPlanningBooksByTag,
+  orderPlanningTagGroups,
+  type PlanningStatus,
+} from "../planningBoard";
+import { SortableDirectionHeader } from "./SortableDirectionHeader";
+import { getBookInactivityDays } from "../dashboardHelpers";
 
 interface ReadwisePlanningBoardProps {
   books: LocalBook[];
   selectedBookId: string | null;
   selectedTags: string[];
   sortLocale: string;
-  collapsedGroupKeys: string[];
-  onSelectBook(bookId: string): void;
-  onMoveBook(bookId: string, status: PlanningStatus): Promise<void>;
-  onCollapsedGroupKeysChange(groupKeys: string[]): void;
+  focusTags: string[];
+  directionOrder: string[];
+  directionBookOrder: Record<string, string[]>;
+  readingActivityByBook: Record<string, Record<string, ReadingActivityDay>>;
+  onSelectBook: (bookId: string) => void;
+  onMoveBook: (bookId: string, status: PlanningStatus) => Promise<void>;
+  onFocusTagsChange: (tags: string[]) => void;
+  onDirectionOrderChange: (directionKeys: string[]) => void;
 }
 
 const columns: Array<{
@@ -39,10 +52,11 @@ const PlanningCard: React.FC<{
   book: LocalBook;
   selected: boolean;
   moving: boolean;
-  onDragStart(event: React.DragEvent<HTMLButtonElement>): void;
-  onDragEnd(): void;
-  onSelect(): void;
-}> = ({ book, selected, moving, onDragStart, onDragEnd, onSelect }) => {
+  inactivityDays: number | null;
+  onDragStart: (event: React.DragEvent<HTMLButtonElement>) => void;
+  onDragEnd: () => void;
+  onSelect: () => void;
+}> = ({ book, selected, moving, inactivityDays, onDragStart, onDragEnd, onSelect }) => {
   const progress = Math.min(100, Math.max(0, book.reading_progress || 0));
   return (
     <button
@@ -59,6 +73,11 @@ const PlanningCard: React.FC<{
       <span className="readwise-planning-card-content">
         <span className="readwise-planning-card-title">{book.title}</span>
         <span className="readwise-planning-card-author">{book.author || t("dashboard.unknownAuthor")}</span>
+        {inactivityDays !== null && inactivityDays > 14 ? (
+          <span className="readwise-planning-stale-label">
+            {t("dashboard.unreadDays", { days: inactivityDays })}
+          </span>
+        ) : null}
         <span className="readwise-planning-progress-row">
           <span className="readwise-planning-progress-track">
             <span style={{ width: `${progress}%` }} />
@@ -75,24 +94,42 @@ export const ReadwisePlanningBoard: React.FC<ReadwisePlanningBoardProps> = ({
   selectedBookId,
   selectedTags,
   sortLocale,
-  collapsedGroupKeys,
+  focusTags,
+  directionOrder,
+  directionBookOrder,
+  readingActivityByBook,
   onSelectBook,
   onMoveBook,
-  onCollapsedGroupKeysChange,
+  onFocusTagsChange,
+  onDirectionOrderChange,
 }) => {
   const [draggedBookId, setDraggedBookId] = React.useState<string | null>(null);
   const [dropStatus, setDropStatus] = React.useState<PlanningStatus | null>(null);
   const [movingBookId, setMovingBookId] = React.useState<string | null>(null);
-  const collapsedGroups = React.useMemo(() => new Set(collapsedGroupKeys), [collapsedGroupKeys]);
   const groups = React.useMemo(
-    () => groupPlanningBooksByTag(books, sortLocale, selectedTags),
-    [books, selectedTags, sortLocale],
+    () => orderPlanningTagGroups(
+      groupPlanningBooksByTag(books, sortLocale, selectedTags),
+      directionOrder,
+      directionBookOrder,
+      sortLocale,
+    ),
+    [books, directionBookOrder, directionOrder, selectedTags, sortLocale],
   );
-  const counts = React.useMemo(() => {
-    const result: Record<PlanningStatus, number> = { planned: 0, reading: 0, completed: 0 };
-    for (const book of books) result[getPlanningStatus(book)] += 1;
+  const orderedDirectionKeys = React.useMemo(
+    () => groups.map((group) => getPlanningDirectionKey(group.tag)),
+    [groups],
+  );
+  const counts = React.useMemo(() => countPlanningBooksByStatus(books), [books]);
+  const inactivityDaysByBookId = React.useMemo(() => {
+    const result: Record<string, number> = {};
+    const now = new Date();
+    for (const book of books) {
+      if (getPlanningStatus(book) !== "reading") continue;
+      const days = getBookInactivityDays(book, readingActivityByBook, now);
+      if (days !== null && days > 14) result[book.id] = days;
+    }
     return result;
-  }, [books]);
+  }, [books, readingActivityByBook]);
 
   if (books.length === 0) return <div className="readwise-empty-state">{t("dashboard.boardEmpty")}</div>;
 
@@ -112,32 +149,44 @@ export const ReadwisePlanningBoard: React.FC<ReadwisePlanningBoardProps> = ({
       </div>
 
       {groups.map((group) => {
-        const groupKey = JSON.stringify(group.tag);
-        const collapsed = collapsedGroups.has(groupKey);
+        const groupKey = getPlanningDirectionKey(group.tag);
+        const collapsed = !focusTags.includes(groupKey);
         const groupLabel = group.tag || t("dashboard.boardNoTag");
+        const groupCounts = countPlanningBooksByStatus(group.books);
         return (
-          <section key={groupKey} className={`readwise-planning-tag-group${collapsed ? " is-collapsed" : ""}`}>
-            <button
-              type="button"
+          <section key={groupKey} className={`readwise-planning-tag-group${collapsed ? " is-collapsed" : " is-focus"}`}>
+            <SortableDirectionHeader
               className="readwise-planning-tag-heading"
-              aria-expanded={!collapsed}
+              directionKey={groupKey}
+              orderedDirectionKeys={orderedDirectionKeys}
+              expanded={!collapsed}
               title={t(collapsed ? "stats.expand" : "stats.collapse")}
-              onClick={() => {
-                onCollapsedGroupKeysChange(
+              onOrderChange={onDirectionOrderChange}
+              onToggle={() => {
+                onFocusTagsChange(
                   collapsed
-                    ? collapsedGroupKeys.filter((key) => key !== groupKey)
-                    : [...collapsedGroupKeys, groupKey],
+                    ? [...focusTags, groupKey]
+                    : focusTags.filter((key) => key !== groupKey),
                 );
                 setDropStatus(null);
               }}
             >
-              <span className="readwise-planning-tag-chevron" aria-hidden="true">
-                {collapsed ? "▶" : "▼"}
-              </span>
-              <span className="readwise-planning-tag-icon">#</span>
-              <span>{groupLabel}</span>
-              <span className="readwise-planning-count">{group.books.length}</span>
-            </button>
+              {columns.map((column, index) => (
+                <span key={column.status} className="readwise-planning-tag-heading-cell">
+                  {index === 0 ? (
+                    <span className="readwise-planning-tag-label">
+                      <span className="readwise-gantt-drag" aria-hidden="true">⋮⋮</span>
+                      <span className="readwise-planning-tag-chevron" aria-hidden="true">
+                        {collapsed ? "▶" : "▼"}
+                      </span>
+                      <span className="readwise-planning-tag-icon">#</span>
+                      <span>{groupLabel}</span>
+                    </span>
+                  ) : null}
+                  <span className="readwise-planning-count">{groupCounts[column.status]}</span>
+                </span>
+              ))}
+            </SortableDirectionHeader>
             {collapsed ? null : (
               <div className="readwise-planning-columns">
                 {columns.map((column) => (
@@ -174,6 +223,7 @@ export const ReadwisePlanningBoard: React.FC<ReadwisePlanningBoardProps> = ({
                           book={book}
                           selected={selectedBookId === book.id}
                           moving={movingBookId === book.id}
+                          inactivityDays={inactivityDaysByBookId[book.id] ?? null}
                           onDragStart={(event) => {
                             setDraggedBookId(book.id);
                             event.dataTransfer.effectAllowed = "move";
