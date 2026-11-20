@@ -23,7 +23,7 @@ export function useTextSelection(
     if (!enabled || !range || !host || !text || range.rangeCount === 0) return setSelection(undefined);
     const live = range.getRangeAt(0);
     const startNode = live.startContainer;
-    const row = (startNode instanceof Element ? startNode : startNode.parentElement)?.closest<HTMLElement>(
+    const row = (startNode.instanceOf(Element) ? startNode : startNode.parentElement)?.closest<HTMLElement>(
       ".rwt-stream-item",
     );
     if (!row || !host.contains(row)) return setSelection(undefined);

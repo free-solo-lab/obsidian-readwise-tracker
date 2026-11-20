@@ -34,6 +34,7 @@ import {
   QUOTE_MATCHER_VERSION,
   type QuoteIndex,
 } from "./anchors";
+import { startTimer, stopTimer } from "../utils/timers";
 
 export interface ContentTransport {
   getDocumentContent(id: string): Promise<ReadwiseDocument | undefined>;
@@ -256,14 +257,14 @@ export class DocumentSourceResolver {
       return await Promise.race([
         task,
         new Promise<never>((_resolve, reject) => {
-          timer = setTimeout(
+          timer = startTimer(
             () => reject(new Error(t("workspace.source.readerTimeout"))),
             timeout ?? this.options.networkTimeoutMs ?? 15_000,
           );
         }),
       ]);
     } finally {
-      if (timer) clearTimeout(timer);
+      if (timer) stopTimer(timer);
     }
   }
   /** Resolve image-only highlights on demand. URLs/filenames are hints, never proof. */

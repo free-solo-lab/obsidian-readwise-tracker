@@ -23,7 +23,7 @@ import type { CreateInboxNoteArgs } from "./contracts";
 import { BookWorkspaceService } from "../workspace/service";
 import { BOOK_WORKSPACE_VIEW, BookWorkspaceView } from "../workspace/BookWorkspaceView";
 import { readerDocumentUrl } from "../services/readerBookUrl";
-import { errorMessage } from "../utils/errors";
+import { errorMessage, toError } from "../utils/errors";
 
 interface SyncOptions {
   silent?: boolean;
@@ -254,7 +254,7 @@ export class ReadwiseTrackerPlugin extends Plugin {
       await this.syncInFlight;
     }
 
-    if (options.throwOnError && this.lastSyncError) throw this.lastSyncError;
+    if (options.throwOnError && this.lastSyncError) throw toError(this.lastSyncError);
   }
 
   private async runSync(options: SyncOptions): Promise<void> {

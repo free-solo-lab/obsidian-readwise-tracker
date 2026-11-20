@@ -476,7 +476,7 @@ export class BookWorkspaceService {
     this.afterReaderChange();
   }
   private async renderHtml(markdown: string, path: string): Promise<string> {
-    const host = window.document.createElement("div"),
+    const host = createDiv(),
       owner = new Component();
     owner.load();
     try {

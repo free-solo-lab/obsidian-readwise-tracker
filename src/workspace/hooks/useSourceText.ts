@@ -4,6 +4,7 @@ import type { ContentResolution, SourceAnchor, WorkspaceDocument } from "../type
 import type { WorkspaceFocus } from "../focus";
 import { emptyResolution } from "../source";
 import { errorMessage } from "../../utils/errors";
+import { startTimer, stopTimer } from "../../utils/timers";
 
 interface Options {
   service: BookWorkspaceService;
@@ -118,7 +119,7 @@ export function useSourceText({
     const controller = new AbortController();
     repair.current?.abort();
     repair.current = controller;
-    const timer = setTimeout(() => {
+    const timer = startTimer(() => {
       void service.sources
         .repairTables(document, remote, controller.signal)
         .then((repaired) => {
@@ -129,7 +130,7 @@ export function useSourceText({
         });
     }, 250);
     return () => {
-      clearTimeout(timer);
+      stopTimer(timer);
       controller.abort();
     };
   }, [open, document, service, source?.revision, coordinator, remote]);
@@ -140,7 +141,7 @@ export function useSourceText({
     const current = sourceRef.current.anchors.find((item) => item.nodePath === focusPath);
     if (current?.status !== "missing" || current.manual) return;
     const controller = new AbortController();
-    const timer = setTimeout(() => {
+    const timer = startTimer(() => {
       void service.sources
         .resolveImageAnchor(document, focusPath, controller.signal)
         .then((resolved) => {
@@ -151,7 +152,7 @@ export function useSourceText({
         });
     }, 100);
     return () => {
-      clearTimeout(timer);
+      stopTimer(timer);
       controller.abort();
     };
   }, [open, document, service, focusPath, source?.revision, anchor?.quote, anchor?.status]);

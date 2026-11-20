@@ -2,6 +2,7 @@ import * as React from "react";
 import { defaultRangeExtractor, useVirtualizer } from "@tanstack/react-virtual";
 import type { WorkspaceFocus, WorkspacePanel } from "./focus";
 import { preserveViewportOnResize } from "./streamLayout";
+import { startTimer, stopTimer } from "../utils/timers";
 
 export interface StreamAnchor {
   key: string;
@@ -92,8 +93,8 @@ export function VirtualStream<T>({
   const correction = React.useRef<ReturnType<typeof setTimeout>>();
   const correct = React.useCallback(() => {
     if (!following.current?.armed || coordinator.accepts(panel)) return;
-    if (correction.current) clearTimeout(correction.current);
-    correction.current = setTimeout(() => {
+    if (correction.current) stopTimer(correction.current);
+    correction.current = startTimer(() => {
       const target = following.current,
         el = element.current;
       if (!target?.armed || !el || coordinator.accepts(panel)) return;
@@ -203,13 +204,13 @@ export function VirtualStream<T>({
       settle: ReturnType<typeof setTimeout> | undefined,
       frame = 0;
     const arm = () => {
-      settle = setTimeout(() => {
+      settle = startTimer(() => {
         if (following.current !== targetState) return;
         targetState.armed = true;
         correct();
       }, 300);
     };
-    timer = setTimeout(() => {
+    timer = startTimer(() => {
       if (coordinator.accepts(panel)) return;
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -218,13 +219,13 @@ export function VirtualStream<T>({
         virtual.getOffsetForIndex(activeIndex, "center")?.[0] ?? el.scrollTop;
       if (!reduced && Math.abs(target - el.scrollTop) > el.clientHeight * 2) {
         el.classList.add("is-seeking");
-        timer = setTimeout(() => {
+        timer = startTimer(() => {
           if (!coordinator.accepts(panel))
             virtual.scrollToIndex(activeIndex, {
               align: "center",
               behavior: "auto",
             });
-          frame = requestAnimationFrame(() =>
+          frame = window.requestAnimationFrame(() =>
             el.classList.remove("is-seeking"),
           );
           arm();
@@ -238,12 +239,12 @@ export function VirtualStream<T>({
       }
     }, 40);
     return () => {
-      if (timer) clearTimeout(timer);
-      if (settle) clearTimeout(settle);
-      if (correction.current) clearTimeout(correction.current);
+      if (timer) stopTimer(timer);
+      if (settle) stopTimer(settle);
+      if (correction.current) stopTimer(correction.current);
       following.current = undefined;
       virtual.cancelScroll();
-      cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frame);
       el.classList.remove("is-seeking");
     };
   }, [
@@ -293,12 +294,12 @@ export function VirtualStream<T>({
         schedule.current();
         return;
       }
-      timer = setTimeout(tick, 60);
+      timer = startTimer(tick, 60);
     };
     tick();
     return () => {
       stopped = true;
-      if (timer) clearTimeout(timer);
+      if (timer) stopTimer(timer);
       for (const name of events) el.removeEventListener(name, stop);
     };
     // Only on mount: later scrolling is the reader's.
@@ -351,20 +352,20 @@ export function VirtualStream<T>({
       }
     };
     const scroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (!frame) frame = window.requestAnimationFrame(update);
     };
     schedule.current = scroll;
     el.addEventListener("scroll", scroll, { passive: true });
     scroll();
     return () => {
       el.removeEventListener("scroll", scroll);
-      cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frame);
       schedule.current = () => undefined;
     };
   }, [coordinator, panel, virtual, items.length, viewport]);
   const lead = () => {
     following.current = undefined;
-    if (correction.current) clearTimeout(correction.current);
+    if (correction.current) stopTimer(correction.current);
     const el = element.current;
     // Cancel the virtualizer's target and the browser's running smooth animation.
     // Starting another virtual scroll here would keep a command alive under user input.

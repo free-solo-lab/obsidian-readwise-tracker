@@ -1,3 +1,4 @@
+import { startTimer, stopTimer } from "./timers";
 export interface Debounced<Args extends unknown[]> {
   (...args: Args): void;
   /** Drop the pending call, if any. */
@@ -14,9 +15,9 @@ export function debounce<Args extends unknown[]>(
   let timer: ReturnType<typeof setTimeout> | undefined;
   let pending: Args | undefined;
   const debounced = ((...args: Args) => {
-    if (timer) clearTimeout(timer);
+    if (timer) stopTimer(timer);
     pending = args;
-    timer = setTimeout(() => {
+    timer = startTimer(() => {
       timer = undefined;
       pending = undefined;
       task(...args);
@@ -24,14 +25,14 @@ export function debounce<Args extends unknown[]>(
   }) as Debounced<Args>;
   debounced.flush = () => {
     if (!timer || !pending) return;
-    clearTimeout(timer);
+    stopTimer(timer);
     const args = pending;
     timer = undefined;
     pending = undefined;
     task(...args);
   };
   debounced.cancel = () => {
-    if (timer) clearTimeout(timer);
+    if (timer) stopTimer(timer);
     timer = undefined;
     pending = undefined;
   };
@@ -40,7 +41,7 @@ export function debounce<Args extends unknown[]>(
 
 /** Let the event loop run (rendering, input) between chunks of long synchronous work. */
 export const yieldToEventLoop = (): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, 0));
+  new Promise((resolve) => startTimer(resolve, 0));
 
 /** A minimal subscribe/notify pair shared by the workspace's background runners. */
 export class Listeners {

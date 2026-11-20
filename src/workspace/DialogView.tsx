@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform } from "obsidian";
 import type { ReadwiseTrackerViewHost } from "../plugin/contracts";
 import type { DialogMessage, WorkspaceDocument, WorkspaceNode } from "./types";
 import { Icon, IconButton, Markdown, NoteEditor } from "./controls";
@@ -6,8 +7,9 @@ import { basename, parseMarkdown, parseMessages } from "./markdown";
 import { safeAssistantMarkdown } from "./ai";
 import { t } from "../i18n";
 import { SCOPE_BOOK, SCOPE_KEY } from "./dialog";
+import { startTimer, stopTimer } from "../utils/timers";
 
-const SUBMIT_SHORTCUT = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘ ↵" : "Ctrl ↵";
+const SUBMIT_SHORTCUT = Platform.isMacOS || Platform.isIosApp ? "⌘ ↵" : "Ctrl ↵";
 
 interface DialogProps {
   plugin: ReadwiseTrackerViewHost;
@@ -79,7 +81,7 @@ export function DialogBody({
     alive.current = true;
     return () => {
       alive.current = false;
-      if (copyTimer.current) clearTimeout(copyTimer.current);
+      if (copyTimer.current) stopTimer(copyTimer.current);
     };
   }, []);
   const messages = windowed ? all.slice(-shown) : all;
@@ -133,8 +135,8 @@ export function DialogBody({
       .then(() => {
         if (!alive.current) return;
         setCopied(message.id);
-        if (copyTimer.current) clearTimeout(copyTimer.current);
-        copyTimer.current = setTimeout(() => setCopied(undefined), 1600);
+        if (copyTimer.current) stopTimer(copyTimer.current);
+        copyTimer.current = startTimer(() => setCopied(undefined), 1600);
       })
       .catch((error: unknown) => service.report(error));
   };

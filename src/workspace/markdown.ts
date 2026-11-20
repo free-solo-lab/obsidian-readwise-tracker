@@ -152,7 +152,7 @@ export function fileStem(body: string): string {
       ?.replace(/[#>*[\]`^]/g, "")
       .replace(/^_+|_+$/g, "")
       .replace(/[\\/:?"<>|]/g, " ")
-      // eslint-disable-next-line no-control-regex
+      // eslint-disable-next-line no-control-regex -- control characters are not allowed in file names
       .replace(/[\u0000-\u001f]/g, " ")
       .trim() || "";
   // Cut by code point so an emoji is never split into a lone surrogate.

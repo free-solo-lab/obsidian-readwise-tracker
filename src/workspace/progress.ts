@@ -1,3 +1,4 @@
+import { startTimer, stopTimer } from "../utils/timers";
 /** Reading progress mirrored to Reader: sent after a pause, only forward, and "finished" archives the document. */
 export const FINISHED = 0.97;
 export const PROGRESS_STEP = 0.01;
@@ -34,13 +35,13 @@ export class ProgressMirror {
     if (!done && progress < state.sent + PROGRESS_STEP) return;
     state.pending = progress;
     state.readerId = readerId;
-    if (state.timer) clearTimeout(state.timer);
-    state.timer = setTimeout(() => void this.flush(readerId), this.delay);
+    if (state.timer) stopTimer(state.timer);
+    state.timer = startTimer(() => void this.flush(readerId), this.delay);
   }
   async flush(readerId: string): Promise<void> {
     const state = this.states.get(readerId);
     if (!state || state.pending === undefined) return;
-    if (state.timer) clearTimeout(state.timer);
+    if (state.timer) stopTimer(state.timer);
     state.timer = undefined;
     const finished = state.pending >= FINISHED,
       value = finished ? 1 : Math.max(state.pending, state.sent);
@@ -61,6 +62,6 @@ export class ProgressMirror {
   }
   dispose(): void {
     for (const state of this.states.values())
-      if (state.timer) clearTimeout(state.timer);
+      if (state.timer) stopTimer(state.timer);
   }
 }
