@@ -64,9 +64,9 @@ test("the adapter reports why it cannot run and passes model, signal and callbac
   let app: unknown = { plugins: { plugins: {} } };
   const adapter = new CodexBridgeAdapter(() => app, () => " gpt ", () => false);
   assert.match(adapter.unavailable() || "", /Codex Bridge/);
-  app = { plugins: { plugins: { "codex-bridge": { api: { ...api, version: 2 } } } } };
+  app = { plugins: { plugins: { "free-solo-codex-bridge": { api: { ...api, version: 2 } } } } };
   assert.equal(findBridge(app), undefined);
-  app = { plugins: { plugins: { "codex-bridge": { api } } } };
+  app = { plugins: { plugins: { "free-solo-codex-bridge": { api } } } };
   assert.equal(adapter.unavailable(), undefined);
   assert.equal(adapter.queued(), 2);
   const parts: string[] = [];
@@ -99,7 +99,7 @@ test("with a threaded Bridge the first call sends history, later ones only the q
       return Promise.resolve({ text: "r", threadId: (task.threadId as string) ?? "new-thread" });
     },
   };
-  const adapter = new CodexBridgeAdapter(() => ({ plugins: { plugins: { "codex-bridge": { api } } } }), () => "", () => false);
+  const adapter = new CodexBridgeAdapter(() => ({ plugins: { plugins: { "free-solo-codex-bridge": { api } } } }), () => "", () => false);
   const base = { book: { title: "T", author: "" }, notes: [], history: [message("user", "OLD")], question: "Q", title: "chat" };
   const signal = new AbortController().signal;
   const first = await adapter.generate(base, { signal });
@@ -120,7 +120,7 @@ test("with a threaded Bridge the first call sends history, later ones only the q
 test("full access is requested only when enabled and changes the instructions", async () => {
   const seen: Array<Record<string, unknown>> = [];
   const api = { version: 1, getStatus: () => ({ queued: 0, busy: false }), run: (task: Record<string, unknown>) => (seen.push(task), Promise.resolve("ok")) };
-  const app = { plugins: { plugins: { "codex-bridge": { api } } } };
+  const app = { plugins: { plugins: { "free-solo-codex-bridge": { api } } } };
   const request = { book: { title: "T", author: "" }, notes: [], history: [], question: "q" };
   const signal = new AbortController().signal;
   await new CodexBridgeAdapter(() => app, () => "", () => false).generate(request, { signal });
