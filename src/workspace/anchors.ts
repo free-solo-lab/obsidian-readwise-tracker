@@ -1,5 +1,6 @@
 import type { SourceAnchor } from "./types";
 import { directImageMatches } from "./images";
+import { startTimer } from "../utils/timers";
 
 export const QUOTE_MATCHER_VERSION = 4;
 interface WordIndex {
@@ -150,7 +151,7 @@ export async function prepareQuoteIndex(text: string): Promise<QuoteIndex> {
   for (let from = 0; from < masked.length; ) {
     from = append(index, masked, from, Math.min(masked.length, from + 32_768));
     if (from < masked.length)
-      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      await new Promise<void>((resolve) => startTimer(resolve, 0));
   }
   return finish(index);
 }

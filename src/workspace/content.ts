@@ -6,6 +6,7 @@ import { pathJoin } from "./markdown";
 import { markdownTable, type PreparedTable, type TableCell } from "./tables";
 import { HighlightTableIndex, readHighlightTables } from "./highlightTables";
 import { yieldToEventLoop } from "../utils/timing";
+import { startTimer, stopTimer } from "../utils/timers";
 
 export async function sha256(data: ArrayBuffer | string): Promise<string> {
   const bytes =
@@ -301,7 +302,7 @@ export async function extractPdf(data: ArrayBuffer): Promise<string> {
     port.addEventListener("error", (event) =>
       reject(new Error("PDF worker: " + (event.message || "could not start"))),
     );
-    timeout = setTimeout(
+    timeout = startTimer(
       () =>
         reject(
           new Error(
@@ -331,7 +332,7 @@ export async function extractPdf(data: ArrayBuffer): Promise<string> {
       );
     return parts.join("\n\n");
   } finally {
-    if (timeout) clearTimeout(timeout);
+    if (timeout) stopTimer(timeout);
     void task.destroy().catch(() => undefined);
     worker.destroy();
     port.terminate();

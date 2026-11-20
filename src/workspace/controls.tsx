@@ -16,6 +16,7 @@ import {
 import { WorkspaceConflictError } from "./repository";
 import { t } from "../i18n";
 import type { BookArchiveFilter } from "../utils/bookArchive";
+import { startTimer, stopTimer } from "../utils/timers";
 
 const imageDimensions = new WeakMap<
   App,
@@ -150,11 +151,10 @@ export function Markdown({
       if (!alive) return;
       for (const table of Array.from(element.querySelectorAll("table"))) {
         if (table.parentElement?.closest("table, .rwt-table-scroll")) continue;
-        const scroll = element.ownerDocument.createElement("div");
-        scroll.className = "rwt-table-scroll";
-        scroll.tabIndex = 0;
-        scroll.setAttribute("role", "region");
-        scroll.setAttribute("aria-label", t("workspace.table"));
+        const scroll = createDiv({
+          cls: "rwt-table-scroll",
+          attr: { tabindex: "0", role: "region", "aria-label": t("workspace.table") },
+        });
         table.before(scroll);
         scroll.appendChild(table);
       }
@@ -309,7 +309,7 @@ export function NoteEditor({
   });
   const flush = React.useCallback(async () => {
     const editor = state.current;
-    if (editor.timer) clearTimeout(editor.timer);
+    if (editor.timer) stopTimer(editor.timer);
     if (!editor.dirty) return editor.saving;
     const text = editor.value,
       base = editor.node;
@@ -371,13 +371,15 @@ export function NoteEditor({
   React.useLayoutEffect(() => {
     const input = ref.current;
     if (input) {
-      input.style.height = "auto";
+      input.setCssProps({ height: "auto" });
       const height = Math.max(
         draft ? 96 : comment ? 56 : 140,
         input.scrollHeight,
       );
-      input.style.height = (draft ? Math.min(240, height) : height) + "px";
-      input.style.overflowY = draft && height > 240 ? "auto" : "hidden";
+      input.setCssProps({
+        height: (draft ? Math.min(240, height) : height) + "px",
+        "overflow-y": draft && height > 240 ? "auto" : "hidden",
+      });
     }
   }, [value, draft, comment]);
   return (
@@ -437,8 +439,8 @@ export function NoteEditor({
         valueListener.current?.(text);
         state.current.value = text;
         state.current.dirty = true;
-        if (state.current.timer) clearTimeout(state.current.timer);
-        state.current.timer = setTimeout(() => {
+        if (state.current.timer) stopTimer(state.current.timer);
+        state.current.timer = startTimer(() => {
           void flush();
         }, 450);
       }}
