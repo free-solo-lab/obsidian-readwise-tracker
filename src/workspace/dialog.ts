@@ -1,3 +1,4 @@
+import { latexToObsidianMath } from "./math";
 import { readableError } from "./ai";
 import { SAVE_REQUEST, readerLinkIds, takeReaderIds } from "./readerLinks";
 import type { WorkspaceRepository } from "./repository";
@@ -234,7 +235,7 @@ export class DialogRunner {
         id: crypto.randomUUID(),
         role: "assistant",
         created: new Date().toISOString(),
-        content: content || t("dialog.savedToReader"),
+        content: latexToObsidianMath(content) || t("dialog.savedToReader"),
         sources: dialog.sources,
         revision,
       };

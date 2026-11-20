@@ -1,3 +1,4 @@
+import { latexToObsidianMath } from "./math";
 import { READER_MARKER } from "./readerLinks";
 import type { AiAnswer, AiCallbacks, AiRequest, WorkspaceAiAdapter } from "./types";
 import { t, type I18nKey } from "../i18n/messages";
@@ -148,7 +149,7 @@ export function readableError(error: unknown): string {
  * whatever the model put in its address. Remote images become plain links.
  */
 export function safeAssistantMarkdown(text: string): string {
-  return text
+  return latexToObsidianMath(text)
     .replace(/!\[([^\]]*)\]\(\s*<?(https?:[^)\s>]*)>?[^)]*\)/gi, "[$1]($2)")
     .replace(/<img\b[^>]*>/gi, "");
 }
