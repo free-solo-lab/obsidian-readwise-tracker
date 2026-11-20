@@ -9,6 +9,7 @@ import {
     ReadwiseReaderLoginResponse,
 } from '../models/readwise';
 import { getHttpErrorStatus, getRateLimitWaitMs } from './readwiseRateLimit';
+import { errorMessage } from '../utils/errors';
 
 export type ReaderLocation = 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
 
@@ -32,6 +33,19 @@ export class ReadwiseService {
     private debug = false;
     private requestDelayMs = 0;
     private maxRetries = 5;
+    private requestGate: Promise<void> = Promise.resolve();
+    private nextRequestAt = 0;
+    private limitedUntil = 0;
+
+    private async pace(): Promise<void> {
+        const task = this.requestGate.catch(() => undefined).then(async () => {
+            const wait = Math.max(this.nextRequestAt, this.limitedUntil) - Date.now();
+            if (wait > 0) await this.sleep(wait);
+            this.nextRequestAt = Date.now() + this.requestDelayMs;
+        });
+        this.requestGate = task;
+        await task;
+    }
 
     constructor(token: string) {
         this.token = token;
@@ -221,6 +235,7 @@ export class ReadwiseService {
         }
 
         for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+            await this.pace();
             let response;
             try {
                 response = await requestUrl(requestParams);
@@ -233,7 +248,7 @@ export class ReadwiseService {
                 if (this.debug) {
                     console.warn('[Readwise] rate limited, retry in', waitMs, 'ms');
                 }
-                await this.sleep(waitMs);
+                this.limitedUntil = Math.max(this.limitedUntil, Date.now() + waitMs);
                 continue;
             }
 
@@ -250,7 +265,7 @@ export class ReadwiseService {
                 if (this.debug) {
                     console.warn('[Readwise] rate limited, retry in', waitMs, 'ms');
                 }
-                await this.sleep(waitMs);
+                this.limitedUntil = Math.max(this.limitedUntil, Date.now() + waitMs);
                 continue;
             }
 
@@ -258,11 +273,11 @@ export class ReadwiseService {
                 const message = typeof response.text === 'string' && response.text.length > 0
                     ? `Readwise API request failed: ${response.status} ${response.text.slice(0, 200)}`
                     : `Readwise API request failed: ${response.status}`;
-                throw new Error(message);
+                throw Object.assign(new Error(message), { status: response.status });
             }
 
             if (this.debug) {
-                console.log('[Readwise] response json', response.json);
+                console.log('[Readwise] response received');
             }
 
             return response.json as T;
@@ -307,9 +322,26 @@ export class ReadwiseService {
         });
     }
 
+    public async updateDocumentProgress(documentId: string, progress: number): Promise<void> {
+        if (!documentId) return;
+
+        await this.requestJson<ReadwiseSaveDocumentResponse>(`/update/${encodeURIComponent(documentId)}/`, {
+            method: 'PATCH',
+            body: { reading_progress: Math.max(0, Math.min(1, progress)) },
+            okStatuses: [200],
+        });
+    }
+
     public async getDocument(documentId: string): Promise<ReadwiseDocument | undefined> {
         if (!documentId) return undefined;
         const response = await this.request<ReadwiseListResponse>('/list/', { id: documentId });
+        return response.results[0];
+    }
+
+    public async getDocumentContent(documentId: string): Promise<ReadwiseDocument | undefined> {
+        const response = await this.request<ReadwiseListResponse>('/list/', {
+            id: documentId, withHtmlContent: 'true', withRawSourceUrl: 'true',
+        });
         return response.results[0];
     }
 
@@ -322,8 +354,7 @@ export class ReadwiseService {
                 await this.updateDocumentTags(documentIds, tags);
                 return;
             } catch (error) {
-                const message = error instanceof Error ? error.message : String(error);
-                const canRetry = /document not found/i.test(message) && attempt < retryDelaysMs.length;
+                const canRetry = /document not found/i.test(errorMessage(error)) && attempt < retryDelaysMs.length;
                 if (!canRetry) throw error;
                 await this.sleep(retryDelaysMs[attempt]);
             }
@@ -342,6 +373,24 @@ export class ReadwiseService {
                 .map((tag) => [tag.toLocaleLowerCase(), tag]),
         ).values());
         await this.updateDocumentTags([documentId], mergedTags);
+    }
+
+    /** A freshly saved document may not be queryable yet; "not found" is retried with growing pauses. */
+    public async addDocumentTagsWhenReady(documentIds: string[], tags: string[]): Promise<void> {
+        if (!tags.length) return;
+        const delays = [500, 1000, 2000, 3000, 4000, 4000];
+        for (const id of documentIds) {
+            for (let attempt = 0; ; attempt++) {
+                try {
+                    await this.addDocumentTags(id, tags);
+                    break;
+                } catch (error) {
+                    const notReady = /document not found/i.test(errorMessage(error));
+                    if (!notReady || attempt >= delays.length) throw error;
+                    await this.sleep(delays[attempt]);
+                }
+            }
+        }
     }
 
     public async deleteReaderDocument(documentId: string, sessionCookie: string): Promise<void> {
@@ -583,9 +632,6 @@ export class ReadwiseService {
             const response: ReadwiseListResponse = await this.getDocuments(location, category, updatedAfter, nextPageCursor || undefined);
             allDocuments = allDocuments.concat(response.results);
             nextPageCursor = response.nextPageCursor;
-            if (nextPageCursor && this.requestDelayMs > 0) {
-                await this.sleep(this.requestDelayMs);
-            }
         } while (nextPageCursor);
 
         return allDocuments;

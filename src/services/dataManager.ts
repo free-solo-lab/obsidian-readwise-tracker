@@ -19,7 +19,11 @@ export class DataManager {
     public saveData(): Promise<void> {
         return updatePluginData(
             this.plugin,
-            (existing) => Object.assign({}, existing, this.data) as Record<string, unknown>,
+            (existing) => {
+                const next = { ...existing };
+                for (const key of Object.keys(DEFAULT_DATA) as Array<keyof PluginData>) next[key] = this.data[key];
+                return next;
+            },
         );
     }
 
@@ -113,7 +117,7 @@ export class DataManager {
         const stored = loaded as Partial<PluginData>;
         return {
             ...DEFAULT_DATA,
-            ...stored,
+            lastSync: typeof stored.lastSync === 'string' ? stored.lastSync : null,
             books: { ...(stored.books || {}) },
             topics: { ...(stored.topics || {}) },
             plans: { ...(stored.plans || {}) },

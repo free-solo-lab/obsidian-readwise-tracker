@@ -18,6 +18,10 @@ export interface ReadwiseDocument {
     parent_id?: string | null;
     readable_title?: string;
     site_name?: string;
+    html_content?: string | null;
+    raw_source_url?: string | null;
+    highlight_location?: string | null;
+    highlight_offset?: number | null;
 }
 
 export interface ReadwiseListResponse {

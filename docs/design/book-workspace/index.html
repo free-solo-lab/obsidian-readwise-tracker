@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book workspace — interactive mock-ups</title>
+<style>
+:root { color-scheme: dark; background: #101315; }
+body { margin: 0; padding: 28px; }
+body > main { max-width: 1600px; margin: auto; }
+@media (max-width: 580px) { body { padding: 12px; } }
+@media (prefers-color-scheme: light) { :root { color-scheme: light; background: #f3f2ee; } }
+</style>
+<script src="./icons.js"></script>
+<script>
+(() => {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem('book-workspace-prototype-v1')); } catch {}
+  window.openai = {
+    widgetState: saved,
+    setWidgetState: async value => {
+      window.openai.widgetState = value;
+      try { localStorage.setItem('book-workspace-prototype-v1', JSON.stringify(value)); } catch {}
+    }
+  };
+})();
+</script>
+</head>
+<body><main><div id="book-workspace-prototype" lang="en" aria-label="Book workspace mock-ups">
+  <div class="bw-gallery">
+    <div class="bw-gallery-heading"><span>BOOK WORKSPACE</span><span class="bw-demo">Demo</span></div>
+    <nav class="bw-scenes" aria-label="Mock-up screens"></nav>
+  </div>
+  <div class="bw-window">
+    <header class="bw-tabbar"><span class="bw-brand">◇</span><span class="bw-vault">My library</span><div class="bw-tab"><i data-lucide="book-open" aria-hidden="true"></i><span>Working with a book</span></div><span class="bw-tab-end">Readwise</span></header>
+    <div class="bw-location"></div>
+    <div class="bw-workspace" aria-label="Workspace"></div>
+    <div class="bw-lineage" hidden></div>
+    <footer class="bw-status"></footer>
+  </div>
+  <div class="bw-scene-caption" aria-live="polite"></div>
+  <div class="bw-announcement" aria-live="polite"></div>
+</div>
+<style>
+#book-workspace-prototype {
+  --bw-bg: light-dark(#faf9f6, #191c1e);
+  --bw-panel: light-dark(#f3f2ee, #15181a);
+  --bw-chrome: light-dark(#edece8, #111416);
+  --bw-hover: light-dark(#e9e8e3, #252a2d);
+  --bw-line: light-dark(#deded7, #2b3033);
+  --bw-text: light-dark(#292d2d, #d9dddc);
+  --bw-muted: light-dark(#646b69, #909a99);
+  --bw-accent: light-dark(#27776d, #95bdb1);
+  --bw-soft: light-dark(#e6eee8, #27352f);
+  --bw-quote: light-dark(#eee9d8, #33342b);
+  --bw-paper: light-dark(#fffefa, #1d2122);
+  --bw-split: 1;
+  color: var(--bw-text); font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  width:100%; min-width:0;
+}
+#book-workspace-prototype * {box-sizing:border-box}
+#book-workspace-prototype [hidden] {display:none!important}
+#book-workspace-prototype button,#book-workspace-prototype input,#book-workspace-prototype textarea {font:inherit;color:inherit}
+#book-workspace-prototype button {border:0;background:transparent;box-shadow:none;cursor:pointer}
+#book-workspace-prototype button:hover {background:var(--bw-hover)}
+#book-workspace-prototype button:focus-visible,#book-workspace-prototype input:focus-visible,#book-workspace-prototype textarea:focus-visible {outline:2px solid var(--bw-accent);outline-offset:3px}
+#book-workspace-prototype button:disabled {opacity:.45;cursor:default}
+#book-workspace-prototype svg {width:16px;height:16px;flex:none;stroke-width:1.5}
+#book-workspace-prototype h1,#book-workspace-prototype h2,#book-workspace-prototype h3,#book-workspace-prototype p {margin:0}
+#book-workspace-prototype .bw-gallery {padding:0 0 20px}
+#book-workspace-prototype .bw-gallery-heading {display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:11px;letter-spacing:.12em;color:var(--bw-muted)}
+#book-workspace-prototype .bw-demo {letter-spacing:0}
+#book-workspace-prototype .bw-scenes {display:flex;flex-wrap:wrap;gap:5px}
+#book-workspace-prototype .bw-scene {padding:7px 11px;border-radius:5px;font-size:12px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-scene[aria-pressed="true"] {background:var(--bw-soft);color:var(--bw-text)}
+#book-workspace-prototype .bw-scene-number {opacity:.65;margin-right:6px;font-variant-numeric:tabular-nums}
+#book-workspace-prototype .bw-window {background:var(--bw-bg);border:1px solid var(--bw-line);border-radius:9px;overflow:hidden}
+#book-workspace-prototype .bw-tabbar {display:flex;gap:16px;align-items:center;padding:0 18px;min-height:45px;background:var(--bw-chrome);border-bottom:1px solid var(--bw-line);font-size:12px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-brand {font-size:24px;color:var(--bw-accent)}
+#book-workspace-prototype .bw-tab {display:flex;align-items:center;gap:9px;background:var(--bw-bg);color:var(--bw-text);align-self:stretch;padding:0 21px;border-inline:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-tab-end {margin-left:auto}
+#book-workspace-prototype .bw-location {min-height:74px;padding:17px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-book-title {display:flex;align-items:center;gap:10px;font-weight:500}
+#book-workspace-prototype .bw-book-author {font-size:12px;color:var(--bw-muted);padding-left:26px;margin-top:3px}
+#book-workspace-prototype .bw-location-tools {display:flex;align-items:center;gap:12px;font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-provenance {display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:5px 0;color:var(--bw-muted);font-size:12px}
+#book-workspace-prototype .bw-provenance button {padding:2px 5px;color:var(--bw-accent);border-radius:3px}
+#book-workspace-prototype .bw-main-title {min-width:0}
+#book-workspace-prototype .bw-workspace {display:flex;height:680px;min-height:0;align-items:stretch;overflow:hidden}
+#book-workspace-prototype .bw-rail {flex:0 0 45px;width:45px;display:flex;flex-direction:column;align-items:stretch;background:var(--bw-panel);border-right:1px solid var(--bw-line);min-height:0}
+#book-workspace-prototype .bw-rail-right {border-right:0;border-left:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-rail-button {display:flex;flex-direction:column;align-items:center;gap:20px;flex:1;padding:20px 0 24px;min-height:200px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-rail-label {writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.07em;font-size:12px}
+#book-workspace-prototype .bw-rail-count {font-size:11px;color:var(--bw-muted);margin-top:auto;border:1px solid var(--bw-line);border-radius:4px;min-width:21px;padding:0 3px}
+#book-workspace-prototype .bw-rail.is-active {background:var(--bw-soft)}
+#book-workspace-prototype .bw-rail.is-active .bw-rail-button {color:var(--bw-accent)}
+#book-workspace-prototype .bw-book-map {margin-top:24px;height:116px;width:3px;background:var(--bw-line);position:relative}
+#book-workspace-prototype .bw-book-map::before {content:"";position:absolute;left:0;top:39px;width:3px;height:14px;background:var(--bw-accent)}
+#book-workspace-prototype .bw-notes,#book-workspace-prototype .bw-reader,#book-workspace-prototype .bw-side {margin:0;min-width:0;min-height:0;flex:1 1 0;background:var(--bw-bg);display:flex;flex-direction:column;overflow:hidden}
+#book-workspace-prototype .bw-workspace.is-split>.bw-notes {flex:var(--bw-split) 1 0}
+#book-workspace-prototype .bw-reader {background:var(--bw-paper);border-right:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-side {background:var(--bw-panel)}
+#book-workspace-prototype .bw-pane-head {display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:62px;padding:15px 25px;border-bottom:1px solid var(--bw-line);flex-wrap:wrap}
+#book-workspace-prototype .bw-pane-title {display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.02em}
+#book-workspace-prototype .bw-pane-count {color:var(--bw-muted);font-weight:400;margin-left:5px}
+#book-workspace-prototype .bw-pane-actions {display:flex;gap:6px;align-items:center}
+#book-workspace-prototype .bw-icon-button {padding:5px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--bw-muted)}
+#book-workspace-prototype .bw-tiny-button {font-size:11px;padding:4px 7px;border-radius:4px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-notes-content {padding:34px clamp(22px,5%,70px) 28px;max-width:1000px;margin:auto}
+#book-workspace-prototype .bw-kicker {font-size:11px;letter-spacing:.12em;color:var(--bw-muted);text-transform:uppercase}
+#book-workspace-prototype .bw-notes-intro {display:flex;align-items:baseline;gap:12px;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap}
+#book-workspace-prototype .bw-notes-intro h1 {font:400 26px/1.3 Georgia,"Times New Roman",serif;letter-spacing:-.02em}
+#book-workspace-prototype .bw-note {position:relative;padding:20px 0 23px;border-bottom:1px solid var(--bw-line);transition:color 180ms ease,background-color 180ms ease}
+#book-workspace-prototype .bw-note:first-of-type {padding-top:8px}
+#book-workspace-prototype .bw-note-top {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+#book-workspace-prototype .bw-note-picker {display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0;font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype input[type="checkbox"] {accent-color:var(--bw-accent);margin:0;width:14px;height:14px;cursor:pointer}
+#book-workspace-prototype .bw-note-position {font-size:11px;color:var(--bw-muted);padding:3px 7px;border-radius:4px}
+#book-workspace-prototype .bw-quote {margin:0;border-left:2px solid var(--bw-line);padding:1px 0 1px 15px;font:400 18px/1.55 Georgia,"Times New Roman",serif;max-width:780px;transition:border-color 180ms ease}
+#book-workspace-prototype .bw-note.is-focused .bw-quote {border-left-color:var(--bw-accent)}
+#book-workspace-prototype .bw-note.is-focused .bw-note-picker {color:var(--bw-accent)}
+#book-workspace-prototype .bw-note-focus {display:none;font-size:10px;letter-spacing:.05em;color:var(--bw-accent)}
+#book-workspace-prototype .bw-note.is-focused .bw-note-focus {display:inline}
+#book-workspace-prototype .bw-note-scroller {flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--bw-line) transparent;overflow-anchor:none}
+#book-workspace-prototype .bw-note-scroller .bw-notes-content {padding-bottom:220px}
+#book-workspace-prototype .bw-focusbar {display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 25px;border-bottom:1px solid var(--bw-line);color:var(--bw-muted);font-size:11px}
+#book-workspace-prototype .bw-focus-current {color:var(--bw-accent)}
+#book-workspace-prototype .bw-picker-toolbar {padding:13px 18px;background:var(--bw-soft);border-bottom:1px solid var(--bw-line);font-size:12px}
+#book-workspace-prototype .bw-picker-toolbar p {margin-bottom:9px;color:var(--bw-muted);font-size:11px}
+#book-workspace-prototype .bw-picker-actions {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#book-workspace-prototype .bw-picker-actions>div {display:flex;gap:6px;align-items:center}
+#book-workspace-prototype .bw-existing-source {font-size:10px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-reference.is-pick-target {border-left:2px solid var(--bw-accent);padding-left:13px}
+#book-workspace-prototype .bw-chat-pin {display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--bw-muted);margin-bottom:16px;flex-wrap:wrap}
+#book-workspace-prototype .bw-note-comment {padding-left:17px;margin-top:12px;color:var(--bw-muted);font-size:13px;max-width:720px}
+#book-workspace-prototype .bw-note-links {display:flex;gap:9px;flex-wrap:wrap;margin:13px 0 0 11px}
+#book-workspace-prototype .bw-link {display:inline-flex;align-items:center;gap:5px;padding:3px 6px;color:var(--bw-muted);font-size:11px;border-radius:3px;text-align:left}
+#book-workspace-prototype .bw-link svg {width:12px;height:12px}
+#book-workspace-prototype .bw-note-add {margin-top:22px;display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 0;color:var(--bw-muted)}
+#book-workspace-prototype .bw-selection {display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 0 15px;border-bottom:1px solid var(--bw-line);font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-solid {display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:7px 12px;border-radius:5px;background:var(--bw-soft);color:var(--bw-text);border:1px solid var(--bw-line);font-size:12px}
+#book-workspace-prototype button.bw-solid {background:var(--bw-soft);border:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-reader-body {padding:30px clamp(24px,7%,68px) 30px;max-width:780px;margin:auto}
+#book-workspace-prototype .bw-reader-body h2 {font:400 25px/1.4 Georgia,"Times New Roman",serif;margin:14px 0 24px}
+#book-workspace-prototype .bw-reader-body p {font:400 var(--bw-reader-size,17px)/1.8 Georgia,"Times New Roman",serif;margin:0 0 19px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-reader-body mark {background:var(--bw-quote);color:var(--bw-text);padding:3px 0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#book-workspace-prototype .bw-reader-body .bw-active-passage {border-left:2px solid var(--bw-accent);padding-left:16px;margin-left:-18px;color:var(--bw-text)}
+#book-workspace-prototype .bw-reader-bottom {display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--bw-muted);padding-top:18px;border-top:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-side-body {padding:26px;max-width:820px;margin:auto}
+#book-workspace-prototype .bw-context {font-size:11px;color:var(--bw-muted);padding:0 0 21px;border-bottom:1px solid var(--bw-line);margin-bottom:25px}
+#book-workspace-prototype .bw-context-label {margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+#book-workspace-prototype .bw-chips {display:flex;gap:6px;flex-wrap:wrap}
+#book-workspace-prototype .bw-chip {border:1px solid var(--bw-line);border-radius:4px;padding:4px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11px;max-width:100%;text-align:left}
+#book-workspace-prototype .bw-chip svg {width:12px;height:12px}
+#book-workspace-prototype .bw-form-label {display:block;color:var(--bw-muted);font-size:11px;margin-bottom:9px}
+#book-workspace-prototype .bw-title-input {display:block;width:100%;background:transparent;border:0;border-bottom:1px solid var(--bw-line);border-radius:0;padding:0 0 15px;margin:0 0 20px;font:400 25px/1.3 Georgia,"Times New Roman",serif}
+#book-workspace-prototype .bw-editor {display:block;width:100%;min-height:230px;resize:vertical;padding:0;background:transparent;border:0;line-height:1.85;font-size:14px}
+#book-workspace-prototype .bw-compose-footer {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--bw-line);font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-thought-path {padding-top:24px;font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-thought-path button {padding:0;color:var(--bw-accent);text-align:left}
+#book-workspace-prototype .bw-panel-note {font-size:11px;color:var(--bw-muted);margin:18px 0}
+#book-workspace-prototype .bw-chat {display:flex;flex-direction:column;gap:23px}
+#book-workspace-prototype .bw-message-name {display:flex;gap:7px;align-items:center;font-size:11px;color:var(--bw-muted);margin-bottom:9px}
+#book-workspace-prototype .bw-message p {font-size:13px;line-height:1.8;margin:0 0 12px}
+#book-workspace-prototype .bw-ai-point {border-left:1px solid var(--bw-accent);padding-left:14px;color:var(--bw-text)}
+#book-workspace-prototype .bw-chat-form {border:1px solid var(--bw-line);border-radius:6px;margin-top:24px;padding:12px;background:var(--bw-bg)}
+#book-workspace-prototype .bw-chat-form textarea {width:100%;background:transparent;border:0;resize:vertical;min-height:54px;font-size:13px}
+#book-workspace-prototype .bw-chat-form-footer {display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-reference {padding:0 0 23px;margin-bottom:23px;border-bottom:1px solid var(--bw-line)}
+#book-workspace-prototype .bw-reference h3 {font:400 21px/1.4 Georgia,"Times New Roman",serif;margin:8px 0 5px}
+#book-workspace-prototype .bw-reference .bw-author {color:var(--bw-muted);font-size:12px}
+#book-workspace-prototype .bw-reference p {font-size:13px;color:var(--bw-muted);margin:14px 0;line-height:1.7}
+#book-workspace-prototype .bw-reference-relation {display:flex;align-items:center;gap:7px;font-size:11px;color:var(--bw-accent);margin-bottom:14px}
+#book-workspace-prototype .bw-reference-footer {display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+#book-workspace-prototype .bw-empty {padding:30px 0;color:var(--bw-muted);font-size:13px}
+#book-workspace-prototype .bw-empty h3 {font:400 24px/1.4 Georgia,"Times New Roman",serif;color:var(--bw-text);margin-bottom:13px}
+#book-workspace-prototype .bw-status {display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:10px 18px;background:var(--bw-chrome);border-top:1px solid var(--bw-line);color:var(--bw-muted);font-size:11px}
+#book-workspace-prototype .bw-status button {display:flex;align-items:center;gap:7px;padding:2px 4px;text-align:left;color:var(--bw-accent);font-size:11px}
+#book-workspace-prototype .bw-lineage {padding:23px 32px;border-top:1px solid var(--bw-line);background:var(--bw-paper)}
+#book-workspace-prototype .bw-lineage-title {display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;font-size:12px}
+#book-workspace-prototype .bw-path {display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--bw-muted);font-size:12px}
+#book-workspace-prototype .bw-path-node {display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+#book-workspace-prototype .bw-path-node>span {font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+#book-workspace-prototype .bw-path-node>button {padding:5px 8px;border:1px solid var(--bw-line);border-radius:4px;background:var(--bw-bg);text-align:left;color:var(--bw-text)}
+#book-workspace-prototype .bw-path-branches {display:flex;flex-direction:column;gap:6px}
+#book-workspace-prototype .bw-scene-caption {padding:13px 0 0;display:flex;gap:10px;color:var(--bw-muted);font-size:12px}
+#book-workspace-prototype .bw-caption-index {color:var(--bw-accent);white-space:nowrap}
+#book-workspace-prototype .bw-announcement {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#book-workspace-prototype .bw-pane-head {flex:none;min-height:58px;flex-wrap:nowrap}
+#book-workspace-prototype .bw-pane-actions {gap:7px}
+#book-workspace-prototype .bw-pane-actions .bw-icon-button {width:28px;height:28px}
+#book-workspace-prototype .bw-panel-stage {position:relative;flex:1;min-height:0;overflow:hidden}
+#book-workspace-prototype .bw-panel-stage>.bw-side-body,#book-workspace-prototype .bw-panel-stage>.bw-reader-body {height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--bw-line) transparent;overflow-anchor:none}
+#book-workspace-prototype .bw-transition-ghost {position:absolute;inset:0;width:100%;pointer-events:none;z-index:2;background:var(--bw-panel);overflow:hidden!important}
+#book-workspace-prototype .bw-reader .bw-transition-ghost {background:var(--bw-paper)}
+#book-workspace-prototype .bw-context {display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:18px;min-height:47px}
+#book-workspace-prototype .bw-context>.bw-icon-button {flex:none}
+#book-workspace-prototype .bw-editor {min-height:330px;resize:none;line-height:1.9;field-sizing:content}
+#book-workspace-prototype .bw-thought-tools {display:flex;align-items:center;gap:8px;justify-content:flex-end;padding-top:12px}
+#book-workspace-prototype .bw-thought-tabs {display:flex;gap:4px;height:24px;margin-bottom:8px}
+#book-workspace-prototype .bw-thought-tabs button {font-size:11px;border-radius:3px;padding:3px 8px;color:var(--bw-muted)}
+#book-workspace-prototype .bw-thought-tabs button[aria-pressed="true"] {background:var(--bw-soft);color:var(--bw-text)}
+#book-workspace-prototype .bw-chat-form {position:relative}
+#book-workspace-prototype .bw-chat-form-footer {justify-content:flex-end}
+#book-workspace-prototype .bw-reference-footer {justify-content:space-between}
+#book-workspace-prototype .bw-empty {padding:14px 0}
+#book-workspace-prototype .bw-note-links {gap:9px}
+#book-workspace-prototype .bw-note-links .bw-icon-button {width:26px;height:26px}
+#book-workspace-prototype .bw-chip {font-variant-numeric:tabular-nums}
+#book-workspace-prototype .bw-status,#book-workspace-prototype .bw-scene-caption {display:none}
+#book-workspace-prototype .bw-panel-stage>.bw-side-body.bw-stream {padding:0;overflow-anchor:none}
+#book-workspace-prototype .bw-stream::after {content:"";display:block;height:300px;pointer-events:none}
+#book-workspace-prototype .bw-stream>.bw-entity {position:relative;padding:26px;margin:0;border-left:2px solid transparent;border-bottom:1px solid var(--bw-line);transition:border-left-color 180ms ease}
+#book-workspace-prototype .bw-stream>.bw-entity.is-active {border-left-color:var(--bw-accent)}
+#book-workspace-prototype .bw-thought-entity {min-height:440px}
+#book-workspace-prototype .bw-conversation-entity {min-height:360px}
+#book-workspace-prototype .bw-stream .bw-editor {min-height:260px}
+#book-workspace-prototype .bw-stream .bw-reference.is-pick-target {border-left-color:var(--bw-accent)}
+@media (min-width:1250px) {#book-workspace-prototype .bw-workspace {height:720px} #book-workspace-prototype .bw-notes-content {padding-top:44px}}
+@media (prefers-reduced-motion:reduce) {#book-workspace-prototype .bw-note,#book-workspace-prototype .bw-quote,#book-workspace-prototype .bw-stream>.bw-entity {transition:none}}
+@media (max-width:760px) {
+ #book-workspace-prototype .bw-rail {flex-basis:34px;width:34px}
+ #book-workspace-prototype .bw-pane-head {padding:13px 16px}
+ #book-workspace-prototype .bw-side-body {padding:21px 18px}
+ #book-workspace-prototype .bw-note-links {margin-left:8px;gap:3px}
+ #book-workspace-prototype .bw-location {padding:15px 18px}
+ #book-workspace-prototype .bw-location-tools {display:none}
+ #book-workspace-prototype .bw-vault {display:none}
+}
+@media (max-width:580px) {
+ #book-workspace-prototype .bw-workspace {flex-wrap:wrap;height:auto;min-height:0;overflow:visible}
+ #book-workspace-prototype .bw-rail,#book-workspace-prototype .bw-rail-right {flex:1 1 20%;width:auto;min-height:0;order:0;border:0;border-bottom:1px solid var(--bw-line)}
+ #book-workspace-prototype .bw-rail-button {flex-direction:row;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 4px;min-height:48px;font-size:11px}
+ #book-workspace-prototype .bw-rail-label {writing-mode:horizontal-tb;transform:none;letter-spacing:0;font-size:11px}
+ #book-workspace-prototype .bw-rail-count {display:none}
+ #book-workspace-prototype .bw-book-map {display:none}
+ #book-workspace-prototype .bw-notes,#book-workspace-prototype .bw-reader,#book-workspace-prototype .bw-side {flex:1 1 100%!important;order:2;border:0;border-top:1px solid var(--bw-line)}
+ #book-workspace-prototype .bw-reader,#book-workspace-prototype .bw-side {order:1}
+ #book-workspace-prototype .bw-notes,#book-workspace-prototype .bw-reader,#book-workspace-prototype .bw-side {height:620px}
+ #book-workspace-prototype .bw-pane-head {min-height:54px}
+ #book-workspace-prototype .bw-notes-content {padding:25px 20px}
+ #book-workspace-prototype .bw-status {padding:10px 12px}
+ #book-workspace-prototype .bw-status>span {display:none}
+ #book-workspace-prototype .bw-tabbar {padding:0 12px;gap:10px}
+ #book-workspace-prototype .bw-tab {padding:0 12px}
+ #book-workspace-prototype .bw-scenes {gap:2px}
+ #book-workspace-prototype .bw-scene {padding:7px;font-size:11px}
+ #book-workspace-prototype .bw-scene-caption {font-size:11px}
+ #book-workspace-prototype .bw-lineage {padding:20px}
+}
+@media (pointer:coarse) {#book-workspace-prototype button {min-height:44px} #book-workspace-prototype input,#book-workspace-prototype textarea {font-size:16px}}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('book-workspace-prototype');
+  const $ = selector => root.querySelector(selector);
+  const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const icon = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
+  const books = {
+    attention: { title:'The Art of Noticing', author:'Anna Levina', kind:'Book', chapter:'Attention and habit', chapterNo:'03', page:42,
+      notes:[
+        {id:'n1',page:42,title:'Attention changes the familiar',quote:'The familiar becomes invisible not because there is nothing left to see in it, but because we stopped asking it questions.',comment:'Perhaps good reading begins by giving up the feeling of “I already know this”.',thoughts:1,ai:1,links:2},
+        {id:'n2',page:48,title:'A question as a way of reading',quote:'A question keeps a thought open longer than a ready answer does. It leaves room for what we do not yet understand.',comment:'Connect with the previous thought: attention can be sustained with questions.',thoughts:1,ai:0,links:1},
+        {id:'n3',page:67,title:'A pause between reading and conclusion',quote:'The pause is not there to stop the thought, but to notice where it was about to go out of habit.',comment:'How can I give what I read some time before turning it into a conclusion?',thoughts:0,ai:0,links:0}
+      ],
+      before:'We often mistake recognition for understanding. A familiar word, a habitual route or a book read once promise us ease: it seems enough to glance over it to find ourselves in a known place again.',
+      after:'Try to linger on a single line. Do not look for immediate benefit in it. Ask yourself what went unnoticed here on the first reading and what assumption of your own you brought to this line.',
+      ending:'This is how attention becomes an action. We do not just save a piece of text, but enter into a conversation with it, and gradually notice a change in our own way of looking.' },
+    questions: {title:'Thinking begins with a question',author:'Mikhail Serov',kind:'Article',chapter:'The open question',chapterNo:'01',page:3,
+      notes:[
+        {id:'q1',page:3,title:'A question creates a direction',quote:'A question does not only reveal a gap in knowledge. It chooses the direction in which that knowledge will grow.',comment:'Came here from the thought about attention. Now it is interesting who sets the direction: the text or the reader?',thoughts:0,ai:0,links:1},
+        {id:'q2',page:5,title:'Do not close the uncertainty',quote:'Sometimes it is more useful to refine the question than to hurry with an answer.',comment:'Compare with the pause in reading.',thoughts:0,ai:0,links:0}
+      ],before:'We are used to judging a thought by the clarity of its conclusion. But before the conclusion there is other work: you have to notice what is worth asking about in the first place.',after:'That is why a good question changes along with the inquiry. Keeping its history is as important as keeping the answers found.',ending:'Go back to the original fragment and see how the new question changed its meaning.'},
+    reading: {title:'Reading as a dialogue',author:'My note · Obsidian',kind:'Note',chapter:'A conversation with the text',chapterNo:'01',page:1,
+      notes:[{id:'r1',page:1,title:'Keep the train of thought',quote:'The value of a note lies not only in its wording but in being able to return to what it grew out of.',comment:'Bring the practice of reading, questions and my own thoughts together in one space.',thoughts:0,ai:0,links:1}],before:'A book becomes an interlocutor when I start marking my own objections, questions and unexpected associations.',after:'Links help continue this conversation through other books and my own records.',ending:'Not losing the original line means leaving yourself the chance to reconsider the conclusion.'},
+    pause: {title:'The Practice of Slow Attention',author:'Elena Belova',kind:'Book',chapter:'Lingering on a thought',chapterNo:'02',page:28,
+      notes:[{id:'p1',page:28,title:'Stay with the observation',quote:'Observation becomes more precise when we let it exist before explanation.',comment:'The other side of reading: give the question time.',thoughts:0,ai:0,links:1}],before:'The urge to name what we see right away often outruns the observation itself.',after:'A small pause makes it possible to tell new details apart.',ending:'Understanding begins where attention stops hurrying.'}
+  };
+  const scenes = [
+    {id:'notes',name:'Notes'}, {id:'source',name:'Context'},
+    {id:'thought',name:'Thoughts'}, {id:'expanded',name:'Focus'},
+    {id:'reading',name:'Text + thought'}, {id:'ai',name:'AI'},
+    {id:'links',name:'Links'}, {id:'destination',name:'Another text'},
+    {id:'add-sources',name:'Add notes'}
+  ];
+  const sampleThoughts = {
+    n1:'To see something new in the familiar, rereading it once more is not enough. You need a question that changes the direction of attention.\n\nA note can be not the outcome of reading but the start of the next question: notice → ask → return to the text.',
+    n2:'A good question sets the direction for the next reading.\n\nTry keeping not only the answers but also how the question itself changed. That makes the movement of thought visible.',
+    n3:''
+  };
+  let state = {version:3,scene:'notes',book:'attention',context:'n1',sourceFor:'n1',source:false,right:null,focus:false,center:'notes',lineage:false,history:[],thoughts:{},thoughtByNote:{},nextThought:1,chats:{},chatOrigins:{},chatByNote:{},questionDrafts:{},relationOrigins:{},relationFocus:null,picker:null,selected:[],scrollPositions:{},panelScrollPositions:{}};
+  const book = () => books[state.book];
+  const note = id => book().notes.find(n=>n.id===id)||book().notes[0];
+  const scope = id => state.book+':'+id;
+  const thoughtLabel = thought => thought.body.trim().split('\n')[0].slice(0,64)||'Thought';
+  const thoughtIds = (id=state.context) => Object.keys(state.thoughts).filter(key=>state.thoughts[key].documentId===state.book&&state.thoughts[key].origins.includes(id));
+  function createThought(body='',origins=[state.context],extra={}){
+    const id='t'+state.nextThought++;
+    const value={id,documentId:state.book,body,origins:origins.slice(),saved:true,...extra};
+    state.thoughts[id]=value;
+    origins.forEach(origin=>state.thoughtByNote[scope(origin)]=id);
+    return value;
+  }
+  function draft(){
+    if(state.picker?.kind==='thought')return state.thoughts[state.picker.thoughtId];
+    const ids=thoughtIds();
+    const selected=state.thoughtByNote[scope(state.context)];
+    return state.thoughts[ids.includes(selected)?selected:ids[ids.length-1]]||createThought();
+  }
+  function aiNote(){
+    if(state.picker?.kind==='ai')return state.picker.anchor;
+    const mapped=state.chatByNote[scope(state.context)];
+    if(mapped&&(state.chatOrigins[scope(mapped)]||[mapped]).includes(state.context))return mapped;
+    return state.context;
+  }
+  const aiKey = () => scope(aiNote());
+  const aiOrigins = () => state.chatOrigins[aiKey()]||[aiNote()];
+  const relationSources = target => state.relationOrigins[scope(target)]||(state.book==='attention'?{questions:['n1','n2'],reading:['n1'],pause:['n3']}[target]:null)||[book().notes[0].id];
+  let revealNoteId=null,focusFrame=0,focusTimer=null,pendingFocus=null,initialized=false;
+  let scrollDriver=null;
+  const synchronizedScrolls=new WeakMap();
+  const movingScrollers=new Set();
+  const reducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function persist(){
+    if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{screen:state.scene,currentText:book().title,activeNote:note(state.context).title,openPanel:state.right,sourceSelection:state.picker?{for:state.picker.title,additionalNotes:state.selected.map(id=>note(id).title)}:null},privateContent:{workspace:state}}).catch(()=>{});
+  }
+  function loadSaved(saved){
+    const candidate=saved?.privateContent?.workspace;
+    if(candidate&&books[candidate.book]&&Array.isArray(candidate.history)){
+      state={...state,...candidate};
+      if(candidate.version!==3){
+        state.picker=null;state.selected=[];state.chatPinned=null;
+        state.thoughts={};state.thoughtByNote={};state.nextThought=1;
+        const current=state.book;
+        for(const [documentId,legacy] of Object.entries(candidate.drafts||{})){
+          if(!books[documentId])continue;
+          state.book=documentId;
+          const origins=(legacy.origins||[]).filter(id=>book().notes.some(n=>n.id===id));
+          createThought(legacy.body||legacy.title||'',origins.length?origins:[book().notes[0].id],{fromAI:!!legacy.fromAI,conversation:legacy.conversation,legacyTitle:legacy.title});
+        }
+        state.book=current;delete state.drafts;
+      }
+      state.version=3;
+      if(!book().notes.some(n=>n.id===state.context))state.context=book().notes[0].id;
+    }
+    const current=state.book;
+    state.book='attention';
+    for(const id of ['n1','n2'])if(!thoughtIds(id).length)createThought(sampleThoughts[id],[id]);
+    state.book=current;
+    if(!Object.hasOwn(state.chats,'attention:n1'))state.chats['attention:n1']=[
+      {role:'user',text:'How can I turn this thought into a reading practice?'},
+      {role:'assistant',text:'Return to a familiar fragment with one open question: what did you take for granted here? Save your first assumption and check whether it changes after the next reading.'}
+    ];
+    if(!Object.hasOwn(state.chats,'attention:n2'))state.chats['attention:n2']=[
+      {role:'user',text:'How can I keep a good question without hurrying to an answer?'},
+      {role:'assistant',text:'Write down the question itself and your first assumption. After the next fragment, return to this record: refine the wording but keep the original version. The change in the question also shows how understanding develops.'}
+    ];
+  }
+  loadSaved(window.openai?.widgetState);
+  function glyphs(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
+  function button(action,label,cls='bw-tiny-button',extra=''){return `<button type="button" data-action="${action}" class="${cls} cursor-interaction" ${extra}>${label}</button>`;}
+  function ib(action,name,label,extra=''){return button(action,icon(name),'bw-icon-button',`aria-label="${esc(label)}" data-tooltip="${esc(label)}" ${extra}`);}
+  function rail(key,label,count,name,active=false){return `<aside class="bw-rail ${['source','notes'].includes(key)?'':'bw-rail-right'} ${active?'is-active':''}">${button('rail:'+key,`${icon(name)}<span class="bw-rail-label">${label}</span>${key==='source'?'<span class="bw-book-map" aria-hidden="true"></span>':''}<span class="bw-rail-count" ${count?'':'hidden'}>${count}</span>`,'bw-rail-button',`aria-label="${active?'Collapse':'Open'}: ${label}" aria-expanded="${active}"`)}</aside>`;}
+  function head(title,actions=''){return `<header class="bw-pane-head"><div class="bw-pane-title">${title}</div><div class="bw-pane-actions">${actions}</div></header>`;}
+  function sourceChip(id){const n=note(id);return button('source:'+id,icon('quote')+' p. '+n.page,'bw-chip',`aria-label="${esc(n.title)} · page ${n.page}" data-tooltip="${esc(n.title)}"`);}
+  function contextBlock(origins,kind=null){return `<div class="bw-context"><div class="bw-chips">${origins.map(sourceChip).join('')}</div>${kind?ib('add-sources:'+kind,'plus','Add notes',state.picker?'disabled':''):''}</div>`;}
+  function pickerToolbar(){return `<div class="bw-picker-toolbar"><div class="bw-picker-actions"><span>${esc(state.picker.title)}</span><div>${button('picker-cancel','Cancel')}${button('picker-apply','Add'+(state.selected.length?' · '+state.selected.length:''),'bw-solid',state.selected.length?'':'disabled')}</div></div></div>`;}
+  function notesPane(){return `<main class="bw-notes" aria-label="Notes on the book">${head('Notes',ib('new-thought','plus','New thought'))}${state.picker?pickerToolbar():''}<div class="bw-note-scroller" data-document="${state.book}" role="region" aria-label="Notes: scrolling changes focus"><div class="bw-notes-content"><div class="bw-notes-intro"><h1>${esc(book().chapter)}</h1></div>${book().notes.map((n,i)=>{
+    const linked=state.picker?.base.includes(n.id);
+    return `<article class="bw-note ${state.context===n.id?'is-focused':''}" data-note="${n.id}" ${state.context===n.id?'aria-current="true"':''}><div class="bw-note-top"><${state.picker?'label':'div'} class="bw-note-picker">${state.picker?`<input type="checkbox" data-note-select="${n.id}" ${linked||state.selected.includes(n.id)?'checked':''} ${linked?'disabled':''} aria-label="${linked?'Already linked':'Add'}: ${esc(n.title)}">`:''}<span>${String(i+1).padStart(2,'0')} · ${esc(n.title)}</span></${state.picker?'label':'div'}>${button('source:'+n.id,'p. '+n.page,'bw-note-position',`aria-label="Show the fragment on page ${n.page}"`)}</div><blockquote class="bw-quote">${esc(n.quote)}</blockquote><p class="bw-note-comment">${esc(n.comment)}</p><div class="bw-note-links">${ib('thought:'+n.id,'pen-line','Thoughts on the note')}${ib('ai:'+n.id,'sparkles','Dialog about the note')}${ib('links:'+n.id,'git-branch','Linked texts')}</div></article>`;
+  }).join('')}</div></div></main>`;}
+  function readerBody(){const n=note(state.sourceFor);return `<h2>${esc(book().chapter)}</h2><p>${esc(book().before)}</p><p class="bw-active-passage"><mark>${esc(n.quote)}</mark></p><p>${esc(book().after)}</p><p>${esc(book().ending)}</p><div class="bw-reader-bottom"><span>p. ${n.page}</span>${ib('reveal-note','arrow-up-right','Back to the note')}</div>`;}
+  function stage(className,body,key){return `<div class="bw-panel-stage"><div class="${className}" data-panel-key="${esc(key)}">${body}</div></div>`;}
+  function readerPane(){return `<section class="bw-reader" aria-label="Book text">${head('Text',ib('reader-close','panel-left-close','Collapse text'))}${stage('bw-reader-body',readerBody(),'reader:'+state.sourceFor)}</section>`;}
+  function sideHead(){return head({thought:'Thoughts',ai:'AI',links:'Links'}[state.right],ib('focus',state.focus?'minimize-2':'maximize-2',state.focus?'Restore notes':'Expand panel')+ib('text-beside','columns-2','Text alongside')+ib('close-right','x','Collapse panel'));}
+  function documentThoughts(){
+    book().notes.forEach(n=>{if(!thoughtIds(n.id).length)createThought('',[n.id]);});
+    const position=id=>book().notes.findIndex(n=>n.id===id);
+    return Object.values(state.thoughts).filter(d=>d.documentId===state.book).sort((a,b)=>position(a.origins[0])-position(b.origins[0])||Number(a.id.slice(1))-Number(b.id.slice(1)));
+  }
+  function entityAttributes(kind,id,origins){return `data-entity-kind="${kind}" data-entity-id="${id}" data-origins="${origins.join(',')}"`;}
+  function thoughtBody(){return documentThoughts().map(d=>`<article class="bw-entity bw-thought-entity" ${entityAttributes('thought',d.id,d.origins)} aria-label="Thought · ${esc(note(d.origins[0]).title)}">${contextBlock(d.origins,'thought')}<textarea id="bw-thought-${d.id}" class="bw-editor" data-thought-id="${d.id}" aria-label="Your own thought" placeholder="Write a thought…">${esc(d.body)}</textarea><div class="bw-thought-tools">${d.fromAI?ib('return-to-ai','sparkles','Open the source dialog',`data-thought-id="${d.id}"`):''}${ib('toggle-lineage','route','Origin of the thought')}</div></article>`).join('');}
+  function chatBody(){return book().notes.map(n=>{
+    const anchor=n.id,key=scope(anchor),origins=state.chatOrigins[key]||[anchor],messages=state.chats[key]||[];
+    return `<article class="bw-entity bw-conversation-entity" ${entityAttributes('ai',anchor,origins)} aria-label="Dialog · ${esc(n.title)}">${contextBlock(origins,'ai')}<div class="bw-chat">${messages.map((m,i)=>`<div class="bw-message"><div class="bw-message-name">${m.role==='user'?'You':icon('sparkles')+' AI'}</div><p>${esc(m.text)}</p>${m.role==='assistant'?ib('ai-to-thought','pen-line','Save the answer as a thought',`data-message-index="${i}" data-conversation-anchor="${anchor}"`):''}</div>`).join('')}</div><form class="bw-chat-form" data-conversation="${esc(key)}"><textarea id="bw-question-${anchor}" aria-label="Question for AI" placeholder="Ask about this fragment…" required>${esc(state.questionDrafts[key]||'')}</textarea><div class="bw-chat-form-footer"><button type="submit" class="bw-icon-button cursor-interaction" aria-label="Send question" data-tooltip="Send question">${icon('arrow-up')}</button></div></form></article>`;
+  }).join('');}
+  function referenceDefinitions(){return state.book==='attention'?[
+    {target:'questions',relation:'Develops the thought about the question',description:'On how questions direct attention and help keep a thought from closing on the first answer.'},
+    {target:'reading',relation:'Continuation of my own thought',description:'Personal practice: read, ask questions and keep the path from fragment to conclusion.'},
+    {target:'pause',relation:'Another view on attention',description:'Practices of observation, pausing and returning to the familiar without a ready interpretation.'}
+  ]:[{target:'attention',relation:'Original link',description:'The book and notes this inquiry grew out of.'}];}
+  function visibleReferences(){const anchor=state.picker?.kind==='relation'?state.picker.anchor:state.context;return referenceDefinitions().filter(r=>relationSources(r.target).includes(anchor)||(state.picker?.kind==='relation'&&state.picker.target===r.target));}
+  function reference(r){const b=books[r.target];return `<article class="bw-reference bw-entity ${state.picker?.target===r.target?'is-pick-target':''}" data-reference="${r.target}" ${entityAttributes('links',r.target,relationSources(r.target))}><div class="bw-kicker">${b.kind==='Note'?'Obsidian':b.kind}</div><h3>${esc(b.title)}</h3><div class="bw-author">${esc(b.author)}</div><p>${r.description}</p><div class="bw-reference-relation">${icon('git-branch')}${r.relation}</div><div class="bw-reference-footer"><div class="bw-chips">${relationSources(r.target).map(sourceChip).join('')}</div><div>${ib('add-relation:'+r.target,'plus','Add notes to the link',state.picker?'disabled':'')}${ib('navigate:'+r.target,'arrow-up-right','Work with the text',`data-via="${esc(r.relation)}"`)}</div></div></article>`;}
+  function linksBody(){const refs=referenceDefinitions();return refs.length?refs.map(reference).join(''):'<div class="bw-empty">No linked texts</div>';}
+  function panelKey(){return 'stream:'+state.book+':'+state.right;}
+  function panelBody(){return state.right==='thought'?thoughtBody():state.right==='ai'?chatBody():linksBody();}
+  function sidePane(){return `<section class="bw-side ${state.right==='thought'?'bw-thought':''}" aria-label="${{thought:'Thoughts on the note',ai:'Dialog about the note',links:'Linked texts'}[state.right]}">${sideHead()}${stage('bw-side-body bw-stream',panelBody(),panelKey())}</section>`;}
+  function lineage(){
+    const d=state.right==='thought'?draft():null;
+    const target=state.relationFocus||visibleReferences()[0]?.target;
+    const origins=d?d.origins:state.right==='ai'?aiOrigins():state.right==='links'&&target?relationSources(target):[state.context];
+    const node=(label,content)=>`<div class="bw-path-node"><span>${label}</span>${content}</div>`;
+    const arrow='<span aria-hidden="true">→</span>';
+    return `<div class="bw-lineage-title"><span>Origin</span>${ib('toggle-lineage','x','Close origin')}</div><div class="bw-path">${node('Book',button('rail:source',esc(book().title)))}${arrow}${node('Fragments',`<div class="bw-path-branches">${origins.map(id=>button('source:'+id,'p. '+note(id).page+' · '+esc(note(id).title))).join('')}</div>`)}${d?arrow+node('Thought',button('open-thought',esc(thoughtLabel(d)))):''}${state.right==='ai'?arrow+node('AI',button('rail:ai','Dialog')):''}${state.right==='links'&&target?arrow+node('Text',button('navigate:'+target,esc(books[target].title))):''}</div>`;
+  }
+  function startPicker(kind,target=null){
+    let base,title,anchor=state.context,thoughtId=null;
+    if(kind==='thought'){const d=draft();base=d.origins.slice();thoughtId=d.id;title='Thought';}
+    else if(kind==='ai'){anchor=aiNote();base=aiOrigins().slice();title='Dialog';}
+    else {base=relationSources(target).slice();state.relationFocus=target;title=books[target].title;}
+    state.picker={kind,target,anchor,base,title,thoughtId};state.selected=[];
+    state.focus=false;state.center='notes';state.source=false;state.right=kind==='relation'?'links':kind;
+    state.scene=kind==='thought'?'add-sources':state.right;
+  }
+  function cancelPicker(){state.picker=null;state.selected=[];}
+  function applySources(){
+    const p=state.picker;if(!p||!state.selected.length)return;
+    const origins=[...new Set([...p.base,...state.selected])];
+    if(p.kind==='thought'){const d=state.thoughts[p.thoughtId];d.origins=origins;origins.forEach(id=>state.thoughtByNote[scope(id)]=d.id);}
+    else if(p.kind==='ai'){state.chatOrigins[scope(p.anchor)]=origins;origins.forEach(id=>state.chatByNote[scope(id)]=p.anchor);}
+    else state.relationOrigins[scope(p.target)]=origins;
+    cancelPicker();state.scene=state.right==='thought'?'thought':state.right;
+  }
+  function clearFocusWork(){if(focusFrame)cancelAnimationFrame(focusFrame);focusFrame=0;clearTimeout(focusTimer);focusTimer=null;pendingFocus=null;}
+  function replaceBody(pane,html,key,force=false){
+    const stage=pane?.querySelector('.bw-panel-stage');const live=stage?.querySelector(':scope > [data-panel-key]');
+    if(!live||(!force&&live.dataset.panelKey===key))return;
+    stage.querySelectorAll('.bw-transition-ghost').forEach(el=>el.remove());live.getAnimations().forEach(a=>a.cancel());
+    const oldScroll=live.scrollTop;
+    state.panelScrollPositions[live.dataset.panelKey]=oldScroll;
+    const ghost=reducedMotion()?null:live.cloneNode(true);
+    if(ghost){ghost.classList.add('bw-transition-ghost');ghost.removeAttribute('id');ghost.removeAttribute('data-panel-key');ghost.setAttribute('aria-hidden','true');ghost.inert=true;ghost.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));}
+    live.innerHTML=html;live.dataset.panelKey=key;live.scrollTop=state.panelScrollPositions[key]||0;
+    if(ghost){stage.append(ghost);ghost.scrollTop=oldScroll;
+      const oldAnimation=ghost.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-4px)'}],{duration:160,easing:'ease-out'});oldAnimation.finished.then(()=>ghost.remove()).catch(()=>ghost.remove());
+      live.animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:190,easing:'cubic-bezier(.2,.8,.2,1)'});
+    }
+    glyphs();
+  }
+  function entityOrigins(entity){return (entity?.dataset.origins||'').split(',').filter(id=>book().notes.some(n=>n.id===id));}
+  function preferredEntity(){
+    const body=$('.bw-side-body:not(.bw-transition-ghost)');if(!body)return null;
+    const target=state.picker?(state.picker.thoughtId||state.picker.target||state.picker.anchor):state.right==='thought'?draft().id:state.right==='ai'?aiNote():state.relationFocus;
+    const entities=[...body.querySelectorAll(':scope > .bw-entity')];
+    return entities.find(el=>el.dataset.entityId===target&&(state.picker||entityOrigins(el).includes(state.context)))||entities.find(el=>entityOrigins(el).includes(state.context))||null;
+  }
+  function markRightFocus(){
+    const active=preferredEntity();
+    root.querySelectorAll('.bw-side-body:not(.bw-transition-ghost) > .bw-entity').forEach(entity=>{
+      const selected=entity===active;entity.classList.toggle('is-active',selected);
+      if(selected)entity.setAttribute('aria-current','true');else entity.removeAttribute('aria-current');
+      const editor=entity.querySelector('[data-thought-id].bw-editor');if(editor)editor.id=selected?'bw-thought-body':'bw-thought-'+entity.dataset.entityId;
+      const question=entity.querySelector('.bw-chat-form textarea');if(question)question.id=selected?'bw-question':'bw-question-'+entity.dataset.entityId;
+    });
+    return active;
+  }
+  function suppressScroll(scroller,top,smooth=true){
+    const token={target:top};synchronizedScrolls.set(scroller,token);movingScrollers.add(scroller);
+    scroller.scrollTo({top,behavior:smooth&&!reducedMotion()?'smooth':'instant'});
+    setTimeout(()=>{if(synchronizedScrolls.get(scroller)===token){synchronizedScrolls.delete(scroller);movingScrollers.delete(scroller);}},1400);
+  }
+  function followElement(scroller,element,smooth=true){
+    if(!scroller||!element)return;
+    const r=element.getBoundingClientRect(),bounds=scroller.getBoundingClientRect();
+    const line=scroller.clientHeight*(scroller.classList.contains('bw-stream')?.35:.5);
+    const top=Math.max(0,Math.min(scroller.scrollHeight-scroller.clientHeight,scroller.scrollTop+r.top-bounds.top+Math.min(r.height/2,line)-line));
+    if(Math.abs(top-scroller.scrollTop)<1)return;
+    suppressScroll(scroller,top,smooth);
+  }
+  function claimScroll(scroller){
+    if(!scroller||!scroller.isConnected)return;
+    if(scrollDriver!==scroller){
+      clearFocusWork();
+      for(const other of [...movingScrollers])suppressScroll(other,other.scrollTop,false);
+      movingScrollers.clear();
+    }
+    synchronizedScrolls.delete(scroller);movingScrollers.delete(scroller);scrollDriver=scroller;
+  }
+  function activateEntity(entity){
+    if(!entity||state.picker)return;
+    const origins=entityOrigins(entity);if(!origins.length)return;
+    const currentIndex=book().notes.findIndex(n=>n.id===state.context);
+    const id=origins.includes(state.context)?state.context:origins.slice().sort((a,b)=>Math.abs(book().notes.findIndex(n=>n.id===a)-currentIndex)-Math.abs(book().notes.findIndex(n=>n.id===b)-currentIndex))[0];
+    if(entity.dataset.entityKind==='thought')state.thoughtByNote[scope(id)]=entity.dataset.entityId;
+    else if(entity.dataset.entityKind==='ai')state.chatByNote[scope(id)]=entity.dataset.entityId;
+    else state.relationFocus=entity.dataset.entityId;
+    activateNote(id,{from:'right'});
+  }
+  function activateNote(id,options={}){
+    const changed=id!==state.context;
+    state.context=id;state.sourceFor=id;
+    if(changed&&!state.picker&&options.from!=='right'&&state.relationFocus&&!relationSources(state.relationFocus).includes(id))state.relationFocus=null;
+    root.querySelectorAll('.bw-note').forEach(el=>{const active=el.dataset.note===id;el.classList.toggle('is-focused',active);if(active)el.setAttribute('aria-current','true');else el.removeAttribute('aria-current');});
+    if($('.bw-reader'))replaceBody($('.bw-reader'),readerBody(),'reader:'+id);
+    if(state.right&&!state.picker){const active=markRightFocus();if(options.from!=='right')followElement($('.bw-side-body:not(.bw-transition-ghost)'),active);}
+    if(options.from==='right')followElement($('.bw-note-scroller'),root.querySelector('.bw-note[data-note="'+id+'"]'));
+    const counts={thought:thoughtIds().filter(key=>state.thoughts[key].body.trim()).length,ai:Number(!!state.chats[aiKey()]?.length),links:visibleReferences().length};
+    for(const [key,count] of Object.entries(counts)){const mark=$('[data-action="rail:'+key+'"] .bw-rail-count');if(mark){mark.textContent=count;mark.hidden=!count;}}
+    if(state.lineage)$('.bw-lineage').innerHTML=lineage();
+    persist();
+  }
+  function nearestNote(scroller){
+    const cards=scroller.querySelectorAll('.bw-note');
+    if(scroller.scrollTop<=1)return cards[0]?.dataset.note;
+    if(scroller.scrollTop+scroller.clientHeight>=scroller.scrollHeight-1)return cards[cards.length-1]?.dataset.note;
+    const bounds=scroller.getBoundingClientRect(),center=bounds.top+scroller.clientHeight/2;
+    let nearest=null,distance=Infinity,currentDistance=Infinity;
+    scroller.querySelectorAll('.bw-note').forEach(el=>{const r=el.getBoundingClientRect();if(r.bottom<=bounds.top||r.top>=bounds.bottom)return;const d=Math.abs(r.top+r.height/2-center);if(el.dataset.note===state.context)currentDistance=d;if(d<distance){nearest=el.dataset.note;distance=d;}});
+    return nearest!==state.context&&currentDistance-distance<24?state.context:nearest;
+  }
+  function measureFocus(scroller){
+    if(!scroller.isConnected||synchronizedScrolls.has(scroller))return;
+    if(scroller.classList.contains('bw-stream')){measureRightFocus(scroller);return;}
+    state.scrollPositions[state.book]=scroller.scrollTop;
+    const candidate=nearestNote(scroller);
+    if(!candidate||candidate===state.context){clearTimeout(focusTimer);pendingFocus=null;return;}
+    if(candidate===pendingFocus)return;
+    clearTimeout(focusTimer);pendingFocus=candidate;
+    focusTimer=setTimeout(()=>{pendingFocus=null;if(scroller.isConnected&&nearestNote(scroller)===candidate)activateNote(candidate);},75);
+  }
+  function nearestEntity(scroller){
+    const entities=[...scroller.querySelectorAll(':scope > .bw-entity')];if(!entities.length)return null;
+    if(scroller.scrollTop<=1)return entities[0];
+    if(scroller.scrollTop+scroller.clientHeight>=scroller.scrollHeight-1)return entities[entities.length-1];
+    const line=scroller.getBoundingClientRect().top+scroller.clientHeight*.35;
+    let nearest=null,distance=Infinity,currentDistance=Infinity,current=null;
+    entities.forEach(el=>{const r=el.getBoundingClientRect(),d=Math.max(r.top-line,line-r.bottom,0);if(el.classList.contains('is-active')){current=el;currentDistance=d;}if(d<distance){nearest=el;distance=d;}});
+    return current&&current!==nearest&&currentDistance-distance<24?current:nearest;
+  }
+  function measureRightFocus(scroller){
+    state.panelScrollPositions[scroller.dataset.panelKey]=scroller.scrollTop;if(state.picker)return;
+    const entity=nearestEntity(scroller);if(!entity||entity.classList.contains('is-active')){clearTimeout(focusTimer);pendingFocus=null;return;}
+    const key='right:'+entity.dataset.entityId;if(pendingFocus===key)return;
+    clearTimeout(focusTimer);pendingFocus=key;
+    focusTimer=setTimeout(()=>{pendingFocus=null;if(scroller.isConnected&&!synchronizedScrolls.has(scroller)&&nearestEntity(scroller)===entity)activateEntity(entity);},75);
+  }
+  function render(){
+    clearFocusWork();
+    scrollDriver=null;
+    for(const moving of [...movingScrollers])suppressScroll(moving,moving.scrollTop,false);
+    const oldScroller=$('.bw-note-scroller'),oldWidth=oldScroller?.clientWidth;
+    if(oldScroller)state.scrollPositions[oldScroller.dataset.document]=oldScroller.scrollTop;
+    const oldBody=$('.bw-side-body');if(oldBody)state.panelScrollPositions[oldBody.dataset.panelKey]=oldBody.scrollTop;
+    $('.bw-scenes').innerHTML=scenes.map((s,i)=>button('scene:'+s.id,`<span class="bw-scene-number">${String(i+1).padStart(2,'0')}</span>${s.name}`,'bw-scene',`aria-pressed="${state.scene===s.id}"`)).join('');
+    const back=state.history[state.history.length-1];
+    $('.bw-location').innerHTML=`<div class="bw-main-title">${back?`<div class="bw-provenance">${button('back',icon('arrow-left')+' '+esc(books[back.book].title))}<span>›</span><span>${esc(back.via)}</span></div>`:''}<div class="bw-book-title">${icon('book-open')}${esc(book().title)}</div><div class="bw-book-author">${esc(book().author)}</div></div>${ib('toggle-lineage','route','Origin')}`;
+    let html='';
+    if(state.focus&&state.right)html=state.center==='text'?rail('notes','Notes',book().notes.length,'notebook-pen')+readerPane():rail('source','Text',book().notes.length,'book-open')+rail('notes','Notes',book().notes.length,'notebook-pen');
+    else html=(state.source?readerPane():rail('source','Text',book().notes.length,'book-open'))+notesPane();
+    const labels={thought:['Thoughts','pen-line'],ai:['AI','sparkles'],links:['Links','git-branch']};
+    const counts={thought:thoughtIds().filter(id=>state.thoughts[id].body.trim()).length,ai:Number(!!state.chats[aiKey()]?.length),links:visibleReferences().length};
+    for(const key of ['thought','ai','links']){if(state.right===key){if(!state.focus||state.center==='text')html+=rail(key,...[labels[key][0],counts[key],labels[key][1]],true);html+=sidePane();}else html+=rail(key,...[labels[key][0],counts[key],labels[key][1]]);}
+    $('.bw-workspace').classList.toggle('is-split',!!(state.source||state.right));$('.bw-workspace').innerHTML=html;
+    $('.bw-lineage').hidden=!state.lineage;if(state.lineage)$('.bw-lineage').innerHTML=lineage();
+    $('.bw-status').hidden=true;$('.bw-status').innerHTML='';$('.bw-scene-caption').hidden=true;
+    const scroller=$('.bw-note-scroller');
+    if(scroller){suppressScroll(scroller,state.scrollPositions[state.book]||0,false);if(!revealNoteId&&oldWidth&&Math.abs(oldWidth-scroller.clientWidth)>1)revealNoteId=state.context;if(revealNoteId)followElement(scroller,scroller.querySelector('[data-note="'+revealNoteId+'"]'),false);state.scrollPositions[state.book]=scroller.scrollTop;}
+    const body=$('.bw-side-body');
+    if(body){suppressScroll(body,state.panelScrollPositions[body.dataset.panelKey]||0,false);const entity=markRightFocus();if(entity){const r=entity.getBoundingClientRect(),bounds=body.getBoundingClientRect();if(revealNoteId||state.picker||!oldBody||oldBody.dataset.panelKey!==body.dataset.panelKey||r.bottom<bounds.top+30||r.top>bounds.bottom-30)followElement(body,entity,false);}}
+    if(initialized&&!reducedMotion())for(const pane of root.querySelectorAll('.bw-side,.bw-reader'))pane.animate([{opacity:0,transform:'translateX(5px)'},{opacity:1,transform:'translateX(0)'}],{duration:180,easing:'ease-out'});
+    initialized=true;revealNoteId=null;glyphs();
+  }
+  function openRight(key){cancelPicker();state.right=key;state.source=false;state.focus=false;state.center='notes';state.scene=key==='thought'?'thought':key;}
+  function go(target,via){if(target===state.book)return;state.history.push({book:state.book,context:state.context,sourceFor:state.sourceFor,right:state.right,source:state.source,focus:state.focus,center:state.center,via:via||'Linked text'});state.book=target;cancelPicker();state.relationFocus=null;state.context=book().notes[0].id;state.sourceFor=state.context;state.right=null;state.source=false;state.focus=false;state.center='notes';state.scene='destination';state.lineage=false;revealNoteId=state.context;}
+  function setScene(id){cancelPicker();state.scene=id;state.book='attention';state.history=[];state.context='n1';state.sourceFor='n1';state.relationFocus=null;state.source=id==='source';state.right=['thought','expanded','reading','add-sources'].includes(id)?'thought':['ai','links'].includes(id)?id:null;state.focus=['expanded','reading'].includes(id);state.center=id==='reading'?'text':'notes';state.lineage=false;revealNoteId='n1';if(id==='destination'){state.right='links';go('questions','Develops the thought about the question');}if(id==='add-sources')startPicker('thought');}
+  root.addEventListener('click',event=>{
+    const trigger=event.target.closest('button[data-action]');if(!trigger||!root.contains(trigger))return;
+    const [action,arg]=trigger.dataset.action.split(':');
+    if(state.picker&&['scene','rail','source','reader-close','reveal-note','thought','ai','links','new-thought','open-thought','focus','text-beside','close-right','ai-to-thought','return-to-ai','navigate','back'].includes(action))cancelPicker();
+    if(action==='scene')setScene(arg);
+    else if(action==='rail'){
+      if(arg==='source'){if(state.focus&&state.right){state.center='text';state.scene='reading';}else{state.source=!state.source;state.right=null;state.focus=false;state.scene=state.source?'source':'notes';}}
+      else if(arg==='notes'){state.focus=false;state.center='notes';state.scene=state.right||'notes';}
+      else if(state.right===arg){state.right=null;state.focus=false;state.center='notes';state.scene='notes';}
+      else openRight(arg);
+    }
+    else if(action==='source'){state.sourceFor=arg;state.context=arg;revealNoteId=arg;if(state.right){state.focus=true;state.center='text';state.scene='reading';}else{state.source=true;state.scene='source';}}
+    else if(action==='reader-close'){if(state.focus){state.center='notes';state.scene='expanded';}else{state.source=false;state.scene='notes';}}
+    else if(action==='reveal-note'){state.context=state.sourceFor;revealNoteId=state.context;state.focus=false;state.source=false;state.scene=state.right||'notes';}
+    else if(['thought','ai','links'].includes(action)){state.context=arg;state.sourceFor=arg;revealNoteId=arg;openRight(action);}
+    else if(action==='new-thought'){createThought();openRight('thought');}
+    else if(action==='open-thought')openRight('thought');
+    else if(action==='select-thought')state.thoughtByNote[scope(state.context)]=arg;
+    else if(action==='focus'){state.focus=!state.focus;state.center='notes';state.scene=state.focus?'expanded':state.right;}
+    else if(action==='text-beside'){state.focus=true;state.center='text';state.sourceFor=state.context;state.scene='reading';}
+    else if(action==='close-right'){state.right=null;state.focus=false;state.center='notes';state.scene='notes';}
+    else if(action==='add-sources')startPicker(arg);
+    else if(action==='add-relation')startPicker('relation',arg);
+    else if(action==='picker-apply')applySources();
+    else if(action==='picker-cancel'){cancelPicker();state.scene=state.right==='thought'?'thought':state.right;}
+    else if(action==='ai-to-thought'){const conversation=trigger.dataset.conversationAnchor||aiNote(),index=Number(trigger.dataset.messageIndex),reply=state.chats[scope(conversation)]?.[index];createThought(reply?.text||'',state.chatOrigins[scope(conversation)]||[conversation],{fromAI:true,conversation});openRight('thought');}
+    else if(action==='toggle-lineage')state.lineage=!state.lineage;
+    else if(action==='return-to-ai'){const thought=state.thoughts[trigger.dataset.thoughtId]||draft(),anchor=thought.conversation||thought.origins[0]||state.context;state.context=anchor;state.sourceFor=anchor;revealNoteId=anchor;openRight('ai');}
+    else if(action==='navigate')go(arg,trigger.dataset.via);
+    else if(action==='back'){const back=state.history.pop();if(back){Object.assign(state,back,{scene:back.right||'notes',lineage:false});}}
+    render();persist();
+  });
+  root.addEventListener('change',event=>{const id=event.target.dataset.noteSelect;if(!id||!state.picker||state.picker.base.includes(id))return;state.selected=event.target.checked?[...new Set([...state.selected,id])]:state.selected.filter(x=>x!==id);const toolbar=$('.bw-picker-toolbar');if(toolbar)toolbar.outerHTML=pickerToolbar();glyphs();persist();});
+  function scrollSurface(target){return target.closest?.('.bw-note-scroller,.bw-side-body.bw-stream');}
+  root.addEventListener('wheel',event=>claimScroll(scrollSurface(event.target)),{capture:true,passive:true});
+  root.addEventListener('pointerdown',event=>claimScroll(scrollSurface(event.target)),{capture:true,passive:true});
+  root.addEventListener('touchstart',event=>claimScroll(scrollSurface(event.target)),{capture:true,passive:true});
+  root.addEventListener('keydown',event=>{if(['PageUp','PageDown','Home','End','ArrowUp','ArrowDown',' '].includes(event.key)&&!event.target.matches('input,textarea'))claimScroll(scrollSurface(event.target));},true);
+  root.addEventListener('focusin',event=>{const entity=event.target.closest('.bw-entity');if(entity&&!state.picker){claimScroll(scrollSurface(entity));activateEntity(entity);}});
+  root.addEventListener('scroll',event=>{if(!event.target.matches?.('.bw-note-scroller,.bw-side-body.bw-stream'))return;const scroller=event.target;if(synchronizedScrolls.has(scroller))return;if(focusFrame)cancelAnimationFrame(focusFrame);focusFrame=requestAnimationFrame(()=>{focusFrame=0;measureFocus(scroller);});},true);
+  root.addEventListener('scrollend',event=>{const scroller=event.target;if(synchronizedScrolls.has(scroller)){synchronizedScrolls.delete(scroller);movingScrollers.delete(scroller);}if(scroller.matches?.('.bw-note-scroller'))state.scrollPositions[state.book]=scroller.scrollTop;else if(scroller.matches?.('.bw-side-body'))state.panelScrollPositions[scroller.dataset.panelKey]=scroller.scrollTop;},true);
+  root.addEventListener('input',event=>{
+    const id=event.target.dataset.thoughtId;
+    if(id&&state.thoughts[id]){state.thoughts[id].body=event.target.value;state.thoughts[id].saved=true;persist();}
+    else if(event.target.matches('.bw-chat-form textarea')){const key=event.target.closest('form').dataset.conversation;state.questionDrafts[key]=event.target.value;persist();}
+  });
+  root.addEventListener('submit',event=>{
+    if(!event.target.matches('.bw-chat-form'))return;event.preventDefault();
+    const key=event.target.dataset.conversation,input=event.target.querySelector('textarea'),question=input.value.trim();if(!question)return;
+    state.chats[key]||=[];state.chats[key].push({role:'user',text:question},{role:'assistant',text:'Go back to the linked fragments and write down your first assumption. What in the text confirms it, and what makes you refine the question?'});state.questionDrafts[key]='';
+    const anchor=key.slice(state.book.length+1),entity=$('.bw-side-body:not(.bw-transition-ghost) [data-entity-kind="ai"][data-entity-id="'+anchor+'"]');
+    const scroll=$('.bw-side-body');const top=scroll?.scrollTop||0;
+    if(entity){const holder=document.createElement('div');holder.innerHTML=chatBody();const replacement=holder.querySelector('[data-entity-id="'+anchor+'"]');if(replacement)entity.replaceWith(replacement);if(scroll)suppressScroll(scroll,top,false);markRightFocus();glyphs();}persist();
+  });
+  window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState){loadSaved(event.detail.globals.widgetState);render();}});
+  revealNoteId=state.context;render();
+  if(globalThis.Tweak){const design={notesRatio:1,readingSize:17};const tweak=new Tweak({container:root,onChange:()=>{root.style.setProperty('--bw-split',design.notesRatio);root.style.setProperty('--bw-reader-size',design.readingSize+'px');}});tweak.addSlider(design,'notesRatio',{label:'Notes width',min:.7,max:1.4,step:.1});tweak.addSlider(design,'readingSize',{label:'Book text size',min:16,max:21,unit:'px'});}
+})();
+</script>
+</main></body>
+</html>

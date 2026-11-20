@@ -89,6 +89,43 @@ export class ReadwiseTrackerSettingTab extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName(t("settings.aiModelName"))
+      .setDesc(t("settings.aiModelDesc"))
+      .addText((text) =>
+        text
+          .setPlaceholder("gpt-…")
+          .setValue(this.plugin.settings.workspaceAiModel)
+          .onChange(async (value) => {
+            this.plugin.settings.workspaceAiModel = value.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName(t("settings.aiFullAccessName"))
+      .setDesc(t("settings.aiFullAccessDesc"))
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.workspaceAiFullAccess)
+          .onChange(async (value) => {
+            this.plugin.settings.workspaceAiFullAccess = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName(t("settings.mirrorProgressName"))
+      .setDesc(t("settings.mirrorProgressDesc"))
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.workspaceMirrorProgress)
+          .onChange(async (value) => {
+            this.plugin.settings.workspaceMirrorProgress = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     new Setting(containerEl).setName(t("settings.syncScopeTitle")).setHeading();
 
     new Setting(containerEl)

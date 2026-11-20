@@ -11,9 +11,22 @@ import {
   buildReadwiseInboxNoteFileBaseName,
 } from "./readwiseInboxNoteTemplate";
 import { getCurrentLocale, t } from "../i18n";
+import { readHighlightMetadata } from "./readwiseHighlightMetadata";
+
+/** Restores table structure in quotes using the book's full text, when the workspace has it. */
+export type QuoteFormatter = (
+  context: { book?: LocalBook; bookPath?: string },
+  quotes: string[],
+) => Promise<string[]>;
+
+const linkedHighlightPath = (folder: string, bookTitle: string, index: number) =>
+  normalizePath(`${folder}/${bookTitle} — ${String(index).padStart(3, "0")}.md`);
 
 export class ReadwiseNoteService {
-  constructor(private readonly app: App) {}
+  constructor(
+    private readonly app: App,
+    private readonly formatQuotes: QuoteFormatter = async (_context, quotes) => quotes,
+  ) {}
 
   async createInboxNoteFromHighlight(
     settings: ReadwiseTrackerSettings,
@@ -27,17 +40,21 @@ export class ReadwiseNoteService {
 
     const highlightCache = this.app.metadataCache.getFileCache(args.highlightFile);
     const frontmatter: Record<string, unknown> | undefined = highlightCache?.frontmatter;
-    const highlightTitle =
-      (typeof frontmatter?.title === "string" ? frontmatter.title : undefined) || args.highlightFile.basename;
-    const highlightDate = typeof frontmatter?.date === "string" ? frontmatter.date : "";
+    const highlightText = await this.app.vault.cachedRead(args.highlightFile);
+    const metadata = readHighlightMetadata(args.highlightFile.basename, frontmatter, highlightText);
+    const highlightTitle = metadata.title;
+    const highlightDate = metadata.date;
 
     const highlightLink = `[[${args.highlightFile.path}|${args.highlightFile.basename}]]`;
     const bookLink = args.bookFile
       ? `[[${args.bookFile.path}|${args.bookFile.basename}]]`
       : `[[${args.book.title}]]`;
 
-    const highlightText = await this.app.vault.cachedRead(args.highlightFile);
     const parsed = parseHighlightNote(highlightText);
+    const [quote] = await this.formatQuotes(
+      { book: args.book, bookPath: args.bookFile?.path },
+      [parsed.quote],
+    );
 
     const baseName = buildReadwiseInboxNoteFileBaseName(highlightTitle);
     let outPath = normalizePath(`${inboxFolder}/${baseName}.md`);
@@ -56,7 +73,7 @@ export class ReadwiseNoteService {
       bookLink,
       sourceLink: highlightLink,
       sourceDate: highlightDate ? highlightDate.slice(0, 10) : undefined,
-      quote: parsed.quote,
+      quote,
       description: parsed.description,
     });
 
@@ -110,10 +127,17 @@ export class ReadwiseNoteService {
         if (total === 0) {
           continue;
         }
+        // Table repair reads the whole book; skip it when every note already exists.
+        const texts = highlights.map((highlight) => highlight.text);
+        const missing = highlights.some(
+          (_highlight, index) =>
+            !(this.app.vault.getAbstractFileByPath(linkedHighlightPath(outDir, bookTitle, index + 1)) instanceof TFile),
+        );
+        const quotes = missing ? await this.formatQuotes({ bookPath: file.path }, texts) : texts;
 
         for (let index = 1; index <= total; index += 1) {
           const highlight = highlights[index - 1];
-          const outPath = normalizePath(`${outDir}/${bookTitle} — ${String(index).padStart(3, "0")}.md`);
+          const outPath = linkedHighlightPath(outDir, bookTitle, index);
           const existing = this.app.vault.getAbstractFileByPath(outPath);
           if (existing instanceof TFile) {
             skipped += 1;
@@ -124,9 +148,14 @@ export class ReadwiseNoteService {
             bookTitle,
             index,
             total,
-            text: highlight.text,
+            text: quotes[index - 1] ?? highlight.text,
+            titleText: highlight.text,
             comment: highlight.comment,
             date: highlight.date,
+            sourceUrl: highlight.sourceUrl,
+            readerHighlightId: highlight.readerHighlightId,
+            readerOffset: highlight.readerOffset,
+            readerLocation: highlight.readerLocation,
             locale,
           });
           await this.app.vault.create(outPath, content);
