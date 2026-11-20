@@ -34,7 +34,7 @@ const BRIDGE_CALLER = "readwise-reading-tracker";
 
 /** Looked up on every call: the Bridge may be enabled after this plugin loaded. */
 export function findBridge(app: unknown): BridgeApi | undefined {
-  const api = (app as PluginRegistry).plugins?.plugins?.["codex-bridge"]?.api;
+  const api = (app as PluginRegistry).plugins?.plugins?.["free-solo-codex-bridge"]?.api;
   return api && api.version === 1 && typeof api.run === "function" ? api : undefined;
 }
 
