@@ -13,15 +13,13 @@ Open it with **Detailed review** on a book in the highlights sidebar, or with th
 - Mark a thought or dialog with a star to find it later; the panel can show only the important ones.
 - Your position, open panels, widths and scroll offsets are restored when you come back.
 
-![Book workspace](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-reader.png)
+![Book workspace: the text on the left, the note at the reading line on the right](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-reader.png)
 
 ## Thoughts and links between texts
 
 - **+** creates a thought or a dialog for the current note. Thoughts are ordinary Markdown.
 - Link a note to other sources, including notes from elsewhere in your vault, and describe the connection in your own words.
 - A link to another text opens that text's workspace; the arrow at the top returns to where you came from. Incoming links show the text they came from.
-
-![Links between texts](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-links.png)
 
 ## AI dialogs (optional, through Codex Bridge)
 
@@ -34,7 +32,7 @@ AI answers use the separate [Codex Bridge](https://github.com/free-solo-lab/obsi
 - Optional: let AI search the web and use Readwise tools (**Settings → Let AI search the web and use Readwise**). It is off by default; shell and file access are never enabled.
 - Quotes and comments from your notes are sent to OpenAI through Codex only when you send a question (and book text only when you ask for a translation).
 
-![AI dialog](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-ai-dialog.png)
+![AI dialog: a question about a passage and the answer with a source link](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-ai-dialog.png)
 
 ## Full text and file import
 
@@ -43,7 +41,7 @@ AI answers use the separate [Codex Bridge](https://github.com/free-solo-lab/obsi
 - Quote matching handles Markdown formatting, typographic quotes and PDF line breaks. Ambiguous quotes ask you to choose the match instead of guessing. Image-only highlights are matched by address or content hash.
 - Translate the book text with **Translate to…** (through Codex Bridge, so the translated passages are sent to OpenAI via Codex) and switch back to the original at any time; the last view is remembered per book.
 
-![Import and translation](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-import.png)
+![Text toolbar: full screen, attach a file, export, refresh, translate](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-import.png)
 
 ## Reader progress (optional)
 
