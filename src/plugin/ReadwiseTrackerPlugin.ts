@@ -20,16 +20,31 @@ import { t } from "../i18n";
 import { AUTO_SYNC_CHECK_INTERVAL_MS, isAutoSyncDue } from "./autoSync";
 import { DASHBOARD_VIEW_TYPE, STATS_VIEW_TYPE, activateReadwiseView } from "./workspace";
 import type { CreateInboxNoteArgs } from "./contracts";
+import { BookWorkspaceService } from "../workspace/service";
+import { BOOK_WORKSPACE_VIEW, BookWorkspaceView } from "../workspace/BookWorkspaceView";
+import { readerDocumentUrl } from "../services/readerBookUrl";
+import { errorMessage } from "../utils/errors";
+
+interface SyncOptions {
+  silent?: boolean;
+  fullHistory?: boolean;
+  /** Reject instead of showing a notice, for callers that handle the failure themselves. */
+  throwOnError?: boolean;
+}
+
+const TOKEN_MISSING = "Readwise API token is not set.";
 
 export class ReadwiseTrackerPlugin extends Plugin {
   settings!: ReadwiseTrackerSettings;
   dataManager!: DataManager;
   readwiseService!: ReadwiseService;
+  workspaceService!: BookWorkspaceService;
 
   private officialSyncService!: ReadwiseOfficialSyncService;
   private syncService!: ReadwiseSyncService;
   private noteService!: ReadwiseNoteService;
   private syncInFlight: Promise<void> | null = null;
+  private lastSyncError: unknown;
   private selectedHighlightsBookId: string | null = null;
   private selectedHighlightsBookListeners = new Set<(bookId: string) => void>();
 
@@ -45,10 +60,20 @@ export class ReadwiseTrackerPlugin extends Plugin {
     this.readwiseService.setMaxRetries(this.settings.maxRetries);
     this.officialSyncService = new ReadwiseOfficialSyncService(this.app);
     this.syncService = new ReadwiseSyncService(this.readwiseService, this.dataManager, this.app, () => this.settings);
-    this.noteService = new ReadwiseNoteService(this.app);
+    this.workspaceService = new BookWorkspaceService(
+      this,
+      () => this.settings,
+      this.dataManager,
+      this.readwiseService,
+      () => this.syncReadwiseData({ silent: true, throwOnError: true }),
+    );
+    this.noteService = new ReadwiseNoteService(this.app, (context, quotes) =>
+      this.workspaceService.formatHighlightQuotes(context, quotes),
+    );
 
     this.registerView(STATS_VIEW_TYPE, (leaf) => new StatsView(leaf, this));
     this.registerView(DASHBOARD_VIEW_TYPE, (leaf) => new DashboardView(leaf, this));
+    this.registerView(BOOK_WORKSPACE_VIEW, (leaf) => new BookWorkspaceView(leaf, this));
 
     this.addSettingTab(new ReadwiseTrackerSettingTab(this.app, this));
     registerCommands(this);
@@ -67,6 +92,22 @@ export class ReadwiseTrackerPlugin extends Plugin {
     }
   }
 
+  /** One workspace leaf is reused; it opens next to the active tab when there is none yet. */
+  async openBookWorkspace(bookId: string): Promise<void> {
+    const { workspace } = this.app;
+    const leaf =
+      workspace.getLeavesOfType(BOOK_WORKSPACE_VIEW)[0] ||
+      workspace.getLeaf(workspace.getMostRecentLeaf(workspace.rootSplit) ? "tab" : false);
+    if (leaf.getViewState().state?.documentId !== bookId) {
+      await leaf.setViewState({
+        type: BOOK_WORKSPACE_VIEW,
+        active: true,
+        state: { documentId: bookId || undefined },
+      });
+    }
+    await workspace.revealLeaf(leaf);
+  }
+
   getSelectedHighlightsBookId(): string | null {
     return this.selectedHighlightsBookId;
   }
@@ -81,10 +122,11 @@ export class ReadwiseTrackerPlugin extends Plugin {
   }
 
   async saveReaderDocument(document: ReadwiseSaveDocumentRequest): Promise<ReadwiseSaveDocumentResponse> {
-    const saved = await this.readwiseService.saveDocument(document);
-    await this.readwiseService.addDocumentTags(saved.id, document.tags || []);
-    await this.syncReadwiseData({ silent: true });
-    return saved;
+    if (!this.settings.readwiseToken) throw new Error(TOKEN_MISSING);
+    const saved = await this.workspaceService.importer.url(document);
+    this.workspaceService.afterReaderChange();
+    const id = saved.readerIds[0];
+    return { id, url: readerDocumentUrl(id) };
   }
 
   async addReaderDocumentTags(documentId: string, tags: string[]): Promise<void> {
@@ -100,6 +142,7 @@ export class ReadwiseTrackerPlugin extends Plugin {
       location,
       current ? applyReaderLocation(current, location, new Date().toISOString()) : undefined,
     );
+    this.workspaceService.afterReaderChange();
   }
 
   async deleteReaderBook(documentId: string): Promise<void> {
@@ -108,6 +151,7 @@ export class ReadwiseTrackerPlugin extends Plugin {
         documentId,
         this.settings.readwiseReaderSessionCookie,
       );
+      this.workspaceService.afterReaderChange();
     } catch (error) {
       if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
         this.settings.readwiseReaderSessionCookie = "";
@@ -117,22 +161,22 @@ export class ReadwiseTrackerPlugin extends Plugin {
     }
   }
 
+  /**
+   * EPUB/PDF go through Reader's upload endpoint (session cookie); other files are
+   * saved as articles through the API, which needs the token.
+   */
   async uploadReaderFile(
     fileName: string,
     contentType: string,
     body: ArrayBuffer,
     tags: string[] = [],
+    title?: string,
   ): Promise<ReadwiseUploadFileResponse> {
+    if (!/\.(epub|pdf)$/i.test(fileName) && !this.settings.readwiseToken) throw new Error(TOKEN_MISSING);
     try {
-      const uploaded = await this.readwiseService.uploadFile(
-        fileName,
-        contentType,
-        body,
-        this.settings.readwiseReaderSessionCookie,
-      );
-      await this.readwiseService.updateNewDocumentTagsWhenReady(uploaded.docs_ids || [], tags);
-      await this.syncReadwiseData({ silent: true });
-      return uploaded;
+      const uploaded = await this.workspaceService.importer.file(fileName, contentType, body, tags, title);
+      this.workspaceService.afterReaderChange();
+      return { docs_ids: uploaded.readerIds };
     } catch (error) {
       if (error instanceof ReaderAuthenticationError && this.settings.readwiseReaderSessionCookie) {
         this.settings.readwiseReaderSessionCookie = "";
@@ -179,52 +223,56 @@ export class ReadwiseTrackerPlugin extends Plugin {
       await this.readwiseService.validateToken();
       this.notice(t("notice.tokenValid"));
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      this.notice(t("notice.tokenTestFailed", { message }));
+      this.notice(t("notice.tokenTestFailed", { message: errorMessage(error) }));
       if (this.settings.debugLogging) {
         console.error(error);
       }
     }
   }
 
-  async syncReadwiseData(options?: { silent?: boolean; fullHistory?: boolean }): Promise<void> {
+  async syncReadwiseData(options: SyncOptions = {}): Promise<void> {
     if (!this.settings.readwiseToken) {
-      if (!options?.silent) {
+      if (options.throwOnError) throw new Error(TOKEN_MISSING);
+      if (!options.silent) {
         this.notice(t("notice.setToken"));
       }
       return;
     }
 
-    if (this.syncInFlight) {
-      await this.syncInFlight;
-      return;
-    }
-
-    if (!options?.silent) {
-      this.notice(t(options?.fullHistory ? "notice.syncingFullHistory" : "notice.syncing"));
-    }
-
-    this.syncInFlight = (async () => {
-      try {
-        if (options?.fullHistory) {
-          await this.syncService.syncFullHistory(this.settings.debugLogging, options);
-        } else {
-          await this.syncService.sync(this.settings.debugLogging, options);
-        }
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        if (this.settings.debugLogging) {
-          console.error(error);
-        }
-        if (!options?.silent) {
-          this.notice(t("notice.syncFailed", { message }));
-        }
-      } finally {
-        this.syncInFlight = null;
+    // A second caller joins the running sync instead of starting another one.
+    if (!this.syncInFlight) {
+      if (!options.silent) {
+        this.notice(t(options.fullHistory ? "notice.syncingFullHistory" : "notice.syncing"));
       }
-    })();
+      this.lastSyncError = undefined;
+      this.syncInFlight = this.runSync(options).finally(() => {
+        this.syncInFlight = null;
+      });
+      await this.syncInFlight;
+      this.workspaceService.reload();
+    } else {
+      await this.syncInFlight;
+    }
 
-    await this.syncInFlight;
+    if (options.throwOnError && this.lastSyncError) throw this.lastSyncError;
+  }
+
+  private async runSync(options: SyncOptions): Promise<void> {
+    try {
+      if (options.fullHistory) {
+        await this.syncService.syncFullHistory(this.settings.debugLogging, options);
+      } else {
+        await this.syncService.sync(this.settings.debugLogging, options);
+      }
+    } catch (error) {
+      this.lastSyncError = error;
+      if (this.settings.debugLogging) {
+        console.error(error);
+      }
+      if (!options.silent) {
+        this.notice(t("notice.syncFailed", { message: errorMessage(error) }));
+      }
+    }
   }
 
   async triggerReadwiseOfficialSyncAndWait(): Promise<void> {

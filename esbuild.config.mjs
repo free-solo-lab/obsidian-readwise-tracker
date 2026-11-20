@@ -1,6 +1,44 @@
 import esbuild from "esbuild";
 import process from "process";
 import { builtinModules } from "node:module";
+import { readFile, readdir } from "node:fs/promises";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { gzipSync } from "node:zlib";
+
+/**
+ * Obsidian plugins ship as a single main.js, so pdf.js's worker, CMaps and standard
+ * fonts are gzipped into the bundle behind the virtual modules `rwt-pdf-worker` and
+ * `rwt-pdf-assets` (typed in src/workspace/vendor.d.ts) and unpacked only when a PDF is read.
+ */
+const packed = (bytes) => gzipSync(bytes, { level: 9 }).toString("base64");
+
+const require = createRequire(import.meta.url);
+const pdfRoot = path.dirname(require.resolve("pdfjs-dist/package.json"));
+const pdfAssets = {
+	name: "bundled-pdf-resources",
+	setup(build) {
+		build.onResolve({ filter: /^rwt-pdf-(worker|assets)$/ }, (args) => ({
+			path: args.path,
+			namespace: "rwt-pdf",
+		}));
+		build.onLoad({ filter: /.*/, namespace: "rwt-pdf" }, async (args) => {
+			if (args.path === "rwt-pdf-worker") {
+				const worker = await readFile(path.join(pdfRoot, "legacy/build/pdf.worker.min.mjs"));
+				return { contents: packed(worker), loader: "text" };
+			}
+			const result = {};
+			for (const [key, folder] of [["cmaps", "cmaps"], ["fonts", "standard_fonts"]]) {
+				result[key] = {};
+				for (const name of await readdir(path.join(pdfRoot, folder))) {
+					if (!/\.(bcmap|pfb|ttf)$/.test(name)) continue;
+					result[key][name] = packed(await readFile(path.join(pdfRoot, folder, name)));
+				}
+			}
+			return { contents: JSON.stringify(result), loader: "json" };
+		});
+	},
+};
 
 const banner =
 `/*
@@ -17,6 +55,7 @@ const context = await esbuild.context({
 	},
 	entryPoints: ["main.ts"],
 	bundle: true,
+	plugins: [pdfAssets],
 	define: {
 		"process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development"),
 	},
@@ -51,6 +90,7 @@ const context = await esbuild.context({
 	target: "es2018",
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
+	minify: prod,
 	treeShaking: true,
 	outfile: "main.js",
 });

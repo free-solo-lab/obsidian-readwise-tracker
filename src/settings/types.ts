@@ -2,6 +2,12 @@ export type ReadwiseSyncLocation = "new" | "later" | "shortlist" | "feed" | "arc
 
 export const ALL_SYNC_LOCATIONS: ReadwiseSyncLocation[] = ["new", "later", "shortlist", "feed", "archive"];
 
+/** How the reader last saw a book in the workspace: its translation into `language`, or the original. */
+export interface WorkspaceTranslationView {
+  language: string;
+  translation: boolean;
+}
+
 export interface ReadwiseTrackerSettings {
   readwiseToken: string;
   readwiseReaderSessionCookie: string;
@@ -9,6 +15,14 @@ export interface ReadwiseTrackerSettings {
   readwiseBooksFolder: string;
   readwiseLinkedHighlightsFolder: string;
   readwiseInboxFolder: string;
+  /** Model id for book dialogs through Codex Bridge; empty uses the Bridge default. */
+  workspaceAiModel: string;
+  /** Ask Codex Bridge for web search and the MCP servers allowed there (e.g. Readwise). */
+  workspaceAiFullAccess: boolean;
+  /** Send reading progress from the book workspace to Reader; a finished book is archived there. */
+  workspaceMirrorProgress: boolean;
+  /** Per workspace document id: the text the reader last had on screen (translation or original). */
+  workspaceTranslationViews: Record<string, WorkspaceTranslationView>;
   /**
    * Reader locations used to bootstrap an empty tracker. Later regular syncs fetch only
    * documents changed since the previous successful sync across every location.
@@ -38,6 +52,10 @@ export const DEFAULT_SETTINGS: ReadwiseTrackerSettings = {
   readwiseBooksFolder: "Readwise/Books",
   readwiseLinkedHighlightsFolder: "Readwise/Highlights",
   readwiseInboxFolder: "Inbox/Readwise",
+  workspaceAiModel: "",
+  workspaceAiFullAccess: false,
+  workspaceMirrorProgress: false,
+  workspaceTranslationViews: {},
   syncLocations: ["new", "later", "shortlist"],
   requestDelayMs: 3200,
   maxRetries: 8,

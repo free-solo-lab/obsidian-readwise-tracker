@@ -15,7 +15,10 @@ function removeLegacyPlanningSettings(settings: Record<string, unknown>): void {
 
 export async function loadPluginSettings(plugin: Plugin): Promise<ReadwiseTrackerSettings> {
   const stored: unknown = await plugin.loadData();
-  const loaded = Object.assign({}, isPluginDataRecord(stored) ? stored : {});
+  const loaded: Record<string, unknown> = {};
+  if (isPluginDataRecord(stored)) for (const key of Object.keys(DEFAULT_SETTINGS)) {
+    if (key in stored) loaded[key] = stored[key];
+  }
   removeLegacyPlanningSettings(loaded);
   return Object.assign({}, DEFAULT_SETTINGS, loaded);
 }
@@ -25,7 +28,8 @@ export async function savePluginSettings(
   settings: ReadwiseTrackerSettings,
 ): Promise<void> {
   await updatePluginData(plugin, (existing) => {
-    const next = Object.assign({}, existing, settings) as Record<string, unknown>;
+    const next = { ...existing };
+    for (const key of Object.keys(DEFAULT_SETTINGS) as Array<keyof ReadwiseTrackerSettings>) next[key] = settings[key];
     removeLegacyPlanningSettings(next);
     return next;
   });

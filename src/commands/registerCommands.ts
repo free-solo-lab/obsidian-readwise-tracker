@@ -4,6 +4,14 @@ import { t } from "../i18n";
 
 export function registerCommands(plugin: ReadwiseTrackerPlugin): void {
   plugin.addCommand({
+    id: "readwise-book-workspace",
+    name: t("command.openWorkspace"),
+    callback: async () => {
+      await plugin.openBookWorkspace(plugin.getSelectedHighlightsBookId() || "");
+    },
+  });
+
+  plugin.addCommand({
     id: "readwise-stats",
     name: t("command.openHighlights"),
     callback: async () => {

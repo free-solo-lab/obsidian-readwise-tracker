@@ -5,6 +5,8 @@ import type { LocalBook, PluginData } from "../../src/models/store";
 import { DataManager } from "../../src/services/dataManager";
 import { savePluginSettings } from "../../src/settings/persistence";
 import { DEFAULT_SETTINGS } from "../../src/settings/types";
+import { updatePluginData } from "../../src/services/pluginDataPersistence";
+import { loadPluginSettings } from "../../src/settings/persistence";
 
 const book: LocalBook = {
   id: "book",
@@ -18,6 +20,15 @@ const book: LocalBook = {
   reading_progress: 50,
   location: "archive",
 };
+
+test('stale analytics and settings snapshots cannot replace a newer import journal',async()=>{
+  let stored:Record<string,unknown>={workspaceImports:{old:{state:'local'}},books:{}};
+  const plugin={loadData:async()=>stored,saveData:async(value:Record<string,unknown>)=>{stored=value;}} as unknown as Plugin;
+  const manager=new DataManager(plugin);await manager.loadData();const settings=await loadPluginSettings(plugin);
+  await updatePluginData(plugin,current=>({...current,workspaceImports:{new:{state:'registered',readerIds:['remote']}}}));
+  await Promise.all([manager.saveBook(book),savePluginSettings(plugin,settings)]);
+  assert.deepEqual(stored.workspaceImports,{new:{state:'registered',readerIds:['remote']}});assert.ok((stored.books as Record<string,unknown>).book);
+});
 
 test("saveReaderLocationChange persists the book and pending confirmation together", async () => {
   let saved: PluginData | undefined;

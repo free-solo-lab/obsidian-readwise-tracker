@@ -5,7 +5,11 @@ import type { ReadwiseTrackerViewHost } from '../plugin/contracts';
 import { LocalBook, ReadingActivityDay } from '../models/store';
 import { findBookNoteFile, findHighlightFilesForBook, normalizeSearchName } from '../services/readwiseFiles';
 import { parseHighlightNote } from '../services/readwiseHighlightParsing';
+import { readHighlightMetadata } from '../services/readwiseHighlightMetadata';
+import { readerBookUrl } from '../services/readerBookUrl';
+import { errorMessage } from '../utils/errors';
 import { formatDurationCompact, getCurrentLocale, getDateLocale, getSortLocale, t } from '../i18n';
+import { matchesArchiveFilter, type BookArchiveFilter } from '../utils/bookArchive';
 import { compareBooksByRecentActivity, getMinutesForDay, getRemainingMinutes } from './dashboardHelpers';
 
 export const STATS_VIEW_TYPE = 'readwise-stats-view';
@@ -89,15 +93,6 @@ function getImportFileTitle(file: File): string {
     return file.name.replace(/\.[^.]+$/, '').trim() || file.name;
 }
 
-function escapeHtml(value: string): string {
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
 function getReaderFileContentType(file: File): string | null {
     const extension = file.name.split('.').pop()?.toLowerCase() || '';
     if (extension === 'epub') return 'application/epub+zip';
@@ -122,6 +117,13 @@ function mergeImportTags(tags: string[], pending = ''): string[] {
     return Array.from(unique.values());
 }
 
+const BOOK_PICKER_LIMIT = 50;
+const BOOK_FILTER_LABELS = {
+    all: 'picker.filterAll',
+    active: 'picker.filterActive',
+    archive: 'picker.filterArchive',
+} as const;
+
 const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin }) => {
     const [books, setBooks] = React.useState<LocalBook[]>([]);
     const [readingActivityByBook, setReadingActivityByBook] = React.useState<Record<string, Record<string, ReadingActivityDay>>>({});
@@ -136,6 +138,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         () => plugin.getSelectedHighlightsBookId(),
     );
     const [bookQuery, setBookQuery] = React.useState('');
+    const [bookArchiveFilter, setBookArchiveFilter] = React.useState<BookArchiveFilter>('all');
     const [bookPickerOpen, setBookPickerOpen] = React.useState(false);
     const [importMenuOpen, setImportMenuOpen] = React.useState(false);
     const [importDialog, setImportDialog] = React.useState<'url' | 'upload' | null>(null);
@@ -222,6 +225,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         if (selectedBookId) return books.find((b) => b.id === selectedBookId) || null;
         return readingBook;
     }, [books, readingBook, selectedBookId]);
+    const activeReaderUrl = activeBook ? readerBookUrl(activeBook) : null;
 
     const availableBookTags = React.useMemo(() => {
         const current = new Set((activeBook?.tags || []).map((tag) => tag.toLocaleLowerCase()));
@@ -291,15 +295,37 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         return findHighlightFilesForBook(plugin.app, plugin.settings, activeBook);
     }, [activeBook, plugin.app, plugin.settings]);
 
+    const recoveredMetadata = React.useRef(new Map<string, { mtime: number; metadata: ReturnType<typeof readHighlightMetadata> }>());
+    const [metadataRevision, setMetadataRevision] = React.useState(0);
+    React.useEffect(() => {
+        let active = true;
+        const pending = highlightsFiles.filter((file) => {
+            const fm = plugin.app.metadataCache.getFileCache(file)?.frontmatter as Record<string, unknown> | undefined;
+            return (!fm || fm.index == null || typeof fm.title !== 'string') && recoveredMetadata.current.get(file.path)?.mtime !== file.stat.mtime;
+        });
+        void (async () => {
+            for (let offset = 0; offset < pending.length && active; offset += 8) {
+                await Promise.all(pending.slice(offset, offset + 8).map(async (file) => {
+                    const mtime = file.stat.mtime;
+                    try {
+                        const text = await plugin.app.vault.cachedRead(file);
+                        if (!active || file.stat.mtime !== mtime) return;
+                        recoveredMetadata.current.set(file.path, { mtime, metadata: readHighlightMetadata(file.basename, undefined, text) });
+                    } catch { /* Filename numbering still works if a file cannot be read. */ }
+                }));
+            }
+            if (active && pending.length) setMetadataRevision((value) => value + 1);
+        })();
+        return () => { active = false; };
+    }, [highlightsFiles, plugin.app]);
+
     const highlightItems = React.useMemo(() => {
         const items = highlightsFiles.map((f) => {
             const cache = plugin.app.metadataCache.getFileCache(f);
             const fm: Record<string, unknown> | undefined = cache?.frontmatter;
-            const title = typeof fm?.title === 'string' ? fm.title : f.basename;
-            const index = typeof fm?.index === 'number' ? fm.index : undefined;
-            const date = typeof fm?.date === 'string' ? fm.date : '';
-            const dateTs = date ? new Date(date).getTime() : Number.NaN;
-            return { file: f, title, index, date, dateTs };
+            const recovered = recoveredMetadata.current.get(f.path);
+            const metadata = recovered?.mtime === f.stat.mtime ? recovered.metadata : readHighlightMetadata(f.basename, fm);
+            return { file: f, ...metadata };
         });
 
         const dir = highlightsSortDir === 'asc' ? 1 : -1;
@@ -320,17 +346,17 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         });
 
         return sorted;
-    }, [highlightsFiles, highlightsSort, highlightsSortDir, plugin.app.metadataCache, sortLocale]);
+    }, [highlightsFiles, highlightsSort, highlightsSortDir, plugin.app.metadataCache, sortLocale, metadataRevision]);
 
     const bookMatches: LocalBook[] = React.useMemo(() => {
         const q = normalizeSearchName(bookQuery);
         const byRecentActivity = (a: LocalBook, b: LocalBook) =>
             compareBooksByRecentActivity(a, b, readingActivityByBook, sortLocale);
         const list = books
-            .slice()
+            .filter((b) => matchesArchiveFilter(b, bookArchiveFilter))
             .sort(byRecentActivity);
 
-        if (!q) return list.slice(0, 20);
+        if (!q) return list.slice(0, BOOK_PICKER_LIMIT);
 
         const scored = list
             .map((b) => {
@@ -342,8 +368,8 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
             .filter((x) => Number.isFinite(x.score))
             .sort((a, b) => a.score - b.score || byRecentActivity(a.b, b.b));
 
-        return scored.slice(0, 20).map((x) => x.b);
-    }, [bookQuery, books, readingActivityByBook, sortLocale]);
+        return scored.slice(0, BOOK_PICKER_LIMIT).map((x) => x.b);
+    }, [bookQuery, bookArchiveFilter, books, readingActivityByBook, sortLocale]);
 
     const closeImportDialog = React.useCallback(() => {
         if (importBusy) return;
@@ -411,7 +437,6 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
             return;
         }
 
-        const extension = file.name.split('.').pop()?.toLowerCase() || '';
         const contentType = getReaderFileContentType(file);
         if (!contentType) {
             setImportStatus(t('stats.importFileUnsupported'));
@@ -421,27 +446,13 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         setImportBusy(true);
         setImportStatus(t('stats.importSaving'));
         try {
-            if (extension === 'epub' || extension === 'pdf') {
-                await plugin.uploadReaderFile(
-                    file.name,
-                    contentType,
-                    await file.arrayBuffer(),
-                    mergeImportTags(importTags, importTagInput),
-                );
-            } else {
-                const text = await file.text();
-                const isHtml = extension === 'html' || extension === 'htm' || file.type === 'text/html';
-                await plugin.saveReaderDocument({
-                    url: `https://obsidian.local/readwise-import/${encodeURIComponent(file.name)}#${Date.now()}`,
-                    html: isHtml ? text : `<article><pre>${escapeHtml(text)}</pre></article>`,
-                    should_clean_html: true,
-                    title: importTitle.trim() || getImportFileTitle(file),
-                    tags: mergeImportTags(importTags, importTagInput),
-                    location: 'new',
-                    category: 'article',
-                    saved_using: 'obsidian-readwise-tracker',
-                });
-            }
+            await plugin.uploadReaderFile(
+                file.name,
+                contentType,
+                await file.arrayBuffer(),
+                mergeImportTags(importTags, importTagInput),
+                importTitle.trim() || getImportFileTitle(file),
+            );
             setImportStatus(t('stats.importSaved'));
             loadData();
             window.setTimeout(() => closeImportDialog(), 700);
@@ -482,6 +493,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                 contentType,
                 await file.arrayBuffer(),
                 mergeImportTags(importTags, importTagInput),
+                importTitle.trim() || getImportFileTitle(file),
             );
             setImportStatus(t('stats.importSaved'));
             setReaderLoginRequired(false);
@@ -494,7 +506,7 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
         } finally {
             setImportBusy(false);
         }
-    }, [closeImportDialog, importTagInput, importTags, plugin, readerEmail, readerPassword, selectedImportFile]);
+    }, [closeImportDialog, importTagInput, importTags, importTitle, plugin, readerEmail, readerPassword, selectedImportFile]);
 
     return (
         <div className="readwise-stats-root p-4">
@@ -515,8 +527,23 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                             className="readwise-book-search-input"
                         />
 
-                        {bookPickerOpen && bookMatches.length > 0 ? (
+                        {bookPickerOpen ? (
                             <div className="readwise-book-picker">
+                                <div className="readwise-book-picker-filter" role="tablist">
+                                    {(['all', 'active', 'archive'] as const).map((filter) => (
+                                        <button
+                                            key={filter}
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={bookArchiveFilter === filter}
+                                            className={`readwise-book-picker-filter-item${bookArchiveFilter === filter ? ' is-active' : ''}`}
+                                            onMouseDown={(e) => e.preventDefault()}
+                                            onClick={() => setBookArchiveFilter(filter)}
+                                        >
+                                            {t(BOOK_FILTER_LABELS[filter])}
+                                        </button>
+                                    ))}
+                                </div>
                                 {bookMatches.map((b) => (
                                     <div
                                         key={b.id}
@@ -641,6 +668,36 @@ const StatsComponent: React.FC<{ plugin: ReadwiseTrackerViewHost }> = ({ plugin 
                             <div className="readwise-selected-book-author">
                                 {activeBook.author || ''}
                             </div>
+                            <button
+                                type="button"
+                                className="readwise-open-workspace"
+                                onClick={() => {
+                                    void plugin.openBookWorkspace(activeBook.id).catch((error: unknown) => {
+                                        new Notice(errorMessage(error));
+                                    });
+                                }}
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                    <path d="M9 4v16M14 9h3M14 13h3" />
+                                </svg>
+                                <span>{t('stats.openWorkspace')}</span>
+                            </button>
+
+                            {activeReaderUrl ? (
+                                <a
+                                    className="readwise-open-reader"
+                                    href={activeReaderUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        window.open(activeReaderUrl, '_blank', 'noopener,noreferrer');
+                                    }}
+                                >
+                                    <span aria-hidden="true">↗</span> {t('stats.openReader')}
+                                </a>
+                            ) : null}
 
                             <div className="readwise-selected-book-tags">
                                     {(activeBook.tags || []).slice(0, 20).map((t: string) => (
