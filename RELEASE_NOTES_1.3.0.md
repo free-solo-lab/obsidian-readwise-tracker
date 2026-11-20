@@ -30,11 +30,11 @@ AI answers use the separate [Codex Bridge](https://github.com/free-solo-lab/obsi
 - Ask a question from any note; the answer is saved in the dialog's own Markdown file. Send with **Cmd/Ctrl+Enter**; stop and retry are one click away.
 - All questions about a book share one persistent Codex thread that remembers earlier questions and answers. The **Book chat** shows the whole feed.
 - A note's dialog sees only that note by default; switch it to the whole book conversation with the library button.
-- Copy an answer or save it as a thought.
+- Formulas in answers are rendered as math. Copy an answer or save it as a thought.
 - Optional: let AI search the web and use Readwise tools (**Settings → Let AI search the web and use Readwise**). It is off by default; shell and file access are never enabled.
 - Quotes and comments from your notes are sent to OpenAI through Codex only when you send a question (and book text only when you ask for a translation).
 
-![AI dialog: a question about a passage and the answer with a source link](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-ai-dialog.png)
+![AI dialog: a question about a passage and an answer with rendered formulas and a source link](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-ai-dialog.png)
 
 ## Full text and file import
 
