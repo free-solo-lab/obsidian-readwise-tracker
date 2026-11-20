@@ -37,11 +37,11 @@ AI answers use the separate [Codex Bridge](https://github.com/free-solo-lab/obsi
 ## Full text and file import
 
 - The text of a book is found in this order: a text or original already in your vault, the `Full Document` link of the official Readwise export, the Reader API, or a file you choose. Once fetched, it is available offline.
-- Import **HTML, EPUB, PDF (with a text layer), TXT and Markdown** from the right-click menu or the workspace. Originals are saved in `_Assets`, images are kept, and tables stay tables. PDF text is extracted locally; nothing is uploaded for processing.
+- Import **HTML, EPUB, PDF (with a text layer), TXT and Markdown** from the right-click menu or with the paperclip (vault file) and upload (local file) buttons above the text. Originals are saved in `_Assets`, images are kept, and tables stay tables. PDF text is extracted locally; nothing is uploaded for processing.
 - Quote matching handles Markdown formatting, typographic quotes and PDF line breaks. Ambiguous quotes ask you to choose the match instead of guessing. Image-only highlights are matched by address or content hash.
 - Translate the book text with **Translate to…** (through Codex Bridge, so the translated passages are sent to OpenAI via Codex) and switch back to the original at any time; the last view is remembered per book.
 
-![Text toolbar: full screen, attach a file, export, refresh, translate](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-import.png)
+![Text toolbar: full screen, choose a vault file, attach a local file, refresh text and tables, translate](https://raw.githubusercontent.com/free-solo-lab/obsidian-readwise-tracker/1.3.0/assets/img/workspace-import.png)
 
 ## Reader progress (optional)
 
