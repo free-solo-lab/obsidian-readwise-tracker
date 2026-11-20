@@ -371,15 +371,17 @@ export function NoteEditor({
   React.useLayoutEffect(() => {
     const input = ref.current;
     if (input) {
-      input.setCssProps({ height: "auto" });
+      // Measure at natural height (class), then publish the result as a CSS variable.
+      input.addClass("is-measuring");
       const height = Math.max(
         draft ? 96 : comment ? 56 : 140,
         input.scrollHeight,
       );
+      input.removeClass("is-measuring");
       input.setCssProps({
-        height: (draft ? Math.min(240, height) : height) + "px",
-        "overflow-y": draft && height > 240 ? "auto" : "hidden",
+        "--rwt-editor-height": (draft ? Math.min(240, height) : height) + "px",
       });
+      input.toggleClass("is-scrolling", draft && height > 240);
     }
   }, [value, draft, comment]);
   return (

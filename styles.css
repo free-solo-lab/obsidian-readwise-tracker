@@ -2307,6 +2307,9 @@ body.theme-dark .readwise-highlight-card {
 .rwt-origins .rwt-icon { width: 23px; min-width: 23px; height: 23px; }
 .rwt-origins .rwt-icon:first-of-type { margin-left: auto; }
 .rwt-editor { display: block; width: 100%; min-height: 140px; background: transparent !important; border: 0 !important; box-shadow: none !important; border-radius: 0; resize: none; overflow: hidden; font-family: var(--font-text); font-size: 16px; line-height: 1.65; padding: 0 !important; color: var(--text-normal); }
+.rwt-editor { height: var(--rwt-editor-height, auto); }
+.rwt-editor.is-measuring { height: auto; }
+.rwt-editor.is-scrolling { overflow-y: auto; }
 .rwt-editor::placeholder { color: var(--text-faint); }
 .rwt-question { font-family: var(--font-interface); font-size: 14px; min-height: 96px; margin-top: 20px; }
 .rwt-target { background: transparent !important; display: flex; width: 100%; height: auto; justify-content: space-between; padding: 0 0 16px; gap: 12px; white-space: normal; text-align: left; font-size: 17px; font-family: var(--font-text); }
