@@ -61,7 +61,7 @@ AI answers use the separate [Codex Bridge](https://github.com/free-solo-lab/obsi
 - Plugin data stays in your vault. The plugin sends data only to Readwise (sync and Reader, as before) and, if you use AI, to Codex through Codex Bridge.
 - Production dependency audit reports zero known vulnerabilities.
 
-Full description of the workspace: [docs/BOOK_WORKSPACE.md](https://github.com/free-solo-lab/obsidian-readwise-tracker/blob/1.3.0/docs/BOOK_WORKSPACE.md) (Russian).
+Full description of the workspace: [docs/BOOK_WORKSPACE.md](https://github.com/free-solo-lab/obsidian-readwise-tracker/blob/1.3.0/docs/BOOK_WORKSPACE.md).
 
 ## Installation
 

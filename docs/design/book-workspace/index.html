@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Пространство книги — интерактивные макеты</title>
+<title>Book workspace — interactive mock-ups</title>
 <style>
 :root { color-scheme: dark; background: #101315; }
 body { margin: 0; padding: 28px; }
@@ -26,15 +26,15 @@ body > main { max-width: 1600px; margin: auto; }
 })();
 </script>
 </head>
-<body><main><div id="book-workspace-prototype" lang="ru" aria-label="Макеты пространства для работы с книгой">
+<body><main><div id="book-workspace-prototype" lang="en" aria-label="Book workspace mock-ups">
   <div class="bw-gallery">
-    <div class="bw-gallery-heading"><span>ПРОСТРАНСТВО КНИГИ</span><span class="bw-demo">Демо</span></div>
-    <nav class="bw-scenes" aria-label="Экраны макета"></nav>
+    <div class="bw-gallery-heading"><span>BOOK WORKSPACE</span><span class="bw-demo">Demo</span></div>
+    <nav class="bw-scenes" aria-label="Mock-up screens"></nav>
   </div>
   <div class="bw-window">
-    <header class="bw-tabbar"><span class="bw-brand">◇</span><span class="bw-vault">Моя библиотека</span><div class="bw-tab"><i data-lucide="book-open" aria-hidden="true"></i><span>Работа с книгой</span></div><span class="bw-tab-end">Readwise</span></header>
+    <header class="bw-tabbar"><span class="bw-brand">◇</span><span class="bw-vault">My library</span><div class="bw-tab"><i data-lucide="book-open" aria-hidden="true"></i><span>Working with a book</span></div><span class="bw-tab-end">Readwise</span></header>
     <div class="bw-location"></div>
-    <div class="bw-workspace" aria-label="Рабочая область"></div>
+    <div class="bw-workspace" aria-label="Workspace"></div>
     <div class="bw-lineage" hidden></div>
     <footer class="bw-status"></footer>
   </div>
@@ -257,42 +257,42 @@ body > main { max-width: 1600px; margin: auto; }
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
   const books = {
-    attention: { title:'Искусство замечать', author:'Анна Левина', kind:'Книга', chapter:'Внимание и привычка', chapterNo:'03', page:42,
+    attention: { title:'The Art of Noticing', author:'Anna Levina', kind:'Book', chapter:'Attention and habit', chapterNo:'03', page:42,
       notes:[
-        {id:'n1',page:42,title:'Внимание меняет знакомое',quote:'Знакомое становится невидимым не потому, что в нём больше нечего увидеть, а потому, что мы перестали задавать ему вопросы.',comment:'Возможно, хорошее чтение начинается с отказа от ощущения «я уже это знаю».',thoughts:1,ai:1,links:2},
-        {id:'n2',page:48,title:'Вопрос как способ читать',quote:'Вопрос удерживает мысль открытой дольше, чем готовый ответ. Он оставляет место для того, чего мы ещё не понимаем.',comment:'Связать с предыдущей мыслью: внимание можно поддерживать вопросами.',thoughts:1,ai:0,links:1},
-        {id:'n3',page:67,title:'Пауза между чтением и выводом',quote:'Пауза нужна не для того, чтобы остановить мысль, а чтобы заметить, куда она собиралась пойти по привычке.',comment:'Как дать прочитанному время, прежде чем превращать его в вывод?',thoughts:0,ai:0,links:0}
+        {id:'n1',page:42,title:'Attention changes the familiar',quote:'The familiar becomes invisible not because there is nothing left to see in it, but because we stopped asking it questions.',comment:'Perhaps good reading begins by giving up the feeling of “I already know this”.',thoughts:1,ai:1,links:2},
+        {id:'n2',page:48,title:'A question as a way of reading',quote:'A question keeps a thought open longer than a ready answer does. It leaves room for what we do not yet understand.',comment:'Connect with the previous thought: attention can be sustained with questions.',thoughts:1,ai:0,links:1},
+        {id:'n3',page:67,title:'A pause between reading and conclusion',quote:'The pause is not there to stop the thought, but to notice where it was about to go out of habit.',comment:'How can I give what I read some time before turning it into a conclusion?',thoughts:0,ai:0,links:0}
       ],
-      before:'Мы часто принимаем узнавание за понимание. Знакомое слово, привычный маршрут или однажды прочитанная книга обещают нам лёгкость: кажется, достаточно скользнуть взглядом, чтобы снова оказаться в уже известном месте.',
-      after:'Попробуйте задержаться на одной строке. Не ищите в ней немедленной пользы. Спросите себя, что здесь осталось незамеченным при первом чтении и какое собственное предположение вы принесли к этой строке.',
-      ending:'Так внимание становится действием. Мы не просто сохраняем фрагмент текста, но вступаем с ним в разговор — и постепенно замечаем перемену в собственном способе смотреть.' },
-    questions: {title:'Мышление начинается с вопроса',author:'Михаил Серов',kind:'Статья',chapter:'Открытый вопрос',chapterNo:'01',page:3,
+      before:'We often mistake recognition for understanding. A familiar word, a habitual route or a book read once promise us ease: it seems enough to glance over it to find ourselves in a known place again.',
+      after:'Try to linger on a single line. Do not look for immediate benefit in it. Ask yourself what went unnoticed here on the first reading and what assumption of your own you brought to this line.',
+      ending:'This is how attention becomes an action. We do not just save a piece of text, but enter into a conversation with it, and gradually notice a change in our own way of looking.' },
+    questions: {title:'Thinking begins with a question',author:'Mikhail Serov',kind:'Article',chapter:'The open question',chapterNo:'01',page:3,
       notes:[
-        {id:'q1',page:3,title:'Вопрос создаёт направление',quote:'Вопрос не только обнаруживает пробел в знании. Он выбирает направление, в котором это знание будет расти.',comment:'Пришёл сюда из мысли о внимании. Теперь интересно, кто задаёт направление: текст или читатель?',thoughts:0,ai:0,links:1},
-        {id:'q2',page:5,title:'Не закрывать неопределённость',quote:'Иногда полезнее уточнить вопрос, чем поспешить с ответом.',comment:'Сопоставить с паузой в чтении.',thoughts:0,ai:0,links:0}
-      ],before:'Мы привыкли оценивать мысль по ясности её вывода. Но до вывода существует другая работа: нужно заметить, о чём вообще стоит спросить.',after:'Поэтому хороший вопрос меняется вместе с исследованием. Сохранять его историю так же важно, как сохранять найденные ответы.',ending:'Вернитесь к исходному фрагменту и посмотрите, как новый вопрос изменил его смысл.'},
-    reading: {title:'Чтение как диалог',author:'Моя заметка · Obsidian',kind:'Заметка',chapter:'Разговор с текстом',chapterNo:'01',page:1,
-      notes:[{id:'r1',page:1,title:'Сохранять ход мысли',quote:'Ценность заметки — не только в формулировке, но и в возможности вернуться к тому, из чего она выросла.',comment:'Собрать практику чтения, вопросов и собственных мыслей в одном пространстве.',thoughts:0,ai:0,links:1}],before:'Книга становится собеседником, когда я начинаю отмечать собственные возражения, вопросы и неожиданные ассоциации.',after:'Связи помогают продолжить этот разговор через другие книги и свои записи.',ending:'Не терять исходную строку — значит оставлять себе возможность пересмотреть вывод.'},
-    pause: {title:'Практика медленного внимания',author:'Елена Белова',kind:'Книга',chapter:'Задержаться на мысли',chapterNo:'02',page:28,
-      notes:[{id:'p1',page:28,title:'Остаться с наблюдением',quote:'Наблюдение становится точнее, когда мы позволяем ему существовать до объяснения.',comment:'Вторая сторона чтения: дать вопросу время.',thoughts:0,ai:0,links:1}],before:'Желание немедленно назвать увиденное часто опережает само наблюдение.',after:'Небольшая пауза даёт возможность различить новые детали.',ending:'Понимание начинается там, где внимание перестаёт торопиться.'}
+        {id:'q1',page:3,title:'A question creates a direction',quote:'A question does not only reveal a gap in knowledge. It chooses the direction in which that knowledge will grow.',comment:'Came here from the thought about attention. Now it is interesting who sets the direction: the text or the reader?',thoughts:0,ai:0,links:1},
+        {id:'q2',page:5,title:'Do not close the uncertainty',quote:'Sometimes it is more useful to refine the question than to hurry with an answer.',comment:'Compare with the pause in reading.',thoughts:0,ai:0,links:0}
+      ],before:'We are used to judging a thought by the clarity of its conclusion. But before the conclusion there is other work: you have to notice what is worth asking about in the first place.',after:'That is why a good question changes along with the inquiry. Keeping its history is as important as keeping the answers found.',ending:'Go back to the original fragment and see how the new question changed its meaning.'},
+    reading: {title:'Reading as a dialogue',author:'My note · Obsidian',kind:'Note',chapter:'A conversation with the text',chapterNo:'01',page:1,
+      notes:[{id:'r1',page:1,title:'Keep the train of thought',quote:'The value of a note lies not only in its wording but in being able to return to what it grew out of.',comment:'Bring the practice of reading, questions and my own thoughts together in one space.',thoughts:0,ai:0,links:1}],before:'A book becomes an interlocutor when I start marking my own objections, questions and unexpected associations.',after:'Links help continue this conversation through other books and my own records.',ending:'Not losing the original line means leaving yourself the chance to reconsider the conclusion.'},
+    pause: {title:'The Practice of Slow Attention',author:'Elena Belova',kind:'Book',chapter:'Lingering on a thought',chapterNo:'02',page:28,
+      notes:[{id:'p1',page:28,title:'Stay with the observation',quote:'Observation becomes more precise when we let it exist before explanation.',comment:'The other side of reading: give the question time.',thoughts:0,ai:0,links:1}],before:'The urge to name what we see right away often outruns the observation itself.',after:'A small pause makes it possible to tell new details apart.',ending:'Understanding begins where attention stops hurrying.'}
   };
   const scenes = [
-    {id:'notes',name:'Заметки'}, {id:'source',name:'Контекст'},
-    {id:'thought',name:'Мысли'}, {id:'expanded',name:'Фокус'},
-    {id:'reading',name:'Текст + мысль'}, {id:'ai',name:'ИИ'},
-    {id:'links',name:'Связи'}, {id:'destination',name:'Другой текст'},
-    {id:'add-sources',name:'Добавить заметки'}
+    {id:'notes',name:'Notes'}, {id:'source',name:'Context'},
+    {id:'thought',name:'Thoughts'}, {id:'expanded',name:'Focus'},
+    {id:'reading',name:'Text + thought'}, {id:'ai',name:'AI'},
+    {id:'links',name:'Links'}, {id:'destination',name:'Another text'},
+    {id:'add-sources',name:'Add notes'}
   ];
   const sampleThoughts = {
-    n1:'Чтобы увидеть в знакомом что-то новое, недостаточно перечитать его ещё раз. Нужен вопрос, который изменит направление внимания.\n\nЗаметка может быть не итогом чтения, а началом следующего вопроса: замечать → спрашивать → возвращаться к тексту.',
-    n2:'Хороший вопрос задаёт направление следующему чтению.\n\nПопробовать сохранять не только ответы, но и то, как менялся сам вопрос. Это позволит увидеть движение мысли.',
+    n1:'To see something new in the familiar, rereading it once more is not enough. You need a question that changes the direction of attention.\n\nA note can be not the outcome of reading but the start of the next question: notice → ask → return to the text.',
+    n2:'A good question sets the direction for the next reading.\n\nTry keeping not only the answers but also how the question itself changed. That makes the movement of thought visible.',
     n3:''
   };
   let state = {version:3,scene:'notes',book:'attention',context:'n1',sourceFor:'n1',source:false,right:null,focus:false,center:'notes',lineage:false,history:[],thoughts:{},thoughtByNote:{},nextThought:1,chats:{},chatOrigins:{},chatByNote:{},questionDrafts:{},relationOrigins:{},relationFocus:null,picker:null,selected:[],scrollPositions:{},panelScrollPositions:{}};
   const book = () => books[state.book];
   const note = id => book().notes.find(n=>n.id===id)||book().notes[0];
   const scope = id => state.book+':'+id;
-  const thoughtLabel = thought => thought.body.trim().split('\n')[0].slice(0,64)||'Мысль';
+  const thoughtLabel = thought => thought.body.trim().split('\n')[0].slice(0,64)||'Thought';
   const thoughtIds = (id=state.context) => Object.keys(state.thoughts).filter(key=>state.thoughts[key].documentId===state.book&&state.thoughts[key].origins.includes(id));
   function createThought(body='',origins=[state.context],extra={}){
     const id='t'+state.nextThought++;
@@ -348,65 +348,65 @@ body > main { max-width: 1600px; margin: auto; }
     for(const id of ['n1','n2'])if(!thoughtIds(id).length)createThought(sampleThoughts[id],[id]);
     state.book=current;
     if(!Object.hasOwn(state.chats,'attention:n1'))state.chats['attention:n1']=[
-      {role:'user',text:'Как превратить эту мысль в практику чтения?'},
-      {role:'assistant',text:'Вернитесь к знакомому фрагменту с одним открытым вопросом: что здесь вы приняли за очевидное? Сохраните первое предположение и проверьте, изменится ли оно после следующего чтения.'}
+      {role:'user',text:'How can I turn this thought into a reading practice?'},
+      {role:'assistant',text:'Return to a familiar fragment with one open question: what did you take for granted here? Save your first assumption and check whether it changes after the next reading.'}
     ];
     if(!Object.hasOwn(state.chats,'attention:n2'))state.chats['attention:n2']=[
-      {role:'user',text:'Как сохранить хороший вопрос, не торопясь с ответом?'},
-      {role:'assistant',text:'Запишите сам вопрос и первое предположение. После следующего фрагмента вернитесь к этой записи: уточните формулировку, но сохраните исходную версию. Изменение вопроса тоже показывает, как развивается понимание.'}
+      {role:'user',text:'How can I keep a good question without hurrying to an answer?'},
+      {role:'assistant',text:'Write down the question itself and your first assumption. After the next fragment, return to this record: refine the wording but keep the original version. The change in the question also shows how understanding develops.'}
     ];
   }
   loadSaved(window.openai?.widgetState);
   function glyphs(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
   function button(action,label,cls='bw-tiny-button',extra=''){return `<button type="button" data-action="${action}" class="${cls} cursor-interaction" ${extra}>${label}</button>`;}
   function ib(action,name,label,extra=''){return button(action,icon(name),'bw-icon-button',`aria-label="${esc(label)}" data-tooltip="${esc(label)}" ${extra}`);}
-  function rail(key,label,count,name,active=false){return `<aside class="bw-rail ${['source','notes'].includes(key)?'':'bw-rail-right'} ${active?'is-active':''}">${button('rail:'+key,`${icon(name)}<span class="bw-rail-label">${label}</span>${key==='source'?'<span class="bw-book-map" aria-hidden="true"></span>':''}<span class="bw-rail-count" ${count?'':'hidden'}>${count}</span>`,'bw-rail-button',`aria-label="${active?'Свернуть':'Открыть'}: ${label}" aria-expanded="${active}"`)}</aside>`;}
+  function rail(key,label,count,name,active=false){return `<aside class="bw-rail ${['source','notes'].includes(key)?'':'bw-rail-right'} ${active?'is-active':''}">${button('rail:'+key,`${icon(name)}<span class="bw-rail-label">${label}</span>${key==='source'?'<span class="bw-book-map" aria-hidden="true"></span>':''}<span class="bw-rail-count" ${count?'':'hidden'}>${count}</span>`,'bw-rail-button',`aria-label="${active?'Collapse':'Open'}: ${label}" aria-expanded="${active}"`)}</aside>`;}
   function head(title,actions=''){return `<header class="bw-pane-head"><div class="bw-pane-title">${title}</div><div class="bw-pane-actions">${actions}</div></header>`;}
-  function sourceChip(id){const n=note(id);return button('source:'+id,icon('quote')+' с. '+n.page,'bw-chip',`aria-label="${esc(n.title)} · страница ${n.page}" data-tooltip="${esc(n.title)}"`);}
-  function contextBlock(origins,kind=null){return `<div class="bw-context"><div class="bw-chips">${origins.map(sourceChip).join('')}</div>${kind?ib('add-sources:'+kind,'plus','Добавить заметки',state.picker?'disabled':''):''}</div>`;}
-  function pickerToolbar(){return `<div class="bw-picker-toolbar"><div class="bw-picker-actions"><span>${esc(state.picker.title)}</span><div>${button('picker-cancel','Отмена')}${button('picker-apply','Добавить'+(state.selected.length?' · '+state.selected.length:''),'bw-solid',state.selected.length?'':'disabled')}</div></div></div>`;}
-  function notesPane(){return `<main class="bw-notes" aria-label="Заметки по книге">${head('Заметки',ib('new-thought','plus','Новая мысль'))}${state.picker?pickerToolbar():''}<div class="bw-note-scroller" data-document="${state.book}" role="region" aria-label="Заметки: прокрутка меняет фокус"><div class="bw-notes-content"><div class="bw-notes-intro"><h1>${esc(book().chapter)}</h1></div>${book().notes.map((n,i)=>{
+  function sourceChip(id){const n=note(id);return button('source:'+id,icon('quote')+' p. '+n.page,'bw-chip',`aria-label="${esc(n.title)} · page ${n.page}" data-tooltip="${esc(n.title)}"`);}
+  function contextBlock(origins,kind=null){return `<div class="bw-context"><div class="bw-chips">${origins.map(sourceChip).join('')}</div>${kind?ib('add-sources:'+kind,'plus','Add notes',state.picker?'disabled':''):''}</div>`;}
+  function pickerToolbar(){return `<div class="bw-picker-toolbar"><div class="bw-picker-actions"><span>${esc(state.picker.title)}</span><div>${button('picker-cancel','Cancel')}${button('picker-apply','Add'+(state.selected.length?' · '+state.selected.length:''),'bw-solid',state.selected.length?'':'disabled')}</div></div></div>`;}
+  function notesPane(){return `<main class="bw-notes" aria-label="Notes on the book">${head('Notes',ib('new-thought','plus','New thought'))}${state.picker?pickerToolbar():''}<div class="bw-note-scroller" data-document="${state.book}" role="region" aria-label="Notes: scrolling changes focus"><div class="bw-notes-content"><div class="bw-notes-intro"><h1>${esc(book().chapter)}</h1></div>${book().notes.map((n,i)=>{
     const linked=state.picker?.base.includes(n.id);
-    return `<article class="bw-note ${state.context===n.id?'is-focused':''}" data-note="${n.id}" ${state.context===n.id?'aria-current="true"':''}><div class="bw-note-top"><${state.picker?'label':'div'} class="bw-note-picker">${state.picker?`<input type="checkbox" data-note-select="${n.id}" ${linked||state.selected.includes(n.id)?'checked':''} ${linked?'disabled':''} aria-label="${linked?'Уже связано':'Добавить'}: ${esc(n.title)}">`:''}<span>${String(i+1).padStart(2,'0')} · ${esc(n.title)}</span></${state.picker?'label':'div'}>${button('source:'+n.id,'с. '+n.page,'bw-note-position',`aria-label="Показать фрагмент на странице ${n.page}"`)}</div><blockquote class="bw-quote">${esc(n.quote)}</blockquote><p class="bw-note-comment">${esc(n.comment)}</p><div class="bw-note-links">${ib('thought:'+n.id,'pen-line','Мысли по заметке')}${ib('ai:'+n.id,'sparkles','Диалог по заметке')}${ib('links:'+n.id,'git-branch','Связанные тексты')}</div></article>`;
+    return `<article class="bw-note ${state.context===n.id?'is-focused':''}" data-note="${n.id}" ${state.context===n.id?'aria-current="true"':''}><div class="bw-note-top"><${state.picker?'label':'div'} class="bw-note-picker">${state.picker?`<input type="checkbox" data-note-select="${n.id}" ${linked||state.selected.includes(n.id)?'checked':''} ${linked?'disabled':''} aria-label="${linked?'Already linked':'Add'}: ${esc(n.title)}">`:''}<span>${String(i+1).padStart(2,'0')} · ${esc(n.title)}</span></${state.picker?'label':'div'}>${button('source:'+n.id,'p. '+n.page,'bw-note-position',`aria-label="Show the fragment on page ${n.page}"`)}</div><blockquote class="bw-quote">${esc(n.quote)}</blockquote><p class="bw-note-comment">${esc(n.comment)}</p><div class="bw-note-links">${ib('thought:'+n.id,'pen-line','Thoughts on the note')}${ib('ai:'+n.id,'sparkles','Dialog about the note')}${ib('links:'+n.id,'git-branch','Linked texts')}</div></article>`;
   }).join('')}</div></div></main>`;}
-  function readerBody(){const n=note(state.sourceFor);return `<h2>${esc(book().chapter)}</h2><p>${esc(book().before)}</p><p class="bw-active-passage"><mark>${esc(n.quote)}</mark></p><p>${esc(book().after)}</p><p>${esc(book().ending)}</p><div class="bw-reader-bottom"><span>с. ${n.page}</span>${ib('reveal-note','arrow-up-right','Вернуться к заметке')}</div>`;}
+  function readerBody(){const n=note(state.sourceFor);return `<h2>${esc(book().chapter)}</h2><p>${esc(book().before)}</p><p class="bw-active-passage"><mark>${esc(n.quote)}</mark></p><p>${esc(book().after)}</p><p>${esc(book().ending)}</p><div class="bw-reader-bottom"><span>p. ${n.page}</span>${ib('reveal-note','arrow-up-right','Back to the note')}</div>`;}
   function stage(className,body,key){return `<div class="bw-panel-stage"><div class="${className}" data-panel-key="${esc(key)}">${body}</div></div>`;}
-  function readerPane(){return `<section class="bw-reader" aria-label="Текст книги">${head('Текст',ib('reader-close','panel-left-close','Свернуть текст'))}${stage('bw-reader-body',readerBody(),'reader:'+state.sourceFor)}</section>`;}
-  function sideHead(){return head({thought:'Мысли',ai:'ИИ',links:'Связи'}[state.right],ib('focus',state.focus?'minimize-2':'maximize-2',state.focus?'Вернуть заметки':'Развернуть панель')+ib('text-beside','columns-2','Текст рядом')+ib('close-right','x','Свернуть панель'));}
+  function readerPane(){return `<section class="bw-reader" aria-label="Book text">${head('Text',ib('reader-close','panel-left-close','Collapse text'))}${stage('bw-reader-body',readerBody(),'reader:'+state.sourceFor)}</section>`;}
+  function sideHead(){return head({thought:'Thoughts',ai:'AI',links:'Links'}[state.right],ib('focus',state.focus?'minimize-2':'maximize-2',state.focus?'Restore notes':'Expand panel')+ib('text-beside','columns-2','Text alongside')+ib('close-right','x','Collapse panel'));}
   function documentThoughts(){
     book().notes.forEach(n=>{if(!thoughtIds(n.id).length)createThought('',[n.id]);});
     const position=id=>book().notes.findIndex(n=>n.id===id);
     return Object.values(state.thoughts).filter(d=>d.documentId===state.book).sort((a,b)=>position(a.origins[0])-position(b.origins[0])||Number(a.id.slice(1))-Number(b.id.slice(1)));
   }
   function entityAttributes(kind,id,origins){return `data-entity-kind="${kind}" data-entity-id="${id}" data-origins="${origins.join(',')}"`;}
-  function thoughtBody(){return documentThoughts().map(d=>`<article class="bw-entity bw-thought-entity" ${entityAttributes('thought',d.id,d.origins)} aria-label="Мысль · ${esc(note(d.origins[0]).title)}">${contextBlock(d.origins,'thought')}<textarea id="bw-thought-${d.id}" class="bw-editor" data-thought-id="${d.id}" aria-label="Своя мысль" placeholder="Записать мысль…">${esc(d.body)}</textarea><div class="bw-thought-tools">${d.fromAI?ib('return-to-ai','sparkles','Открыть исходный диалог',`data-thought-id="${d.id}"`):''}${ib('toggle-lineage','route','Происхождение мысли')}</div></article>`).join('');}
+  function thoughtBody(){return documentThoughts().map(d=>`<article class="bw-entity bw-thought-entity" ${entityAttributes('thought',d.id,d.origins)} aria-label="Thought · ${esc(note(d.origins[0]).title)}">${contextBlock(d.origins,'thought')}<textarea id="bw-thought-${d.id}" class="bw-editor" data-thought-id="${d.id}" aria-label="Your own thought" placeholder="Write a thought…">${esc(d.body)}</textarea><div class="bw-thought-tools">${d.fromAI?ib('return-to-ai','sparkles','Open the source dialog',`data-thought-id="${d.id}"`):''}${ib('toggle-lineage','route','Origin of the thought')}</div></article>`).join('');}
   function chatBody(){return book().notes.map(n=>{
     const anchor=n.id,key=scope(anchor),origins=state.chatOrigins[key]||[anchor],messages=state.chats[key]||[];
-    return `<article class="bw-entity bw-conversation-entity" ${entityAttributes('ai',anchor,origins)} aria-label="Диалог · ${esc(n.title)}">${contextBlock(origins,'ai')}<div class="bw-chat">${messages.map((m,i)=>`<div class="bw-message"><div class="bw-message-name">${m.role==='user'?'Вы':icon('sparkles')+' ИИ'}</div><p>${esc(m.text)}</p>${m.role==='assistant'?ib('ai-to-thought','pen-line','Сохранить ответ как мысль',`data-message-index="${i}" data-conversation-anchor="${anchor}"`):''}</div>`).join('')}</div><form class="bw-chat-form" data-conversation="${esc(key)}"><textarea id="bw-question-${anchor}" aria-label="Вопрос к ИИ" placeholder="Спросить об этом фрагменте…" required>${esc(state.questionDrafts[key]||'')}</textarea><div class="bw-chat-form-footer"><button type="submit" class="bw-icon-button cursor-interaction" aria-label="Отправить вопрос" data-tooltip="Отправить вопрос">${icon('arrow-up')}</button></div></form></article>`;
+    return `<article class="bw-entity bw-conversation-entity" ${entityAttributes('ai',anchor,origins)} aria-label="Dialog · ${esc(n.title)}">${contextBlock(origins,'ai')}<div class="bw-chat">${messages.map((m,i)=>`<div class="bw-message"><div class="bw-message-name">${m.role==='user'?'You':icon('sparkles')+' AI'}</div><p>${esc(m.text)}</p>${m.role==='assistant'?ib('ai-to-thought','pen-line','Save the answer as a thought',`data-message-index="${i}" data-conversation-anchor="${anchor}"`):''}</div>`).join('')}</div><form class="bw-chat-form" data-conversation="${esc(key)}"><textarea id="bw-question-${anchor}" aria-label="Question for AI" placeholder="Ask about this fragment…" required>${esc(state.questionDrafts[key]||'')}</textarea><div class="bw-chat-form-footer"><button type="submit" class="bw-icon-button cursor-interaction" aria-label="Send question" data-tooltip="Send question">${icon('arrow-up')}</button></div></form></article>`;
   }).join('');}
   function referenceDefinitions(){return state.book==='attention'?[
-    {target:'questions',relation:'Развивает мысль о вопросе',description:'О том, как вопросы направляют внимание и помогают не закрывать мысль первым ответом.'},
-    {target:'reading',relation:'Продолжение собственной мысли',description:'Личная практика: читать, задавать вопросы и сохранять путь от фрагмента к выводу.'},
-    {target:'pause',relation:'Другой взгляд на внимание',description:'Практики наблюдения, паузы и возвращения к знакомому без готовой интерпретации.'}
-  ]:[{target:'attention',relation:'Исходная связь',description:'Книга и заметки, из которых выросло это исследование.'}];}
+    {target:'questions',relation:'Develops the thought about the question',description:'On how questions direct attention and help keep a thought from closing on the first answer.'},
+    {target:'reading',relation:'Continuation of my own thought',description:'Personal practice: read, ask questions and keep the path from fragment to conclusion.'},
+    {target:'pause',relation:'Another view on attention',description:'Practices of observation, pausing and returning to the familiar without a ready interpretation.'}
+  ]:[{target:'attention',relation:'Original link',description:'The book and notes this inquiry grew out of.'}];}
   function visibleReferences(){const anchor=state.picker?.kind==='relation'?state.picker.anchor:state.context;return referenceDefinitions().filter(r=>relationSources(r.target).includes(anchor)||(state.picker?.kind==='relation'&&state.picker.target===r.target));}
-  function reference(r){const b=books[r.target];return `<article class="bw-reference bw-entity ${state.picker?.target===r.target?'is-pick-target':''}" data-reference="${r.target}" ${entityAttributes('links',r.target,relationSources(r.target))}><div class="bw-kicker">${b.kind==='Заметка'?'Obsidian':b.kind}</div><h3>${esc(b.title)}</h3><div class="bw-author">${esc(b.author)}</div><p>${r.description}</p><div class="bw-reference-relation">${icon('git-branch')}${r.relation}</div><div class="bw-reference-footer"><div class="bw-chips">${relationSources(r.target).map(sourceChip).join('')}</div><div>${ib('add-relation:'+r.target,'plus','Добавить заметки к связи',state.picker?'disabled':'')}${ib('navigate:'+r.target,'arrow-up-right','Работать с текстом',`data-via="${esc(r.relation)}"`)}</div></div></article>`;}
-  function linksBody(){const refs=referenceDefinitions();return refs.length?refs.map(reference).join(''):'<div class="bw-empty">Нет связанных текстов</div>';}
+  function reference(r){const b=books[r.target];return `<article class="bw-reference bw-entity ${state.picker?.target===r.target?'is-pick-target':''}" data-reference="${r.target}" ${entityAttributes('links',r.target,relationSources(r.target))}><div class="bw-kicker">${b.kind==='Note'?'Obsidian':b.kind}</div><h3>${esc(b.title)}</h3><div class="bw-author">${esc(b.author)}</div><p>${r.description}</p><div class="bw-reference-relation">${icon('git-branch')}${r.relation}</div><div class="bw-reference-footer"><div class="bw-chips">${relationSources(r.target).map(sourceChip).join('')}</div><div>${ib('add-relation:'+r.target,'plus','Add notes to the link',state.picker?'disabled':'')}${ib('navigate:'+r.target,'arrow-up-right','Work with the text',`data-via="${esc(r.relation)}"`)}</div></div></article>`;}
+  function linksBody(){const refs=referenceDefinitions();return refs.length?refs.map(reference).join(''):'<div class="bw-empty">No linked texts</div>';}
   function panelKey(){return 'stream:'+state.book+':'+state.right;}
   function panelBody(){return state.right==='thought'?thoughtBody():state.right==='ai'?chatBody():linksBody();}
-  function sidePane(){return `<section class="bw-side ${state.right==='thought'?'bw-thought':''}" aria-label="${{thought:'Мысли по заметке',ai:'Диалог по заметке',links:'Связанные тексты'}[state.right]}">${sideHead()}${stage('bw-side-body bw-stream',panelBody(),panelKey())}</section>`;}
+  function sidePane(){return `<section class="bw-side ${state.right==='thought'?'bw-thought':''}" aria-label="${{thought:'Thoughts on the note',ai:'Dialog about the note',links:'Linked texts'}[state.right]}">${sideHead()}${stage('bw-side-body bw-stream',panelBody(),panelKey())}</section>`;}
   function lineage(){
     const d=state.right==='thought'?draft():null;
     const target=state.relationFocus||visibleReferences()[0]?.target;
     const origins=d?d.origins:state.right==='ai'?aiOrigins():state.right==='links'&&target?relationSources(target):[state.context];
     const node=(label,content)=>`<div class="bw-path-node"><span>${label}</span>${content}</div>`;
     const arrow='<span aria-hidden="true">→</span>';
-    return `<div class="bw-lineage-title"><span>Происхождение</span>${ib('toggle-lineage','x','Закрыть происхождение')}</div><div class="bw-path">${node('Книга',button('rail:source',esc(book().title)))}${arrow}${node('Фрагменты',`<div class="bw-path-branches">${origins.map(id=>button('source:'+id,'с. '+note(id).page+' · '+esc(note(id).title))).join('')}</div>`)}${d?arrow+node('Мысль',button('open-thought',esc(thoughtLabel(d)))):''}${state.right==='ai'?arrow+node('ИИ',button('rail:ai','Диалог')):''}${state.right==='links'&&target?arrow+node('Текст',button('navigate:'+target,esc(books[target].title))):''}</div>`;
+    return `<div class="bw-lineage-title"><span>Origin</span>${ib('toggle-lineage','x','Close origin')}</div><div class="bw-path">${node('Book',button('rail:source',esc(book().title)))}${arrow}${node('Fragments',`<div class="bw-path-branches">${origins.map(id=>button('source:'+id,'p. '+note(id).page+' · '+esc(note(id).title))).join('')}</div>`)}${d?arrow+node('Thought',button('open-thought',esc(thoughtLabel(d)))):''}${state.right==='ai'?arrow+node('AI',button('rail:ai','Dialog')):''}${state.right==='links'&&target?arrow+node('Text',button('navigate:'+target,esc(books[target].title))):''}</div>`;
   }
   function startPicker(kind,target=null){
     let base,title,anchor=state.context,thoughtId=null;
-    if(kind==='thought'){const d=draft();base=d.origins.slice();thoughtId=d.id;title='Мысль';}
-    else if(kind==='ai'){anchor=aiNote();base=aiOrigins().slice();title='Диалог';}
+    if(kind==='thought'){const d=draft();base=d.origins.slice();thoughtId=d.id;title='Thought';}
+    else if(kind==='ai'){anchor=aiNote();base=aiOrigins().slice();title='Dialog';}
     else {base=relationSources(target).slice();state.relationFocus=target;title=books[target].title;}
     state.picker={kind,target,anchor,base,title,thoughtId};state.selected=[];
     state.focus=false;state.center='notes';state.source=false;state.right=kind==='relation'?'links':kind;
@@ -543,11 +543,11 @@ body > main { max-width: 1600px; margin: auto; }
     const oldBody=$('.bw-side-body');if(oldBody)state.panelScrollPositions[oldBody.dataset.panelKey]=oldBody.scrollTop;
     $('.bw-scenes').innerHTML=scenes.map((s,i)=>button('scene:'+s.id,`<span class="bw-scene-number">${String(i+1).padStart(2,'0')}</span>${s.name}`,'bw-scene',`aria-pressed="${state.scene===s.id}"`)).join('');
     const back=state.history[state.history.length-1];
-    $('.bw-location').innerHTML=`<div class="bw-main-title">${back?`<div class="bw-provenance">${button('back',icon('arrow-left')+' '+esc(books[back.book].title))}<span>›</span><span>${esc(back.via)}</span></div>`:''}<div class="bw-book-title">${icon('book-open')}${esc(book().title)}</div><div class="bw-book-author">${esc(book().author)}</div></div>${ib('toggle-lineage','route','Происхождение')}`;
+    $('.bw-location').innerHTML=`<div class="bw-main-title">${back?`<div class="bw-provenance">${button('back',icon('arrow-left')+' '+esc(books[back.book].title))}<span>›</span><span>${esc(back.via)}</span></div>`:''}<div class="bw-book-title">${icon('book-open')}${esc(book().title)}</div><div class="bw-book-author">${esc(book().author)}</div></div>${ib('toggle-lineage','route','Origin')}`;
     let html='';
-    if(state.focus&&state.right)html=state.center==='text'?rail('notes','Заметки',book().notes.length,'notebook-pen')+readerPane():rail('source','Текст',book().notes.length,'book-open')+rail('notes','Заметки',book().notes.length,'notebook-pen');
-    else html=(state.source?readerPane():rail('source','Текст',book().notes.length,'book-open'))+notesPane();
-    const labels={thought:['Мысли','pen-line'],ai:['ИИ','sparkles'],links:['Связи','git-branch']};
+    if(state.focus&&state.right)html=state.center==='text'?rail('notes','Notes',book().notes.length,'notebook-pen')+readerPane():rail('source','Text',book().notes.length,'book-open')+rail('notes','Notes',book().notes.length,'notebook-pen');
+    else html=(state.source?readerPane():rail('source','Text',book().notes.length,'book-open'))+notesPane();
+    const labels={thought:['Thoughts','pen-line'],ai:['AI','sparkles'],links:['Links','git-branch']};
     const counts={thought:thoughtIds().filter(id=>state.thoughts[id].body.trim()).length,ai:Number(!!state.chats[aiKey()]?.length),links:visibleReferences().length};
     for(const key of ['thought','ai','links']){if(state.right===key){if(!state.focus||state.center==='text')html+=rail(key,...[labels[key][0],counts[key],labels[key][1]],true);html+=sidePane();}else html+=rail(key,...[labels[key][0],counts[key],labels[key][1]]);}
     $('.bw-workspace').classList.toggle('is-split',!!(state.source||state.right));$('.bw-workspace').innerHTML=html;
@@ -561,8 +561,8 @@ body > main { max-width: 1600px; margin: auto; }
     initialized=true;revealNoteId=null;glyphs();
   }
   function openRight(key){cancelPicker();state.right=key;state.source=false;state.focus=false;state.center='notes';state.scene=key==='thought'?'thought':key;}
-  function go(target,via){if(target===state.book)return;state.history.push({book:state.book,context:state.context,sourceFor:state.sourceFor,right:state.right,source:state.source,focus:state.focus,center:state.center,via:via||'Связанный текст'});state.book=target;cancelPicker();state.relationFocus=null;state.context=book().notes[0].id;state.sourceFor=state.context;state.right=null;state.source=false;state.focus=false;state.center='notes';state.scene='destination';state.lineage=false;revealNoteId=state.context;}
-  function setScene(id){cancelPicker();state.scene=id;state.book='attention';state.history=[];state.context='n1';state.sourceFor='n1';state.relationFocus=null;state.source=id==='source';state.right=['thought','expanded','reading','add-sources'].includes(id)?'thought':['ai','links'].includes(id)?id:null;state.focus=['expanded','reading'].includes(id);state.center=id==='reading'?'text':'notes';state.lineage=false;revealNoteId='n1';if(id==='destination'){state.right='links';go('questions','Развивает мысль о вопросе');}if(id==='add-sources')startPicker('thought');}
+  function go(target,via){if(target===state.book)return;state.history.push({book:state.book,context:state.context,sourceFor:state.sourceFor,right:state.right,source:state.source,focus:state.focus,center:state.center,via:via||'Linked text'});state.book=target;cancelPicker();state.relationFocus=null;state.context=book().notes[0].id;state.sourceFor=state.context;state.right=null;state.source=false;state.focus=false;state.center='notes';state.scene='destination';state.lineage=false;revealNoteId=state.context;}
+  function setScene(id){cancelPicker();state.scene=id;state.book='attention';state.history=[];state.context='n1';state.sourceFor='n1';state.relationFocus=null;state.source=id==='source';state.right=['thought','expanded','reading','add-sources'].includes(id)?'thought':['ai','links'].includes(id)?id:null;state.focus=['expanded','reading'].includes(id);state.center=id==='reading'?'text':'notes';state.lineage=false;revealNoteId='n1';if(id==='destination'){state.right='links';go('questions','Develops the thought about the question');}if(id==='add-sources')startPicker('thought');}
   root.addEventListener('click',event=>{
     const trigger=event.target.closest('button[data-action]');if(!trigger||!root.contains(trigger))return;
     const [action,arg]=trigger.dataset.action.split(':');
@@ -612,14 +612,14 @@ body > main { max-width: 1600px; margin: auto; }
   root.addEventListener('submit',event=>{
     if(!event.target.matches('.bw-chat-form'))return;event.preventDefault();
     const key=event.target.dataset.conversation,input=event.target.querySelector('textarea'),question=input.value.trim();if(!question)return;
-    state.chats[key]||=[];state.chats[key].push({role:'user',text:question},{role:'assistant',text:'Вернитесь к связанным фрагментам и запишите первое предположение. Что в тексте подтверждает его, а что заставляет уточнить вопрос?'});state.questionDrafts[key]='';
+    state.chats[key]||=[];state.chats[key].push({role:'user',text:question},{role:'assistant',text:'Go back to the linked fragments and write down your first assumption. What in the text confirms it, and what makes you refine the question?'});state.questionDrafts[key]='';
     const anchor=key.slice(state.book.length+1),entity=$('.bw-side-body:not(.bw-transition-ghost) [data-entity-kind="ai"][data-entity-id="'+anchor+'"]');
     const scroll=$('.bw-side-body');const top=scroll?.scrollTop||0;
     if(entity){const holder=document.createElement('div');holder.innerHTML=chatBody();const replacement=holder.querySelector('[data-entity-id="'+anchor+'"]');if(replacement)entity.replaceWith(replacement);if(scroll)suppressScroll(scroll,top,false);markRightFocus();glyphs();}persist();
   });
   window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState){loadSaved(event.detail.globals.widgetState);render();}});
   revealNoteId=state.context;render();
-  if(globalThis.Tweak){const design={notesRatio:1,readingSize:17};const tweak=new Tweak({container:root,onChange:()=>{root.style.setProperty('--bw-split',design.notesRatio);root.style.setProperty('--bw-reader-size',design.readingSize+'px');}});tweak.addSlider(design,'notesRatio',{label:'Ширина заметок',min:.7,max:1.4,step:.1});tweak.addSlider(design,'readingSize',{label:'Размер текста книги',min:16,max:21,unit:'px'});}
+  if(globalThis.Tweak){const design={notesRatio:1,readingSize:17};const tweak=new Tweak({container:root,onChange:()=>{root.style.setProperty('--bw-split',design.notesRatio);root.style.setProperty('--bw-reader-size',design.readingSize+'px');}});tweak.addSlider(design,'notesRatio',{label:'Notes width',min:.7,max:1.4,step:.1});tweak.addSlider(design,'readingSize',{label:'Book text size',min:16,max:21,unit:'px'});}
 })();
 </script>
 </main></body>

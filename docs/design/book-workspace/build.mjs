@@ -2,11 +2,11 @@ import { readFile, writeFile } from 'node:fs/promises';
 
 const fragment = await readFile(new URL('./workspace.fragment.html', import.meta.url), 'utf8');
 const document = `<!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Пространство книги — интерактивные макеты</title>
+<title>Book workspace — interactive mock-ups</title>
 <style>
 :root { color-scheme: dark; background: #101315; }
 body { margin: 0; padding: 28px; }

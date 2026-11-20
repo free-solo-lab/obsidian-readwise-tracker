@@ -1,14 +1,14 @@
-# Проверка макетов
+# Mock-up validation
 
-Локальный автономный предпросмотр, headless Chromium.
+Local standalone preview, headless Chromium.
 
-- Все три правые панели — непрерывные списки. Прокрутка справа меняет фокус и плавно прокручивает заметки слева; прокрутка слева подводит связанный объект справа.
-- Редакторы не пересоздаются при синхронной прокрутке; текст мыслей и текущая позиция сохраняются после переходов и перезагрузки.
-- Для нескольких источников сохраняется текущая заметка, если она уже связана; иначе выбирается ближайшая по порядку. Переходы не меняют сами связи.
-- В режиме «Текст + мысль» прокрутка справа меняет фрагмент книги слева, сохраняя выбранную компоновку.
-- В списке диалогов сохраняются отдельные истории и неотправленные вопросы; отправка в одном разговоре не затрагивает остальные.
-- Режим добавления источников временно закрепляет объект и не перепривязывает его при прокрутке. После подтверждения двусторонняя синхронизация возобновляется.
-- Проверена реальная прокрутка колесом вниз и вверх. Ведомые прокрутки не запускают ответную синхронизацию: панели не зацикливаются и не отбирают управление.
-- Проверены 1440, 1024, 736, 390 и 320 px, светлая тема и reduced motion. Горизонтального переполнения нет.
+- All three right panels are continuous lists. Scrolling on the right changes focus and smoothly scrolls the notes on the left; scrolling on the left brings the related object into view on the right.
+- Editors are not recreated during synchronised scrolling; the text of thoughts and the current position survive navigation and reload.
+- With several sources, the current note is kept if it is already linked; otherwise the nearest one in order is chosen. Navigation never changes the links themselves.
+- In "Text + thought" mode, scrolling on the right changes the book fragment on the left while keeping the chosen layout.
+- The dialog list keeps separate histories and unsent questions; sending in one conversation does not affect the others.
+- The source-adding mode temporarily pins the object and does not rebind it while scrolling. After confirmation, two-way synchronisation resumes.
+- Real wheel scrolling down and up was checked. Driven scrolls do not trigger a reverse synchronisation: the panels do not loop and do not take control from each other.
+- Checked at 1440, 1024, 736, 390 and 320 px, in the light theme and with reduced motion. There is no horizontal overflow.
 
-Ошибки JavaScript: 0. Ответы ИИ — локальная демонстрация.
+JavaScript errors: 0. AI answers are a local demonstration.
