@@ -2,6 +2,8 @@
 
 Version 1.3.0 adds the **book workspace**: read a book's full text next to your highlights, write thoughts, link texts together and, optionally, discuss the book with AI. Everything is stored as plain Markdown notes in your vault.
 
+You can still read books the way you always do, in Readwise Reader. The workspace is for the next step: working through your notes in depth and coming back to them easily. Each thought, link and AI conversation stays attached to the passage that prompted it, so over time your reading grows into a network of connected articles and discussions on the topics that came up while you read.
+
 Open it with **Detailed review** on a book in the highlights sidebar, or with the command **Readwise Reading Tracker: Open book workspace**.
 
 ## Book workspace
