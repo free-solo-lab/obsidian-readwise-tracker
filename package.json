@@ -1,6 +1,6 @@
 {
 	"name": "readwise-reading-tracker",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"description": "Track reading activity, manage Reader books and tags, import files and URLs, and turn highlights into linked notes.",
 	"main": "main.js",
 	"scripts": {
